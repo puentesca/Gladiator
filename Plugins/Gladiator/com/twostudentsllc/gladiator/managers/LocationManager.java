@@ -34,17 +34,17 @@ public class LocationManager {
 	/**
 	 * Database directory location
 	 */
-	private String databaseFileDirectory = "plugins/GladiatorData/";
+	//private String databaseFileDirectory = "plugins/GladiatorData/";
 	
 	/**
 	 * Database file name
 	 */
-	private String databaseFileName = "locations.dat";
+	//private String databaseFileName = "locations.dat";
 	
 	/**
 	 * Stores location data for plugin. Available locations are: bluespawn, redspawn, lobby
 	 */
-	private HashMap<String, Location> locations;
+	//private HashMap<String, Location> locations;
 	/**
 	 * Stores possible keys for locations to be stored at
 	 */
@@ -53,18 +53,21 @@ public class LocationManager {
 	public LocationManager(Main plugin) throws FileNotFoundException, ClassNotFoundException, IOException
 	{
 		this.plugin = plugin;
-		locations = new HashMap<String, Location>();
-		loadLocationFile();
+		//locations = new HashMap<String, Location>();
+		//loadLocationFile();
 	}
 	
 	/**
 	 * Saves all location data to a file by serializing each location into a string
 	 * @throws FileNotFoundException
 	 * @throws IOException
+	 * @param locationsToSave The locations in which you wish to save
+	 * @param fileDir The directory in which you want to load the location data from
+	 * @param fileName The name of the file in which you wish to load location data from
 	 */
-	public void saveLocationFile() throws FileNotFoundException, IOException
+	public void saveLocationFile(HashMap<String, Location> locationsToSave, String fileDir, String fileName) throws FileNotFoundException, IOException
 	{
-		File file = new File(databaseFileDirectory + databaseFileName);
+		File file = new File(fileDir + fileName);
 		
 		ObjectOutputStream output = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream(file)));
 		
@@ -72,9 +75,9 @@ public class LocationManager {
 		//If the key exists in the locations hashmap, serialize it.
 		for(String s : possibleLocationKeys)
 		{
-			if(locations.containsKey(s))
+			if(locationsToSave.containsKey(s))
 			{
-				String serializedL = Utils.serializeLocation(locations.get(s));
+				String serializedL = Utils.serializeLocation(locationsToSave.get(s));
 				serializedLocations.put(s, serializedL);
 			}
 		}
@@ -92,60 +95,58 @@ public class LocationManager {
 	}
 	
 	/**
-	 * Loads all location data into a hashmap from a file through deserialization.
+	 * Loads the given location data into a hashmap from a file through deserialization.
 	 * @throws FileNotFoundException
 	 * @throws IOException
+	 * @param fileDir The directory in which you want to load the location data from
+	 * @param fileName The name of the file in which you wish to load location data from
+	 * @return The loaded location data
 	 */
-	public void loadLocationFile() throws FileNotFoundException, IOException, ClassNotFoundException
+	public HashMap<String, Location> loadLocationFile(String fileDir, String fileName) throws FileNotFoundException, IOException, ClassNotFoundException
 	{
-		File dir = new File(databaseFileDirectory);
+		File dir = new File(fileDir);
 		//If the directory doesnt exist, create it.
 		if(!dir.exists())
 		{
 			dir.mkdirs();
 		}
 		
-		File file = new File(databaseFileDirectory + databaseFileName);
+		File file = new File(fileDir + fileName);
 		//If the file doesnt exist
 		if(!file.exists()) {
 			try {
 			    file.createNewFile();
-			    return;
+			    return new HashMap<String, Location>();
 			} catch(IOException e) {
 			    e.printStackTrace();
 			}
 		}
 		
+		//Gets the files information
+		FileInputStream stream = new FileInputStream(file);
+		GZIPInputStream GZIP = new GZIPInputStream(stream);
+		ObjectInputStream input = new ObjectInputStream(GZIP);
+		Object readObject = input.readObject();
+		input.close();
 		
-		if(file != null)
+		
+		//If the object read is not a hashmap
+		if(!(readObject instanceof HashMap))
 		{
-			FileInputStream stream = new FileInputStream(file);
-			GZIPInputStream GZIP = new GZIPInputStream(stream);
-			
-			ObjectInputStream input = new ObjectInputStream(GZIP);
-			Object readObject = input.readObject();
-			input.close();
-			
-			//If the object read is not a hashmap
-			if(!(readObject instanceof HashMap))
-			{
-				throw new IOException("Object in " + databaseFileName + " is not a HashMap.");
-			}
-			
-			HashMap<String, String> serializedLocations = (HashMap<String, String>) readObject;
-			
-			//Updates HashMap to deserialized locations
-			for(String s : serializedLocations.keySet())
-			{
-				Location deserializedLocation = Utils.deserializeLocation(serializedLocations.get(s));
-				locations.put(s, deserializedLocation);
-				System.out.println("Location loaded: " + locations.get(s));
-			}
-			
-			
-			
-			
+			throw new IOException("Object in " + fileName + " is not a HashMap.");
 		}
+			
+		HashMap<String, String> serializedLocations = (HashMap<String, String>) readObject;
+		HashMap<String, Location> convertedLocations = new HashMap<String, Location>();
+		//Updates HashMap to deserialized locations
+		for(String s : serializedLocations.keySet())
+		{
+			Location deserializedLocation = Utils.deserializeLocation(serializedLocations.get(s));
+			convertedLocations.put(s, deserializedLocation);
+			System.out.println("Location loaded: " + convertedLocations.get(s));
+		}
+			
+		return convertedLocations;	
 	}
 	
 	/**
@@ -153,20 +154,31 @@ public class LocationManager {
 	 * @param key The key of the new location
 	 * @param l The location to save
 	 */
-	public void setLocation(Player sender, String key, Location l)
+	public void setLocation(Player sender, String[] args, Location l)
 	{
+		String minigameName = args[1];
+		String mapName = args[2];
+		String key = args[3];
+		
 		//If the key is an invalid key
 		if(!isValidKey(sender, key))
 			return;
+		
+		//TODO: 
+		//Check if minigameName exists and gets the Game
+		//Check if the mapName exists in the minigame and get the locations
+		//Check if the key exists in the locations
+		//Set or replace the key and location
+		
 		//If the key is already in the hashmap, replace it.
-		if(locations.containsKey(key))
-		{
-			locations.replace(key, l);
-		}
-		else
-		{
-			locations.put(key, l);
-		}
+//		if(locations.containsKey(key))
+//		{
+//			locations.replace(key, l);
+//		}
+//		else
+//		{
+//			locations.put(key, l);
+//		}
 	}
 	
 	/**
@@ -174,16 +186,24 @@ public class LocationManager {
 	 * @param p The player to be teleported
 	 * @param key The key of the location to teleport to
 	 */
-	public void teleportToLocation(Player p, String key)
+	public void teleportToLocation(Player p, String[] args)
 	{
+		String minigameName = args[1];
+		String mapName = args[2];
+		String key = args[3];
+		
 		//If the key is an invalid key
 		if(!isValidKey(p, key))
 			return;
 		
-		if(!locations.containsKey(key))
-			return;
-		
-		p.teleport(locations.get(key));
+		//TODO: 
+		//Check if minigameName exists and gets the Game
+		//Check if the mapName exists in the minigame and get the locations
+		//Check if the key exists in the locations
+		//Teleport the player to the location
+//		if(!locations.containsKey(key))
+//			return;
+		//p.teleport(locations.get(key));
 	}
 	
 	/**
@@ -195,10 +215,32 @@ public class LocationManager {
 	{
 		if(!Utils.arrayContains(possibleLocationKeys, key))
 		{
-			Utils.Error(sender, (Utils.chatMessage("Invalid location key! Available keys are: " + Arrays.toString(possibleLocationKeys), false)));
+			Utils.Error(sender, (Utils.chatMessage("Invalid location key of '" + key + "'! Available keys are: " + Arrays.toString(possibleLocationKeys), false)));
 			return false;
 		}
 		return true;
+	}
+	
+	/**
+	 * Creates a string representing the directory name of the database of a minigame
+	 * @param minigameName The name of the directory the databases are linked to
+	 * @return A string representing the file name
+	 */
+	public static String getDatabaseDirectoryString(String minigameName)
+	{
+		String dir = "/minigames/" + minigameName + "/";
+		return dir;
+	}
+	
+	/**
+	 * Creates a string representing the file name of the locations of a game map
+	 * @param mapName The name of the map the locations are linked to
+	 * @return A string representing the file name
+	 */
+	public static String getDatabaseFileString(String mapName)
+	{
+		String file = mapName + "_locations.dat";
+		return file;
 	}
 	
 }

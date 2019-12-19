@@ -25,11 +25,11 @@ public class SetLocationCommand extends CustomCommand{
 	/**
 	 * The description of the command
 	 */
-	private String commandDescription = "Sets the location of a spawnpoint using a key";
+	private String commandDescription = "Sets the location of a minigames map using a key";
 	/**
 	 * The correct usage of the command
 	 */
-	private String commandUsage = "/gladiator setlocation <locationkey>";
+	private String commandUsage = "/gladiator setlocation <minigameName> <mapName> <locationKey>";
 	/**
 	 * The player can run the command if they have any of these permissions
 	 */
@@ -37,11 +37,11 @@ public class SetLocationCommand extends CustomCommand{
 	/**
 	 * The minimum arguments the command must have to properly function
 	 */
-	private int minArgs = 2;
+	private int minArgs = 4;
 	/**
 	 * The maximum arguments the command may have to properly function
 	 */
-	private int maxArgs = 2;
+	private int maxArgs = 4;
 	/**
 	 * If only the player should be able to execute this command
 	 */
@@ -78,7 +78,7 @@ public class SetLocationCommand extends CustomCommand{
 	private void commandCalled(CommandSender sender, Command cmd, String label, String[] args)
 	{
 		//Execute command logic
-		plugin.getLocationManager().setLocation(((Player)sender), args[1], ((Player)sender).getLocation());
+		plugin.getLocationManager().setLocation(((Player)sender), args, ((Player)sender).getLocation());
 	}
 	
 

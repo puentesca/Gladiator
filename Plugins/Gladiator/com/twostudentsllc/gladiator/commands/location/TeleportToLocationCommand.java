@@ -30,7 +30,7 @@ public class TeleportToLocationCommand extends CustomCommand{
 	/**
 	 * The correct usage of the command
 	 */
-	private String commandUsage = "/gladiator teleporttolocation <locationkey>";
+	private String commandUsage = "/gladiator teleporttolocation <minigameName> <mapName> <locationKey>";
 	/**
 	 * The player can run the command if they have any of these permissions
 	 */
@@ -38,11 +38,11 @@ public class TeleportToLocationCommand extends CustomCommand{
 	/**
 	 * The minimum arguments the command must have to properly function
 	 */
-	private int minArgs = 2;
+	private int minArgs = 4;
 	/**
 	 * The maximum arguments the command may have to properly function
 	 */
-	private int maxArgs = 2;
+	private int maxArgs = 4;
 	/**
 	 * If only the player should be able to execute this command
 	 */
@@ -77,7 +77,7 @@ public class TeleportToLocationCommand extends CustomCommand{
 	private void commandCalled(CommandSender sender, Command cmd, String label, String[] args)
 	{
 		//Execute command logic
-		plugin.getLocationManager().teleportToLocation((Player)sender, args[1]);
+		plugin.getLocationManager().teleportToLocation((Player)sender, args);
 	}
 	
 

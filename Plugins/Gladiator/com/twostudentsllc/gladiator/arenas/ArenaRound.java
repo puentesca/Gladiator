@@ -12,13 +12,16 @@ import com.twostudentsllc.gladiator.Main;
  * @author Casey Puentes
  *
  */
-public class ArenaRound implements GladiatorRound {
+public class ArenaRound extends MapRound {
 	
 	private STATUS state = STATUS.WAITING;
 	
 	HashMap<String, Location> spawnpoints;
 	
 	private Main plugin;
+	
+	//TODO: Add player list and team list. Also make it so the constructor requires it.
+	//TODO: Make Team class have and ID and require each team to have one spawnpoint
 	
 	public ArenaRound(Main plugin, HashMap<String, Location> spawnpoints)
 	{
@@ -52,7 +55,7 @@ public class ArenaRound implements GladiatorRound {
 	
 	@Override
 	public Player getWinner() {
-		// TODO Auto-generated method stub
+		// TODO: Return winner
 		return null;
 	}
 

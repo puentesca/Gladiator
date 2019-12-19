@@ -7,6 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.twostudentsllc.gladiator.Main;
+import com.twostudentsllc.gladiator.arenas.Arena;
 
 import net.md_5.bungee.api.ChatColor;
 
@@ -109,8 +110,34 @@ public class Utils {
 		
 		l = new Location(world, x, y, z, yaw, pitch);
 		
-		return l;
+		return l;	
+	}
+	
+	
+	/**
+	 * Creates a Arena from a serialized arena string
+	 * @param s The serialized Arena 
+	 * @return The deserialized Arena
+	 */
+	//TODO: Move to Gladiator game class and change plugin to not null
+	public static Arena deserializeArena(String s)
+	{
+		Arena a;
 		
+		String[] parts = s.split(":");
+		
+		Main plugin = null;
+		String minigameName = parts[0];
+		String mapName = parts[1];
+		String mapDisplayName = parts[2];
+		int minTeams = Integer.parseInt(parts[3]);
+		int maxTeams = Integer.parseInt(parts[4]);
+		int minPlayers = Integer.parseInt(parts[5]);
+		int maxPlayers = Integer.parseInt(parts[6]);
+		
+		a = new Arena(plugin, minigameName, mapName, mapDisplayName, minTeams, maxTeams, minPlayers, maxPlayers);
+		
+		return a;
 	}
 	
 	/**
