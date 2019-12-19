@@ -1,6 +1,7 @@
 package com.twostudentsllc.gladiator.commands.location;
 
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -14,7 +15,7 @@ import com.twostudentsllc.gladiator.utils.Utils;
  * @author Casey Puentes
  *
  */
-public class TeleportToLocationCommand implements CustomCommand {
+public class TeleportToLocationCommand extends CustomCommand{
 	
 	private Main plugin;
 
@@ -49,6 +50,7 @@ public class TeleportToLocationCommand implements CustomCommand {
 	
 	public TeleportToLocationCommand(Main plugin)
 	{
+		super.initializeData(commandName, commandDescription, commandUsage, commandPermissions, minArgs, maxArgs, onlyPlayer);
 		this.plugin = plugin;
 		plugin.getCommandManager().registerCommand(getName(), this);
 	}
@@ -64,73 +66,18 @@ public class TeleportToLocationCommand implements CustomCommand {
 		}
 		
 		String commandName = args[0];
-		
-		//Execute command logic
-		plugin.getLocationManager().teleportToLocation((Player)sender, args[1]);
+		commandCalled(sender, cmd, label, args);
 		Utils.commandCompletedMessage(sender, getName());
 		return true;
 	}
 	
-	
-	//
-	//Interface methods
-	//
-	public String getName()
+	/**
+	 * Called when the command listed is called
+	 */
+	private void commandCalled(CommandSender sender, Command cmd, String label, String[] args)
 	{
-		return commandName;
-	}
-	
-	public String getDescription()
-	{
-		return commandDescription;
-	}
-	
-	public String getUsage()
-	{
-		return commandUsage;
-	}
-	
-	public String[] getPermissions()
-	{
-		return commandPermissions;
-	}
-	
-	public boolean canRunCommand(CommandSender sender)
-	{
-		if(getPermissions() == null)
-			return true;
-		for(String s : getPermissions())
-		{
-			if(sender.hasPermission(s))
-				return true;
-		}
-		return false;
-	}
-	
-	public boolean canRunCommand(Player sender)
-	{
-		if(getPermissions() == null)
-			return true;
-		for(String s : getPermissions())
-		{
-			if(sender.hasPermission(s))
-				return true;
-		}
-		return false;
-	}
-	
-	public int getMinArgs()
-	{
-		return minArgs;
-	}
-	
-	public int getMaxArgs()
-	{
-		return maxArgs;
-	}
-	
-	public boolean onlyPlayer() {
-		return onlyPlayer;
+		//Execute command logic
+		plugin.getLocationManager().teleportToLocation((Player)sender, args[1]);
 	}
 	
 

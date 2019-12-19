@@ -3,6 +3,7 @@ package com.twostudentsllc.gladiator.commands.misc;
 import java.util.HashMap;
 
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -15,7 +16,7 @@ import com.twostudentsllc.gladiator.utils.Utils;
  * @author Casey Puentes
  *
  */
-public class HelpCommand implements CustomCommand {
+public class HelpCommand extends CustomCommand {
 	
 	private Main plugin;
 
@@ -50,6 +51,8 @@ public class HelpCommand implements CustomCommand {
 	
 	public HelpCommand(Main plugin)
 	{
+		//Initializes data
+		super.initializeData(commandName, commandDescription, commandUsage, commandPermissions, minArgs, maxArgs, onlyPlayer);
 		this.plugin = plugin;
 		plugin.getCommandManager().registerCommand(getName(), this);
 	}
@@ -86,68 +89,6 @@ public class HelpCommand implements CustomCommand {
 			lineNum++;
 		}
 		sender.sendMessage(Utils.chatMessage(msg, false));
-	}
-	
-	
-	//
-	//Interface methods
-	//
-	public String getName()
-	{
-		return commandName;
-	}
-	
-	public String getDescription()
-	{
-		return commandDescription;
-	}
-	
-	public String getUsage()
-	{
-		return commandUsage;
-	}
-	
-	public String[] getPermissions()
-	{
-		return commandPermissions;
-	}
-	
-	public boolean canRunCommand(CommandSender sender)
-	{
-		if(getPermissions() == null)
-			return true;
-		for(String s : getPermissions())
-		{
-			if(sender.hasPermission(s))
-				return true;
-		}
-		return false;
-	}
-	
-	public boolean canRunCommand(Player sender)
-	{
-		if(getPermissions() == null)
-			return true;
-		for(String s : getPermissions())
-		{
-			if(sender.hasPermission(s))
-				return true;
-		}
-		return false;
-	}
-	
-	public int getMinArgs()
-	{
-		return minArgs;
-	}
-	
-	public int getMaxArgs()
-	{
-		return maxArgs;
-	}
-	
-	public boolean onlyPlayer() {
-		return onlyPlayer;
 	}
 	
 

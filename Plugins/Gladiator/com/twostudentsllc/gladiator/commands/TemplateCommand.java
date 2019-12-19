@@ -14,10 +14,9 @@ import com.twostudentsllc.gladiator.utils.Utils;
  * @author Casey Puentes
  *
  */
-public class TemplateCommand implements CustomCommand {
+public class TemplateCommand extends CustomCommand {
 	
 	private Main plugin;
-
 	/**
 	 * The name of the command that would be used to execute
 	 */
@@ -49,6 +48,8 @@ public class TemplateCommand implements CustomCommand {
 	
 	public TemplateCommand(Main plugin)
 	{
+		//Initializes data
+		super.initializeData(commandName, commandDescription, commandUsage, commandPermissions, minArgs, maxArgs, onlyPlayer);
 		this.plugin = plugin;
 		plugin.getCommandManager().registerCommand(getName(), this);
 	}
@@ -65,71 +66,19 @@ public class TemplateCommand implements CustomCommand {
 		
 		String commandName = args[0];
 		
-		//Write logic here
+		//Signifies the command has been called
+		commandCalled(sender, cmd, label, args);
+		
 		Utils.commandCompletedMessage(sender, getName()); //Command completion confirmation
 		return true;
 	}
 	
-	
-	//
-	//Interface methods
-	//
-	public String getName()
+	/**
+	 * Called when the command listed is called
+	 */
+	private void commandCalled(CommandSender sender, Command cmd, String label, String[] args)
 	{
-		return commandName;
-	}
-	
-	public String getDescription()
-	{
-		return commandDescription;
-	}
-	
-	public String getUsage()
-	{
-		return commandUsage;
-	}
-	
-	public String[] getPermissions()
-	{
-		return commandPermissions;
-	}
-	
-	public boolean canRunCommand(CommandSender sender)
-	{
-		if(getPermissions() == null)
-			return true;
-		for(String s : getPermissions())
-		{
-			if(sender.hasPermission(s))
-				return true;
-		}
-		return false;
-	}
-	
-	public boolean canRunCommand(Player sender)
-	{
-		if(getPermissions() == null)
-			return true;
-		for(String s : getPermissions())
-		{
-			if(sender.hasPermission(s))
-				return true;
-		}
-		return false;
-	}
-	
-	public int getMinArgs()
-	{
-		return minArgs;
-	}
-	
-	public int getMaxArgs()
-	{
-		return maxArgs;
-	}
-	
-	public boolean onlyPlayer() {
-		return onlyPlayer;
+		
 	}
 	
 

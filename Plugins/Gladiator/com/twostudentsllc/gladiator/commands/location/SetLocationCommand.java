@@ -14,7 +14,7 @@ import com.twostudentsllc.gladiator.utils.Utils;
  * @author Casey Puentes
  *
  */
-public class SetLocationCommand implements CustomCommand {
+public class SetLocationCommand extends CustomCommand{
 	
 	private Main plugin;
 
@@ -49,6 +49,7 @@ public class SetLocationCommand implements CustomCommand {
 	
 	public SetLocationCommand(Main plugin)
 	{
+		super.initializeData(commandName, commandDescription, commandUsage, commandPermissions, minArgs, maxArgs, onlyPlayer);
 		this.plugin = plugin;
 		plugin.getCommandManager().registerCommand(getName(), this);
 	}
@@ -65,72 +66,19 @@ public class SetLocationCommand implements CustomCommand {
 		
 		String commandName = args[0];
 		
-		//Executes command logic
-		plugin.getLocationManager().setLocation(((Player)sender), args[1], ((Player)sender).getLocation());
+		//Signifies the command has been called
+		commandCalled(sender, cmd, label, args);
 		Utils.commandCompletedMessage(sender, getName());
 		return true;
 	}
 	
-	
-	//
-	//Interface methods
-	//
-	public String getName()
+	/**
+	 * Called when the command listed is called
+	 */
+	private void commandCalled(CommandSender sender, Command cmd, String label, String[] args)
 	{
-		return commandName;
-	}
-	
-	public String getDescription()
-	{
-		return commandDescription;
-	}
-	
-	public String getUsage()
-	{
-		return commandUsage;
-	}
-	
-	public String[] getPermissions()
-	{
-		return commandPermissions;
-	}
-	
-	public boolean canRunCommand(CommandSender sender)
-	{
-		if(getPermissions() == null)
-			return true;
-		for(String s : getPermissions())
-		{
-			if(sender.hasPermission(s))
-				return true;
-		}
-		return false;
-	}
-	
-	public boolean canRunCommand(Player sender)
-	{
-		if(getPermissions() == null)
-			return true;
-		for(String s : getPermissions())
-		{
-			if(sender.hasPermission(s))
-				return true;
-		}
-		return false;
-	}
-	
-	public int getMinArgs()
-	{
-		return minArgs;
-	}
-	
-	public int getMaxArgs()
-	{
-		return maxArgs;
-	}
-	
-	public boolean onlyPlayer() {
-		return onlyPlayer;
+		//Execute command logic
+		plugin.getLocationManager().setLocation(((Player)sender), args[1], ((Player)sender).getLocation());
 	}
 	
 
