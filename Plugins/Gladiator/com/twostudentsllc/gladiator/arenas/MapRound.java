@@ -8,6 +8,9 @@ import org.bukkit.entity.Player;
  * @author Casey Puentes
  *
  */
+
+//TODO: Add timelimit variables
+
 public abstract class MapRound {
 	/**
 	 * Contains the status of the current round

@@ -17,7 +17,7 @@ import com.twostudentsllc.gladiator.managers.LocationManager;
  */
 public abstract class GameMap {
 	
-	//TODO: Create MapManager to load and save map data from files
+	//TODO: Load maps from the Game's subclasses. Have abstract methods to load in the Game super class.
 	//TODO: Create DatabaseManager to load and save strings in files from directories
 	
 	/**
