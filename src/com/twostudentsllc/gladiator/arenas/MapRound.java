@@ -1,6 +1,11 @@
 package com.twostudentsllc.gladiator.arenas;
 
+import java.util.ArrayList;
+
 import org.bukkit.entity.Player;
+
+import com.twostudentsllc.gladiator.Main;
+import com.twostudentsllc.gladiator.supers.Countdown;
 
 /**
  * An interface for each round in an arena.
@@ -21,6 +26,32 @@ public abstract class MapRound {
 		WAITING, LOADING, IN_PROGRESS, COMPLETED, ERROR
 	};
 	
+	private Main plugin;
+	
+	/**
+	 * Holds the starting time limit of the round, in seconds
+	 */
+	private int timeLimit;
+	
+	/**
+	 * Holds the time limit countdown for when a round is running.
+	 */
+	private Countdown timelimitCountdown;
+	
+	private ArrayList<Runnable> countdownTasks;
+	
+	private ArrayList<Integer> countdownTasksThresholds;
+	
+	
+	//TODO: Add logic to accept the teams and players
+	//Also add appropriate variables
+	public MapRound(Main plugin, int timeLimit, ArrayList<Runnable> countdownTasks, ArrayList<Integer> countdownTasksThresholds)
+	{
+		this.plugin = plugin;
+		this.timeLimit = timeLimit;
+		this.countdownTasks = countdownTasks;
+		this.countdownTasksThresholds = countdownTasksThresholds;
+	}
 	/**
 	 * Gets the winner of the round
 	 * @return
@@ -36,6 +67,23 @@ public abstract class MapRound {
 	 * @return True if the round was successfully started
 	 */
 	public abstract boolean startRound();
+	
+	/**
+	 * Starts the time limit coundown for the round
+	 */
+	public void startTimelimitCountdown()
+	{
+		Countdown c;
+		c = new Countdown(plugin, timeLimit, countdownTasks, countdownTasksThresholds, true);
+		timelimitCountdown = c;
+	}
+	/**
+	 * Stops the rounds timelimit countdown
+	 */
+	public void stopTimelimitCountdown()
+	{
+		timelimitCountdown.stopCountdown();
+	}
 	
 	/**
 	 * Ends a round

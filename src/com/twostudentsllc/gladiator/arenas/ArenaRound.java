@@ -37,7 +37,10 @@ public class ArenaRound extends MapRound {
 			System.out.println("Round not started as round did not have the status of: WAITING");
 			return false;
 		}
+		//Starts the rounds time limit
+		startTimelimitCountdown();
 		//Add logic to start round
+		state = STATUS.IN_PROGRESS;
 		return true;
 	}
 	
@@ -49,7 +52,9 @@ public class ArenaRound extends MapRound {
 			System.out.println("Round not started as round did not have the status of: IN_PROGRESS");
 			return false;
 		}
+		stopTimelimitCountdown();
 		//Add logic to end round
+		state = STATUS.COMPLETED;
 		return true;
 	}
 	
