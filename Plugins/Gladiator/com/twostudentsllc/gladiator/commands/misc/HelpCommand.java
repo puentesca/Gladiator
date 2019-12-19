@@ -9,7 +9,12 @@ import org.bukkit.entity.Player;
 import com.twostudentsllc.gladiator.Main;
 import com.twostudentsllc.gladiator.commands.CustomCommand;
 import com.twostudentsllc.gladiator.utils.Utils;
-
+/**
+ * A command that displays all necessary help information
+ * Copyright 2019 Casey Puentes. All rights reserved.
+ * @author Casey Puentes
+ *
+ */
 public class HelpCommand implements CustomCommand {
 	
 	private Main plugin;
@@ -60,10 +65,7 @@ public class HelpCommand implements CustomCommand {
 		
 		String commandName = args[0];
 		
-		if(commandName.equals(getName()))
-		{
-			gladiatorHelp(sender);
-		}
+		gladiatorHelp(sender);
 		
 		return false;
 	}

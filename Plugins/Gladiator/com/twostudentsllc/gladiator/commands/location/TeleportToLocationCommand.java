@@ -8,6 +8,12 @@ import com.twostudentsllc.gladiator.Main;
 import com.twostudentsllc.gladiator.commands.CustomCommand;
 import com.twostudentsllc.gladiator.utils.Utils;
 
+/**
+ * Command that teleports a player to a spawnpoint
+ * Copyright 2019 Casey Puentes. All rights reserved.
+ * @author Casey Puentes
+ *
+ */
 public class TeleportToLocationCommand implements CustomCommand {
 	
 	private Main plugin;
@@ -59,18 +65,10 @@ public class TeleportToLocationCommand implements CustomCommand {
 		
 		String commandName = args[0];
 		
-		//If the command sent is the command listed here
-		if(commandName.equals(getName()))
-		{
-			plugin.getLocationManager().teleportToLocation((Player)sender, args[1]);
-			Utils.commandCompletedMessage(sender, getName());
-			return true;
-		}
-		else
-		{
-			Utils.Error((Player)sender, Utils.getUsageMessage(getUsage()));
-		}
-		return false;
+		//Execute command logic
+		plugin.getLocationManager().teleportToLocation((Player)sender, args[1]);
+		Utils.commandCompletedMessage(sender, getName());
+		return true;
 	}
 	
 	

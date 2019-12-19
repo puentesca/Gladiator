@@ -8,6 +8,12 @@ import org.bukkit.entity.Player;
 import com.twostudentsllc.gladiator.Main;
 import com.twostudentsllc.gladiator.utils.Utils;
 
+/**
+ * A command
+ * Copyright 2019 Casey Puentes. All rights reserved.
+ * @author Casey Puentes
+ *
+ */
 public class TemplateCommand implements CustomCommand {
 	
 	private Main plugin;
@@ -59,18 +65,9 @@ public class TemplateCommand implements CustomCommand {
 		
 		String commandName = args[0];
 		
-		//If the command sent is the command listed here
-		if(commandName.equals(getName()))
-		{
-			//Write logic here
-			Utils.commandCompletedMessage(sender, getName()); //Command completion confirmation
-			return true;
-		}
-		else
-		{
-			Utils.Error((Player)sender, Utils.getUsageMessage(getUsage()));
-		}
-		return false;
+		//Write logic here
+		Utils.commandCompletedMessage(sender, getName()); //Command completion confirmation
+		return true;
 	}
 	
 	

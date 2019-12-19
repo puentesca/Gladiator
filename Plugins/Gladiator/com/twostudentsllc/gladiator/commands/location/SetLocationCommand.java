@@ -8,7 +8,12 @@ import org.bukkit.entity.Player;
 import com.twostudentsllc.gladiator.Main;
 import com.twostudentsllc.gladiator.commands.CustomCommand;
 import com.twostudentsllc.gladiator.utils.Utils;
-
+/**
+ * Command that allows admins to set the location of spawnpoints
+ * Copyright 2019 Casey Puentes. All rights reserved.
+ * @author Casey Puentes
+ *
+ */
 public class SetLocationCommand implements CustomCommand {
 	
 	private Main plugin;
@@ -60,18 +65,10 @@ public class SetLocationCommand implements CustomCommand {
 		
 		String commandName = args[0];
 		
-		//If the command sent is the command listed here
-		if(commandName.equals(getName()))
-		{
-			plugin.getLocationManager().setLocation(((Player)sender), args[1], ((Player)sender).getLocation());
-			Utils.commandCompletedMessage(sender, getName());
-			return true;
-		}
-		else
-		{
-			Utils.Error((Player)sender, Utils.getUsageMessage(getUsage()));
-		}
-		return false;
+		//Executes command logic
+		plugin.getLocationManager().setLocation(((Player)sender), args[1], ((Player)sender).getLocation());
+		Utils.commandCompletedMessage(sender, getName());
+		return true;
 	}
 	
 	

@@ -4,12 +4,20 @@ import java.io.IOException;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.twostudentsllc.gladiator.arenas.ArenaRound;
+import com.twostudentsllc.gladiator.arenas.GladiatorRound;
 import com.twostudentsllc.gladiator.commands.location.SetLocationCommand;
 import com.twostudentsllc.gladiator.commands.location.TeleportToLocationCommand;
 import com.twostudentsllc.gladiator.commands.misc.HelpCommand;
 import com.twostudentsllc.gladiator.managers.CommandManager;
 import com.twostudentsllc.gladiator.managers.LocationManager;
 
+/**
+ * Gladiator plugin main class. Initializes the plugin.
+ * Copyright 2019 Casey Puentes. All rights reserved.
+ * @author Casey Puentes
+ *
+ */
 public class Main extends JavaPlugin{
 	
 	private LocationManager locMan;

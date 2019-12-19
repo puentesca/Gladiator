@@ -10,6 +10,12 @@ import com.twostudentsllc.gladiator.Main;
 
 import net.md_5.bungee.api.ChatColor;
 
+/**
+ * A common utility class
+ * Copyright 2019 Casey Puentes. All rights reserved.
+ * @author Casey Puentes
+ *
+ */
 public class Utils {
 
 	private Main plugin;

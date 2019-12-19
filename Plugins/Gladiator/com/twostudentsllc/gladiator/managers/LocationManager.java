@@ -18,6 +18,13 @@ import org.bukkit.entity.Player;
 import com.twostudentsllc.gladiator.Main;
 import com.twostudentsllc.gladiator.utils.Utils;
 
+/**
+ * A database that can store, save, load, and add any locations mapped to any key.
+ * Copyright 2019 Casey Puentes. All rights reserved.
+ * @author Casey Puentes
+ *
+ */
+
 public class LocationManager {
 	
 	//TODO: Add reset location(s)

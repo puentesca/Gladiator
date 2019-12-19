@@ -11,6 +11,12 @@ import com.twostudentsllc.gladiator.Main;
 import com.twostudentsllc.gladiator.commands.CustomCommand;
 import com.twostudentsllc.gladiator.utils.Utils;
 
+/**
+ * A custom command manager that stores and calls all subcommands of /gladiator
+ * Copyright 2019 Casey Puentes. All rights reserved.
+ * @author Casey Puentes
+ *
+ */
 public class CommandManager implements CommandExecutor {
 	
 	private HashMap<String, CustomCommand> subcommands;
@@ -51,6 +57,7 @@ public class CommandManager implements CommandExecutor {
 			if(command.onlyPlayer() && !(sender instanceof Player))
 			{
 				Utils.Error(sender, "You must be a player to exectue this command!");
+				return false;
 			}
 			//Verifies the entity has permissions to run the command
 			if(!command.canRunCommand(sender))
