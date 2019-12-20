@@ -17,6 +17,37 @@ import com.twostudentsllc.gladiator.utils.Utils;
 public class TemplateCommand extends CustomCommand {
 	
 	private Main plugin;
+<<<<<<< HEAD
+=======
+	/**
+	 * The name of the command that would be used to execute
+	 */
+	private String commandName = "TEMPLATE_COMMAND";
+	/**
+	 * The description of the command
+	 */
+	protected String commandDescription = "";
+	/**
+	 * The correct usage of the command
+	 */
+	private String commandUsage = "";
+	/**
+	 * The player can run the command if they have any of these permissions
+	 */
+	private String[] commandPermissions;
+	/**
+	 * The minimum arguments the command must have to properly function
+	 */
+	private int minArgs = Integer.MIN_VALUE;
+	/**
+	 * The maximum arguments the command may have to properly function
+	 */
+	private int maxArgs = Integer.MAX_VALUE;
+	/**
+	 * If only the player should be able to execute this command
+	 */
+	private boolean onlyPlayer = true;
+>>>>>>> 25da9ed5ab5cb7b8cb001214bcf581907a0781ad
 	
 	public TemplateCommand(Main plugin)
 	{
