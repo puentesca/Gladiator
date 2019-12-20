@@ -52,7 +52,14 @@ public class HelpCommand extends CustomCommand {
 	public HelpCommand(Main plugin)
 	{
 		//Initializes data
-		super.initializeData(commandName, commandDescription, commandUsage, commandPermissions, minArgs, maxArgs, onlyPlayer);
+		super.setName("help")
+		 .setDescription("Provides you with all types of good information!")
+		 .setUsage("/gladiator help")
+		 .setPermissions(new String[0])
+		 .setMinArgs(1)
+		 .setMaxArgs(1)
+		 .setPlayerOnly(false);
+		
 		this.plugin = plugin;
 		plugin.getCommandManager().registerCommand(getName(), this);
 	}

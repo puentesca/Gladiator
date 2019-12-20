@@ -18,38 +18,18 @@ public class SetLocationCommand extends CustomCommand{
 	
 	private Main plugin;
 
-	/**
-	 * The name of the command that would be used to execute
-	 */
-	private String commandName = "setlocation";
-	/**
-	 * The description of the command
-	 */
-	private String commandDescription = "Sets the location of a minigames map using a key";
-	/**
-	 * The correct usage of the command
-	 */
-	private String commandUsage = "/gladiator setlocation <minigameName> <mapName> <locationKey>";
-	/**
-	 * The player can run the command if they have any of these permissions
-	 */
-	private String[] commandPermissions = {"gladiator.setlocations", "gladiator.admin"};
-	/**
-	 * The minimum arguments the command must have to properly function
-	 */
-	private int minArgs = 4;
-	/**
-	 * The maximum arguments the command may have to properly function
-	 */
-	private int maxArgs = 4;
-	/**
-	 * If only the player should be able to execute this command
-	 */
 	private boolean onlyPlayer = true;
 	
 	public SetLocationCommand(Main plugin)
 	{
-		super.initializeData(commandName, commandDescription, commandUsage, commandPermissions, minArgs, maxArgs, onlyPlayer);
+		super.setName("setlocation")
+			 .setDescription("Sets the location of a minigames map using a key")
+			 .setUsage("/gladiator setlocation <minigameName> <mapName> <locationKey>")
+			 .setPermissions(new String[] {"gladiator.setlocations", "gladiator.admin"})
+			 .setMinArgs(4)
+			 .setMaxArgs(4)
+			 .setPlayerOnly(true);
+		
 		this.plugin = plugin;
 		plugin.getCommandManager().registerCommand(getName(), this);
 	}

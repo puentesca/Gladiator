@@ -11,36 +11,40 @@ import org.bukkit.entity.Player;
  * @author Casey Puentes
  *
  */
-public abstract class CustomCommand implements CommandExecutor{
+public abstract class CustomCommand implements CommandExecutor {
 	
 	/**
 	 * The name of the command that would be used to execute
 	 */
-	private String commandName = "TEMPLATE_COMMAND";
+	protected String commandName = "TEMPLATE_COMMAND";
 	/**
 	 * The description of the command
 	 */
-	private String commandDescription = "";
+	protected String commandDescription = "";
 	/**
 	 * The correct usage of the command
 	 */
-	private String commandUsage = "";
+	protected String commandUsage = "";
 	/**
 	 * The player can run the command if they have any of these permissions
 	 */
-	private String[] commandPermissions;
+	protected String[] commandPermissions;
 	/**
 	 * The minimum arguments the command must have to properly function
 	 */
-	private int minArgs = Integer.MIN_VALUE;
+	protected int minArgs = Integer.MIN_VALUE;
 	/**
 	 * The maximum arguments the command may have to properly function
 	 */
-	private int maxArgs = Integer.MAX_VALUE;
+	protected int maxArgs = Integer.MAX_VALUE;
 	/**
 	 * If only the player should be able to execute this command
 	 */
-	private boolean onlyPlayer = true;
+	protected boolean onlyPlayer = true;
+	
+	
+	//Default constructor for setting up a class with only setters
+	public CustomCommand() {}
 	
 	/**
 	 * Initializes the CustomCommand with all necessary data
@@ -52,7 +56,8 @@ public abstract class CustomCommand implements CommandExecutor{
 	 * @param maxArgs The maximum arguments the command may have to properly function
 	 * @param onlyPlayer If only the player should be able to execute this command
 	 */
-	protected void initializeData(String name, String description, String usage, String[] permissions, int minArgs, int maxArgs, boolean onlyPlayer)
+	
+	public CustomCommand(String name, String description, String usage, String[] permissions, int minArgs, int maxArgs, boolean onlyPlayer)
 	{
 		commandName = name;
 		commandDescription = description;
@@ -61,6 +66,42 @@ public abstract class CustomCommand implements CommandExecutor{
 		this.minArgs = minArgs;
 		this.maxArgs = maxArgs;
 		this.onlyPlayer = onlyPlayer;
+	}
+	
+	
+	public CustomCommand setName(String name) {
+		commandName = name;
+		return this;
+	}
+	
+	public CustomCommand setDescription(String desc) {
+		commandDescription = desc;
+		return this;
+	}
+	
+	public CustomCommand setUsage(String usage) {
+		commandUsage = usage;
+		return this;
+	}
+	
+	public CustomCommand setPermissions(String[] perms) {
+		commandPermissions = perms;
+		return this;
+	}
+	
+	public CustomCommand setMinArgs(int minArgs) {
+		this.minArgs = minArgs;
+		return this;
+	}
+	
+	public CustomCommand setMaxArgs(int maxArgs) {
+		this.maxArgs = maxArgs;
+		return this;
+	}
+	
+	public CustomCommand setPlayerOnly(boolean playerOnly) {
+		this.onlyPlayer = playerOnly;
+		return this;
 	}
 	
 	/**
