@@ -17,8 +17,6 @@ import com.twostudentsllc.gladiator.utils.Utils;
 public class SetLocationCommand extends CustomCommand{
 	
 	private Main plugin;
-
-	private boolean onlyPlayer = true;
 	
 	public SetLocationCommand(Main plugin)
 	{
@@ -36,14 +34,6 @@ public class SetLocationCommand extends CustomCommand{
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		
-		//If the amount of arguments is invalid
-		if(args.length > maxArgs || args.length < minArgs)
-		{
-			Utils.Error((Player)sender, Utils.getUsageMessage(getUsage()));
-			return false;
-		}
-		
 		String commandName = args[0];
 		
 		//Signifies the command has been called

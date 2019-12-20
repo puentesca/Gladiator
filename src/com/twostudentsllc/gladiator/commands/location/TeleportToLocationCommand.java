@@ -35,15 +35,8 @@ public class TeleportToLocationCommand extends CustomCommand{
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		
-		//If the amount of arguments is invalid
-		if(args.length > maxArgs || args.length < minArgs)
-		{
-			Utils.Error((Player)sender, Utils.getUsageMessage(getUsage()));
-			return false;
-		}
-		
 		String commandName = args[0];
+		
 		commandCalled(sender, cmd, label, args);
 		Utils.commandCompletedMessage(sender, getName());
 		return true;

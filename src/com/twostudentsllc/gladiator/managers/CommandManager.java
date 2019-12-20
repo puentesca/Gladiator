@@ -34,10 +34,6 @@ public class CommandManager implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		//If for some reason this is triggered by a different command
-		if(!cmd.getName().equals(mainCommand))
-			return false;
-		
 		//If there are no command arguments
 		if(args == null || args.length == 0)
 		{
@@ -63,6 +59,12 @@ public class CommandManager implements CommandExecutor {
 			if(!command.canRunCommand(sender))
 			{
 				Utils.Error((Player)sender, "You don't have permission to use this command!");
+				return false;
+			}
+			//Verifies the amount of arguments passed in is valid
+			if(!command.hasValidArgumentAmount(args))
+			{
+				Utils.Error((Player)sender, Utils.getUsageMessage(command.getUsage()));
 				return false;
 			}
 			subcommands.get(key).onCommand(sender, cmd, label, args);

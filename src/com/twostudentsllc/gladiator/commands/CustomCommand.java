@@ -5,6 +5,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import com.twostudentsllc.gladiator.utils.Utils;
+
 /**
  * A common command super class
  * Copyright 2019 Casey Puentes. All rights reserved.
@@ -68,6 +70,14 @@ public abstract class CustomCommand implements CommandExecutor {
 		this.onlyPlayer = onlyPlayer;
 	}
 	
+	/**
+	 * Checks to see if the amount of arguments the sent command contains is valid.
+	 * @return True if the amount of arguments is within the minArgs and maxArgs bounds (inclusive)
+	 */
+	public boolean hasValidArgumentAmount(String[] args)
+	{
+		return (args.length <= maxArgs && args.length >= minArgs);
+	}
 	
 	public CustomCommand setName(String name) {
 		commandName = name;
