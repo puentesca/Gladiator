@@ -66,13 +66,6 @@ public class HelpCommand extends CustomCommand {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		
-		if(args.length > maxArgs || args.length < minArgs)
-		{
-			Utils.Error((Player)sender, Utils.getUsageMessage(getUsage()));
-			return false;
-		}
-		
 		String commandName = args[0];
 		
 		gladiatorHelp(sender);

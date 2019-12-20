@@ -21,13 +21,13 @@ public class TemplateCommand extends CustomCommand {
 	public TemplateCommand(Main plugin)
 	{
 		
-		super.setName("template")
+		super.setName("TEMPLATE_COMMAND")
 			 .setDescription("Does template stuff")
-			 .setUsage("/template")
-			 .setPermissions(new String[] {"template.stuff"})
+			 .setUsage("/gladiator template")
+			 .setPermissions(new String[] {"gladiator.template"})
 			 .setMinArgs(0)
-			 .setMaxArgs(1)
-			 .setPlayerOnly(false);
+			 .setMaxArgs(Integer.MAX_VALUE)
+			 .setPlayerOnly(true);
 		
 		//Initializes data
 		this.plugin = plugin;
@@ -36,14 +36,6 @@ public class TemplateCommand extends CustomCommand {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		
-		//If the amount of arguments is invalid
-		if(args.length > maxArgs || args.length < minArgs)
-		{
-			Utils.Error((Player)sender, Utils.getUsageMessage(getUsage()));
-			return false;
-		}
-		
 		String commandName = args[0];
 		
 		//Signifies the command has been called
