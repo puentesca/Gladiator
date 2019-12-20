@@ -24,7 +24,7 @@ public class TemplateCommand extends CustomCommand {
 	/**
 	 * The description of the command
 	 */
-	private String commandDescription = "";
+	protected String commandDescription = "";
 	/**
 	 * The correct usage of the command
 	 */
