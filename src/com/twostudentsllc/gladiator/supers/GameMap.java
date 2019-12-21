@@ -3,11 +3,13 @@ package com.twostudentsllc.gladiator.supers;
 import java.io.IOException;
 import java.util.HashMap;
 
+import com.twostudentsllc.gladiator.managers.WorldManager;
 import org.bukkit.Location;
 
 import com.twostudentsllc.gladiator.Main;
 import com.twostudentsllc.gladiator.arenas.MapRound;
 import com.twostudentsllc.gladiator.managers.LocationManager;
+import org.bukkit.World;
 
 /**
  * Super class that stores all data relating to a maps special information
@@ -35,6 +37,11 @@ public abstract class GameMap {
 	 * <p>This must be one word, as well as be lowercase.</p>
 	 */
 	protected String mapName;
+
+	/*
+	* The actual map instance
+	 */
+	protected World map;
 	
 	/**
 	 * <p>The display name of this map.</p>
@@ -92,8 +99,16 @@ public abstract class GameMap {
 		this.maxTeams = maxTeams;
 		this.minPlayers = minPlayers;
 		this.maxPlayers = maxPlayers;
+		this.map = WorldManager.getWorld(plugin.getServer(), mapName);
 		hasRunningRound = false;
 		loadLocations();
+	}
+
+	//Method is called by Java when an object is going to be deleted
+	@Override
+	protected void finalize() {
+		//Unloads world when object is going to be garbage collected
+		WorldManager.unloadWorld(plugin.getServer(), mapName, true);
 	}
 	
 	/**
@@ -167,7 +182,6 @@ public abstract class GameMap {
 		return true;
 		
 	}
-	
 
 	/**
 	 * @return The name of the minigame this map is associated with

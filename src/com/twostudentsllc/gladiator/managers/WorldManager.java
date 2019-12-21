@@ -8,17 +8,11 @@ import java.util.List;
 
 public class WorldManager {
 
-    private Server currentServer;
-
-    public WorldManager(Server currentServer) {
-        this.currentServer = currentServer;
-    }
-
     /*
      * Gets world by the name {worldname}
      * @return the World object if valid world, null if invalid world or doesn't exist
      */
-    public World getWorld(String worldName) {
+    public static World getWorld(Server currentServer, String worldName) {
         return currentServer.getWorld(worldName);
     }
 
@@ -26,7 +20,7 @@ public class WorldManager {
      * Creates a world under the name worldName, if it already exists it just loads from disk
      * @return World object associated with worldName
      */
-    public World createWorld(String worldName) {
+    public static World createWorld(Server currentServer, String worldName) {
         WorldCreator generator = WorldCreator.name(worldName);
         return generator.createWorld();
     }
@@ -37,7 +31,7 @@ public class WorldManager {
      * @param save whether or not to save chunks before unloading
      * @return true/false if was successfully unloaded
      */
-    public boolean unloadWorld(String worldName, boolean save) {
+    public static boolean unloadWorld(Server currentServer, String worldName, boolean save) {
         return currentServer.unloadWorld(worldName, save);
     }
 
@@ -45,7 +39,7 @@ public class WorldManager {
      * Unload all the worlds
      * @param boolean for whether to save or not save chunk data
      */
-    public void unloadAllWorlds(boolean save) {
+    public static void unloadAllWorlds(Server currentServer, boolean save) {
         List<World> worlds = currentServer.getWorlds();
 
         for(World world: worlds) {
@@ -58,7 +52,7 @@ public class WorldManager {
      * @param otherWorld name of world you want to copy
      * @param newWorld name of new world copy
      */
-    public World createWorldCopy(String otherWorld, String newWorld) {
+    public static World createWorldCopy(Server currentServer, String otherWorld, String newWorld) {
         World worldToCopy = currentServer.getWorld(otherWorld);
 
         if(worldToCopy == null)
