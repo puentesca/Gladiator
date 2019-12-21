@@ -107,8 +107,8 @@ public abstract class GameMap {
 	//Method is called by Java when an object is going to be deleted
 	@Override
 	protected void finalize() {
-		//Unloads world when object is going to be garbage collected
-		WorldManager.unloadWorld(plugin.getServer(), mapName, true);
+		//Unloads loaded chunks in the world when the object is removed
+		unloadChunks();
 	}
 	
 	/**
@@ -146,6 +146,14 @@ public abstract class GameMap {
 			System.out.println("ERROR: " + mapName + " locations did not save successfully!");
 		}
 		System.out.println("Successfully saved map " + mapName + " locations for Minigame: " + minigameName + "");
+	}
+
+
+	/*
+	* Unload loaded chunks on the map
+	 */
+	public void unloadChunks() {
+		WorldManager.unloadLoadedChunks(plugin.getServer(), map);
 	}
 	
 	/**

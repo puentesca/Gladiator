@@ -1,5 +1,6 @@
 package com.twostudentsllc.gladiator.managers;
 
+import org.bukkit.Chunk;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
@@ -33,6 +34,29 @@ public class WorldManager {
      */
     public static boolean unloadWorld(Server currentServer, String worldName, boolean save) {
         return currentServer.unloadWorld(worldName, save);
+    }
+
+    /*
+    * Unloads all loaded chunks on a world
+    * @param currentServer the server the plugin is operating on
+    * @param worldName the name of the world to have chunks unloaded
+     */
+    public static void unloadLoadedChunks(Server currentSever, String worldName) {
+        World targetWorld = getWorld(currentSever, worldName);
+
+        Chunk[] loadedChunks = targetWorld.getLoadedChunks();
+
+        for(Chunk chunk: loadedChunks) {
+            targetWorld.unloadChunkRequest(chunk.getX(), chunk.getZ());
+        }
+    }
+
+    public static void unloadLoadedChunks(Server currentSever, World world) {
+        Chunk[] loadedChunks = world.getLoadedChunks();
+
+        for(Chunk chunk: loadedChunks) {
+            world.unloadChunkRequest(chunk.getX(), chunk.getZ());
+        }
     }
 
     /*
