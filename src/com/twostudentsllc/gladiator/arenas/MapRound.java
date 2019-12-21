@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.bukkit.entity.Player;
 
 import com.twostudentsllc.gladiator.Main;
+import com.twostudentsllc.gladiator.runnables.RoundTimelimitUpdater;
 import com.twostudentsllc.gladiator.supers.Countdown;
 
 /**
@@ -38,19 +39,14 @@ public abstract class MapRound {
 	 */
 	private Countdown timelimitCountdown;
 	
-	private ArrayList<Runnable> countdownTasks;
-	
-	private ArrayList<Integer> countdownTasksThresholds;
 	
 	
 	//TODO: Add logic to accept the teams and players
 	//Also add appropriate variables
-	public MapRound(Main plugin, int timeLimit, ArrayList<Runnable> countdownTasks, ArrayList<Integer> countdownTasksThresholds)
+	public MapRound(Main plugin, int timeLimit)
 	{
 		this.plugin = plugin;
 		this.timeLimit = timeLimit;
-		this.countdownTasks = countdownTasks;
-		this.countdownTasksThresholds = countdownTasksThresholds;
 	}
 	/**
 	 * Gets the winner of the round
@@ -62,6 +58,13 @@ public abstract class MapRound {
 	 * @return The status of the round
 	 */
 	public abstract STATUS getStatus();
+	
+	/**
+	 * Receieves the round time limits time (in seconds) every second and handles a reaction
+	 * @param time The amount of time left in the round
+	 */
+	public abstract void handleTimelimitRemaining(int time);
+	
 	/**
 	 * Starts a round with the players and teams assigned
 	 * @return True if the round was successfully started
@@ -74,7 +77,9 @@ public abstract class MapRound {
 	public void startTimelimitCountdown()
 	{
 		Countdown c;
-		c = new Countdown(plugin, timeLimit, countdownTasks, countdownTasksThresholds, true);
+		
+		Runnable task = new RoundTimelimitUpdater(plugin, this);
+		c = new Countdown(plugin, timeLimit, task, true);
 		timelimitCountdown = c;
 	}
 	/**
@@ -90,4 +95,9 @@ public abstract class MapRound {
 	 * @return True if the round was successfully ended
 	 */
 	public abstract boolean endRound();
+	
+	public Countdown getTimelimitCountdown()
+	{
+		return timelimitCountdown;
+	}
 }

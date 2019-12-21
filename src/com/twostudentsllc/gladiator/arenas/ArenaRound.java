@@ -1,5 +1,6 @@
 package com.twostudentsllc.gladiator.arenas;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.bukkit.Location;
@@ -23,8 +24,9 @@ public class ArenaRound extends MapRound {
 	//TODO: Add player list and team list. Also make it so the constructor requires it.
 	//TODO: Make Team class have and ID and require each team to have one spawnpoint
 	
-	public ArenaRound(Main plugin, HashMap<String, Location> spawnpoints)
+	public ArenaRound(Main plugin, HashMap<String, Location> spawnpoints, int timeLimit)
 	{
+		super(plugin, timeLimit);
 		this.plugin = plugin;
 		this.spawnpoints = spawnpoints;
 	}
@@ -68,6 +70,16 @@ public class ArenaRound extends MapRound {
 	public STATUS getStatus()
 	{
 		return state;
+	}
+
+	@Override
+	public void handleTimelimitRemaining(int time) {
+		
+		//If the round is over
+		if(time == 0)
+		{
+			endRound();
+		}
 	}
 	
 

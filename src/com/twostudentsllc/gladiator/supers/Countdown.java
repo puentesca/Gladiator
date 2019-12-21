@@ -25,14 +25,9 @@ public class Countdown implements Runnable {
 	private int assignedTaskId;
 	
 	/**
-	 * Holds tasks that have to be run after the task threshold. Needs to be sorted in order of execution
+	 * Task executed every second the countdown progresses
 	 */
-	private ArrayList<Runnable> tasks;
-	/**
-	 * Holds the amount of time(in seconds) that has to have passed for a task to take place. Index is linked with an index in the tasks arraylist
-	 * Needs to be sorted in numerical order
-	 */
-	private ArrayList<Integer> taskThresholds;
+	private Runnable taskToExecute;
 	
 	/**
 	 * Initializes the countdown.
@@ -42,12 +37,11 @@ public class Countdown implements Runnable {
 	 * @param taskThresholds
 	 * @param startCountdown True if you want it to auto start the countdown upon creation
 	 */
-	public Countdown(Main plugin, int seconds, ArrayList<Runnable> tasks, ArrayList<Integer> taskThresholds, boolean startCountdown)
+	public Countdown(Main plugin, int seconds, Runnable taskToExecute, boolean startCountdown)
 	{
 		this.plugin = plugin;
 		this.seconds = seconds;
-		this.tasks = tasks;
-		this.taskThresholds = taskThresholds;
+		this.taskToExecute = taskToExecute;
 		secondsCounter = seconds;
 		
 		if(startCountdown)
@@ -57,38 +51,45 @@ public class Countdown implements Runnable {
 	@Override
 	public void run() {
 		secondsCounter -= 1;
-		checkTaskList();
-	}
-	
-	/**
-	 * Checks to see if, at the current time elapsed, any tasks need to be executed. If so, it executes them and removes them from the tasks lists.
-	 */
-	private void checkTaskList()
-	{
+		//checkTaskList();
 		//If all the time has elapsed
 		if(secondsCounter == -1)
 		{
 			cancel();
 		}
-		//If all tasks have been completed
-		if(taskThresholds.size() == 0)
-			return;
-		//The amount of time needed to have passed for the next task to be run
-		int timeThreshold = taskThresholds.get(0);
-		//The amount of seconds that the secondsCounter should be at when this threshold is met
-		int timeElapsed = seconds - timeThreshold;
-		
-		//If the amount of time has passed by
-		if(secondsCounter <= timeElapsed)
-		{
-			//Run the task
-			tasks.get(0).run();
-			//Complete the task and remove it from the list
-			taskThresholds.remove(0);
-			tasks.remove(0);
-		}
+		taskToExecute.run();
 		
 	}
+	
+	/**
+	 * Checks to see if, at the current time elapsed, any tasks need to be executed. If so, it executes them and removes them from the tasks lists.
+	 */
+//	private void checkTaskList()
+//	{
+//		//If all the time has elapsed
+//		if(secondsCounter == -1)
+//		{
+//			cancel();
+//		}
+//		//If all tasks have been completed
+//		if(taskThresholds.size() == 0)
+//			return;
+//		//The amount of time needed to have passed for the next task to be run
+//		int timeThreshold = taskThresholds.get(0);
+//		//The amount of seconds that the secondsCounter should be at when this threshold is met
+//		int timeElapsed = seconds - timeThreshold;
+//		
+//		//If the amount of time has passed by
+//		if(secondsCounter <= timeElapsed)
+//		{
+//			//Run the task
+//			tasks.get(0).run();
+//			//Complete the task and remove it from the list
+//			taskThresholds.remove(0);
+//			tasks.remove(0);
+//		}
+//		
+//	}
 	
 	/**
 	 * Gets the amount of time left (in seconds)
