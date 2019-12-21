@@ -60,7 +60,7 @@ public class WorldManager {
     }
 
     /*
-     * Unload all the worlds
+     * Unload all the worlds for the whole server
      * @param boolean for whether to save or not save chunk data
      */
     public static void unloadAllWorlds(Server currentServer, boolean save) {
