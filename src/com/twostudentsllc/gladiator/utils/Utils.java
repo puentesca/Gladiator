@@ -1,18 +1,18 @@
 package com.twostudentsllc.gladiator.utils;
 
+import com.twostudentsllc.gladiator.supers.Team;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 
 import com.twostudentsllc.gladiator.Main;
 import com.twostudentsllc.gladiator.arenas.Arena;
-import com.twostudentsllc.gladiator.supers.Countdown;
 
 import net.md_5.bungee.api.ChatColor;
+
+import java.util.ArrayList;
 
 /**
  * A common utility class
@@ -210,6 +210,37 @@ public class Utils {
 	{
 		String msg = "&aCommand '" + name + "' completed.";
 		p.sendMessage(chatMessage(msg, true));
+	}
+
+
+	public static ArrayList<Team> assignTeams(int numberOfTeams, ArrayList<Player> playerList) {
+
+		if(numberOfTeams > playerList.size())
+			throw new IllegalArgumentException("Number of teams exceeds playerList size!");
+
+		int players = playerList.size();
+		int playersPerTeam = players / numberOfTeams;
+
+		//Return null if players can't be split into teams equally
+		if(players % numberOfTeams != 0)
+			throw new IllegalArgumentException("Players cant be split into equal teams!");
+
+		ArrayList<Team> teamList = new ArrayList<Team>();
+
+		//Create the required number of teams
+		for(int i = 0; i < numberOfTeams; i++) {
+
+			ArrayList<Player> teamMembers = new ArrayList<Player>();
+
+			//Add players according to number of teams required
+			for(int q = 0; q < playersPerTeam; q++) {
+				teamMembers.add(playerList.get(i * playersPerTeam + q));
+			}
+
+			teamList.add(new Team(i, teamMembers));
+		}
+
+		return teamList;
 	}
 	
 }
