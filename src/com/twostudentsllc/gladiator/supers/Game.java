@@ -3,6 +3,7 @@ package com.twostudentsllc.gladiator.supers;
 import org.bukkit.Server;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 public abstract class Game {
@@ -47,4 +48,38 @@ public abstract class Game {
     public String getGameName() {
         return gameName;
     }
+
+    /*
+    * Gets a HashMap of all the maps that don't have active rounds
+    * @return HashMap of GameMaps tied to their names
+     */
+    public HashMap<String, GameMap> getOpenMaps() {
+        HashMap<String, GameMap> openMaps = new HashMap<>();
+
+        for(Map.Entry<String, GameMap> mapEntry: getMaps().entrySet()) {
+            if(!mapEntry.getValue().hasRunningRound) {
+                openMaps.put(mapEntry.getKey(), mapEntry.getValue());
+            }
+        }
+
+        return openMaps;
+    }
+
+    /*
+    * Conditional check if there are any open maps
+    * INFO: Overkill implementation for performance sake (method will probably be called a lot)
+    * @return boolean if there are any open maps
+     */
+    public boolean hasOpenMaps() {
+        HashMap<String, GameMap> openMaps = new HashMap<>();
+
+        for(Map.Entry<String, GameMap> mapEntry: getMaps().entrySet()) {
+            if(!mapEntry.getValue().hasRunningRound()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 }

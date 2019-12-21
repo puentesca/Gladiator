@@ -69,6 +69,14 @@ public class QueueManager {
     	queueList.put(gameName, new PlayerQueue(playersNeeded, new LinkedList<Player>()));
     	return true;
     }
+
+    public boolean removeGameQueue(String gameName) {
+    	if(!queueList.containsKey(gameName))
+    		return false;
+
+    	queueList.remove(gameName);
+    	return true;
+	}
     
     
     /*
