@@ -1,7 +1,8 @@
 package com.twostudentsllc.gladiator.managers;
 
-import com.twostudentsllc.gladiator.supers.Game;
 import org.bukkit.entity.Player;
+
+import com.twostudentsllc.gladiator.generic_classes.Game;
 
 import java.util.ArrayList;
 import java.util.HashMap;

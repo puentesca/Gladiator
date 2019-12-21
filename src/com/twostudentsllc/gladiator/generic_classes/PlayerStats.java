@@ -1,4 +1,4 @@
-package com.twostudentsllc.gladiator.supers;
+package com.twostudentsllc.gladiator.generic_classes;
 
 
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package com.twostudentsllc.gladiator.arenas;
+package com.twostudentsllc.gladiator.generic_classes;
 
 import java.util.ArrayList;
 
@@ -6,7 +6,6 @@ import org.bukkit.entity.Player;
 
 import com.twostudentsllc.gladiator.Main;
 import com.twostudentsllc.gladiator.runnables.*;
-import com.twostudentsllc.gladiator.supers.Countdown;
 
 /**
  * An interface for each round in an arena.

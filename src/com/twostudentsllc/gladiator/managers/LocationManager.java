@@ -16,7 +16,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import com.twostudentsllc.gladiator.Main;
-import com.twostudentsllc.gladiator.utils.Utils;
+import com.twostudentsllc.gladiator.global.Utils;
 
 /**
  * A database that can store, save, load, and add any locations mapped to any key.

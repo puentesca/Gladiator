@@ -1,4 +1,4 @@
-package com.twostudentsllc.gladiator.supers;
+package com.twostudentsllc.gladiator.generic_classes;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -7,7 +7,6 @@ import com.twostudentsllc.gladiator.managers.WorldManager;
 import org.bukkit.Location;
 
 import com.twostudentsllc.gladiator.Main;
-import com.twostudentsllc.gladiator.arenas.MapRound;
 import com.twostudentsllc.gladiator.managers.LocationManager;
 import org.bukkit.World;
 

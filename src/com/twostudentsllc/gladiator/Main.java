@@ -5,10 +5,10 @@ import java.io.IOException;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.twostudentsllc.gladiator.arenas.ArenaRound;
-import com.twostudentsllc.gladiator.arenas.MapRound;
 import com.twostudentsllc.gladiator.commands.location.SetLocationCommand;
 import com.twostudentsllc.gladiator.commands.location.TeleportToLocationCommand;
 import com.twostudentsllc.gladiator.commands.misc.HelpCommand;
+import com.twostudentsllc.gladiator.generic_classes.MapRound;
 import com.twostudentsllc.gladiator.managers.CommandManager;
 import com.twostudentsllc.gladiator.managers.LocationManager;
 

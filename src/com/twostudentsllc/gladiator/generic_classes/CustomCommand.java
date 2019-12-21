@@ -1,11 +1,11 @@
-package com.twostudentsllc.gladiator.commands;
+package com.twostudentsllc.gladiator.generic_classes;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.twostudentsllc.gladiator.utils.Utils;
+import com.twostudentsllc.gladiator.global.Utils;
 
 /**
  * A common command super class

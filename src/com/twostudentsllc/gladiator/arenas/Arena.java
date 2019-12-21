@@ -1,7 +1,7 @@
 package com.twostudentsllc.gladiator.arenas;
 
 import com.twostudentsllc.gladiator.Main;
-import com.twostudentsllc.gladiator.supers.GameMap;
+import com.twostudentsllc.gladiator.generic_classes.GameMap;
 
 public class Arena extends GameMap {
 	

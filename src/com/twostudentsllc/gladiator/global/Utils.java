@@ -1,6 +1,5 @@
-package com.twostudentsllc.gladiator.utils;
+package com.twostudentsllc.gladiator.global;
 
-import com.twostudentsllc.gladiator.supers.Team;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -9,6 +8,7 @@ import org.bukkit.entity.Player;
 
 import com.twostudentsllc.gladiator.Main;
 import com.twostudentsllc.gladiator.arenas.Arena;
+import com.twostudentsllc.gladiator.generic_classes.Team;
 
 import net.md_5.bungee.api.ChatColor;
 

@@ -5,7 +5,7 @@ import java.util.HashMap;
 import org.bukkit.entity.Player;
 
 import com.twostudentsllc.gladiator.Main;
-import com.twostudentsllc.gladiator.arenas.MapRound;
+import com.twostudentsllc.gladiator.generic_classes.MapRound;
 
 public class RoundTimelimitUpdater implements Runnable {
 

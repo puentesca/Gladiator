@@ -6,8 +6,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.twostudentsllc.gladiator.Main;
-import com.twostudentsllc.gladiator.commands.CustomCommand;
-import com.twostudentsllc.gladiator.utils.Utils;
+import com.twostudentsllc.gladiator.generic_classes.CustomCommand;
+import com.twostudentsllc.gladiator.global.Utils;
 
 /**
  * Command that teleports a player to a spawnpoint

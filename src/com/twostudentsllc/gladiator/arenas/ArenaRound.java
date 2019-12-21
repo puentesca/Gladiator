@@ -7,6 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import com.twostudentsllc.gladiator.Main;
+import com.twostudentsllc.gladiator.generic_classes.MapRound;
 /**
  * An round for an arena
  * Copyright 2019 Casey Puentes. All rights reserved.
