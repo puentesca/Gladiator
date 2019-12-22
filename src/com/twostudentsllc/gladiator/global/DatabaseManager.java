@@ -182,6 +182,7 @@ public class DatabaseManager {
 	}
 	
 	//TODO: Make a check to stop from loading a duplicate world
+	//TODO: Also make a check to stop location from loading duplicates. You can just do it by wiping the current files and replacing them with these.
 	
 	public static HashMap<String, String> loadMap(String minigameName, String fileN)
 	{
