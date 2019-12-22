@@ -9,9 +9,12 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
+import com.twostudentsllc.gladiator.generic_classes.Game;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -43,13 +46,13 @@ public class LocationManager {
 	//private String databaseFileName = "locations.dat";
 	
 	/**
-	 * Stores location data for plugin. Available locations are: bluespawn, redspawn, lobby
+	 * Stores location data for plugin. Available locations are: "spawn", "lobby", "spectate", "hub", "objective"
 	 */
 	//private HashMap<String, Location> locations;
 	/**
 	 * Stores possible keys for locations to be stored at
 	 */
-	private String[] possibleLocationKeys = {"redspawn", "bluespawn", "lobby", "spectating"};
+	private String[] possibleLocationKeys = {"spawn", "lobby", "spectate", "hub", "objective"};
 	
 	public LocationManager(Main plugin) throws FileNotFoundException, ClassNotFoundException, IOException
 	{
@@ -69,10 +72,8 @@ public class LocationManager {
 		String mapName = args[2];
 		String key = args[3];
 
-		//TODO: Recreate a check to verify that the map key is valid. Check for formatting like spawn#_# where the first # is the team number starting at 0, and the second is the count of the current player
-		//If the key is an invalid key
-//		if(!isValidKey(sender, key))
-//			return;
+		//Handle input argument validation
+		validateArguments(sender, args);
 		
 		//Gets the game from the game manager, then gets the GameMap from the game, and adds the location.
 		//Will throw IllegalArgumentException if any of them do not exist
@@ -90,26 +91,73 @@ public class LocationManager {
 		String minigameName = args[1];
 		String mapName = args[2];
 		String key = args[3];
-		
-		//TODO: Recreate a check to verify that the map key is valid. Check for formatting like spawn#_# where the first # is the team number starting at 0, and the second is the count of the current player
-				//If the key is an invalid key
-		//If the key is an invalid key
-//		if(!isValidKey(p, key))
-//			return;
-//		
+
+		//Handle input argument validation
+		validateArguments(p, args);
+
+		GameMap targetMap = plugin.getGameManager().getGame(minigameName).getGameMap(mapName);
+
+		//Check if the location exists before trying to teleport the player
+		Location targetLoc = targetMap.getLocation(key);
+		if(targetLoc == null) {
+			Utils.Error(p, key + " does not exist as a stored location for " + targetMap.getMapDisplayName());
+		}
 		
 		p.teleport(plugin.getGameManager().getGame(minigameName).getGameMap(mapName).getLocation(key));
-		//TODO: 
-		//Check if minigameName exists and gets the Game
-		//Check if the mapName exists in the minigame and get the locations
-		//Check if the key exists in the locations
-		//Teleport the player to the location
-//		if(!locations.containsKey(key))
-//			return;
-		//p.teleport(locations.get(key));
+	}
+
+	/*
+	* Checks whether arguments passed in for locations are valid
+	* Sends chat error message to sender if inputs invalid
+	 */
+	private void validateArguments(Player sender, String[] args) {
+
+		String minigameName = args[1];
+		String mapName = args[2];
+		String key = args[3];
+
+		//Validate that the mini-game exists
+		Game targetGame = plugin.getGameManager().getGame(minigameName);
+		if(plugin.getGameManager().getGame(minigameName) != null) {
+			Utils.Error(sender, "Minigame does not exist!");
+		}
+
+		//Validate that the map exists
+		GameMap targetMap = targetGame.getGameMap(mapName);
+		if(targetGame.getGameMap(mapName) == null) {
+			Utils.Error(sender, "Map does not exist!");
+		}
+
+		//Is the location is one of the valid location keys
+		for(String possibleKey: possibleLocationKeys) {
+			if(!key.contains(possibleKey)) {
+				Utils.Error(sender, "Invalid Location");
+			}
+		}
+
+		//Custom validation for whether the location is a spawn-point
+		if(key.contains("spawn")) {
+			Pattern spawnValidate = Pattern.compile("spawn\\d+_\\d+"); //Check if format is spawn#_#
+			Matcher matcher = spawnValidate.matcher(key);
+			boolean spawnValid = matcher.matches();
+
+			if(!spawnValid)
+				Utils.Error(sender, "Spawn-point configuration invalid, the format is spawn#_#");
+		}
+
+		//Custom validation for whether the location is an objective
+		if(key.contains("objective")) {
+			Pattern spawnValidate = Pattern.compile("objective\\d+"); //Check if format is objective#
+			Matcher matcher = spawnValidate.matcher(key);
+			boolean spawnValid = matcher.matches();
+
+			if(!spawnValid)
+				Utils.Error(sender, "Objective configuration invalid, the format is objective#");
+		}
 	}
 	
 	/**
+	 * FIXME: Remove? Might be unnecessary because of validateArguments
 	 * Checks if the key is a valid key to be called upon
 	 * @param key The key to be validated
 	 * @return true if the key is valid

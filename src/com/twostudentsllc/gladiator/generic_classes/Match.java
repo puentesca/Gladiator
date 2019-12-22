@@ -21,6 +21,7 @@ public abstract class Match {
 
 
 	//TODO: Implement Warmup/Cooldown functionality
+	//TODO: Implement multiround functionality
 
 	/**
 	 * Contains the status of the current round
@@ -28,7 +29,7 @@ public abstract class Match {
 	 *
 	 */
 	public static enum STATUS {
-		WAITING, LOADING, IN_PROGRESS, COMPLETED, ERROR
+		WAITING, WARMUP, LOADING, IN_PROGRESS, COMPLETED, COOLDOWN, ERROR
 	};
 	
 	protected Main plugin;
@@ -47,6 +48,27 @@ public abstract class Match {
 	 * Holds the time limit countdown for when a round is running.
 	 */
 	private Countdown timelimitCountdown;
+
+	/**
+	 * How long should the warm up last
+	 */
+	private int warmUpTimeLimit;
+
+	/**
+	 * How long should the cooldown period last
+	 */
+	private int coolDownTimeLimit;
+
+
+	/**
+	 * Number of rounds this Match has
+	 */
+	private int totalRounds;
+
+	/**
+	 * What round the Match is currently on
+	 */
+	private int currentRound;
 	
 	/**
 	 * The teams currently participating in the round
@@ -54,12 +76,16 @@ public abstract class Match {
 	protected ArrayList<Team> teams;
 	
 	
-	public Match(Main plugin, GameMap map, int timeLimit, ArrayList<Team> teams)
+	public Match(Main plugin, GameMap map, int timeLimit, int warmUpTimeLimit, int coolDownTimeLimit, int totalRounds, ArrayList<Team> teams)
 	{
 		this.plugin = plugin;
 		this.map = map;
 		this.timeLimit = timeLimit;
 		this.teams = teams;
+		this.warmUpTimeLimit = warmUpTimeLimit;
+		this.coolDownTimeLimit = coolDownTimeLimit;
+		this.totalRounds = totalRounds;
+		this.currentRound = 0;
 	}
 
 	/**
@@ -102,10 +128,28 @@ public abstract class Match {
 	public abstract void handleTimelimitRemaining(int time);
 	
 	/**
-	 * Starts a round with the players and teams assigned
+	 * Starts a round with the players and teams assigned, also needs to increment round counter
 	 * @return True if the round was successfully started
 	 */
 	public abstract boolean startRound();
+
+	/**
+	 * Handles the warmup period, also in charge of setting state to WARMUP
+	 */
+	public abstract void doWarmup();
+
+	/**
+	 * Handles the cooldown period, also in charge of setting state to COOLDOWN
+	 */
+	public abstract void doCooldown();
+
+	/**
+	 * Whether or not there are any rounds remaining
+	 * @return true/false
+	 */
+	public boolean hasAnotherRound() {
+		return currentRound >= totalRounds;
+	}
 	
 	/**
 	 * Teleports all players to the spawn

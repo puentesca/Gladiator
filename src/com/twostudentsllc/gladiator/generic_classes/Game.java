@@ -49,7 +49,7 @@ public abstract class Game {
     
     public GameMap getGameMap(String mapName) {
     	if(!hasGameMap(mapName))
-    		throw new IllegalArgumentException("The minigame '" + minigameName + "' does not have map '" + mapName + "'!");
+    		return null;
         return maps.get(mapName);
     }
 

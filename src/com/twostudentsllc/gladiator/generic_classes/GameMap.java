@@ -179,14 +179,14 @@ public abstract class GameMap {
 	}
 	
 	/**
-	 * Gets a specified location. Throws IllegalArgumentException if the location does not exist
-	 * @return
+	 * Gets a specified location.
+	 * @return location or null if it does not exist
 	 */
 	public Location getLocation(String locationKey)
 	{
 		if(!locations.containsKey(locationKey))
 		{
-			throw new IllegalArgumentException("The location '" + locationKey + "' for map '" + mapName + "' does not exist!");
+			return null;
 		}
 		return locations.get(locationKey);
 	}
