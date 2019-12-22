@@ -243,4 +243,17 @@ public class Utils {
 		return teamList;
 	}
 	
+	/**
+	 * Gets the string mapped to a players spawn
+	 * @param teamNum The number of the team
+	 * @param playerNums The number of the player on the team
+	 * @return The string mapped to a players spawn
+	 */
+	public static String getPlayerSpawnLocationString(int teamNum, int playerNum)
+	{
+		String msg = "";
+		msg = "spawn" + teamNum + "_" + playerNum;
+		return msg;
+	}
+	
 }

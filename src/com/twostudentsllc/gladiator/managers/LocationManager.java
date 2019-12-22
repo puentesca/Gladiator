@@ -65,34 +65,34 @@ public class LocationManager {
 	 * @param fileDir The directory in which you want to load the location data from
 	 * @param fileName The name of the file in which you wish to load location data from
 	 */
-	public void saveLocationFile(HashMap<String, Location> locationsToSave, String fileDir, String fileName) throws FileNotFoundException, IOException
-	{
-		File file = new File(fileDir + fileName);
-		
-		ObjectOutputStream output = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream(file)));
-		
-		HashMap<String, String> serializedLocations = new HashMap<String, String>();
-		//If the key exists in the locations hashmap, serialize it.
-		for(String s : possibleLocationKeys)
-		{
-			if(locationsToSave.containsKey(s))
-			{
-				String serializedL = Utils.serializeLocation(locationsToSave.get(s));
-				serializedLocations.put(s, serializedL);
-			}
-		}
-		
-		try {
-			output.writeObject(serializedLocations);
-			output.flush();
-			output.close();
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-		
-	}
+//	public void saveLocationFile(HashMap<String, Location> locationsToSave, String fileDir, String fileName) throws FileNotFoundException, IOException
+//	{
+//		File file = new File(fileDir + fileName);
+//		
+//		ObjectOutputStream output = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream(file)));
+//		
+//		HashMap<String, String> serializedLocations = new HashMap<String, String>();
+//		//If the key exists in the locations hashmap, serialize it.
+//		for(String s : possibleLocationKeys)
+//		{
+//			if(locationsToSave.containsKey(s))
+//			{
+//				String serializedL = Utils.serializeLocation(locationsToSave.get(s));
+//				serializedLocations.put(s, serializedL);
+//			}
+//		}
+//		
+//		try {
+//			output.writeObject(serializedLocations);
+//			output.flush();
+//			output.close();
+//		}
+//		catch(Exception e)
+//		{
+//			e.printStackTrace();
+//		}
+//		
+//	}
 	
 	/**
 	 * Loads the given location data into a hashmap from a file through deserialization.
@@ -102,52 +102,52 @@ public class LocationManager {
 	 * @param fileName The name of the file in which you wish to load location data from
 	 * @return The loaded location data
 	 */
-	public HashMap<String, Location> loadLocationFile(String fileDir, String fileName) throws FileNotFoundException, IOException, ClassNotFoundException
-	{
-		File dir = new File(fileDir);
-		//If the directory doesnt exist, create it.
-		if(!dir.exists())
-		{
-			dir.mkdirs();
-		}
-		
-		File file = new File(fileDir + fileName);
-		//If the file doesnt exist
-		if(!file.exists()) {
-			try {
-			    file.createNewFile();
-			    return new HashMap<String, Location>();
-			} catch(IOException e) {
-			    e.printStackTrace();
-			}
-		}
-		
-		//Gets the files information
-		FileInputStream stream = new FileInputStream(file);
-		GZIPInputStream GZIP = new GZIPInputStream(stream);
-		ObjectInputStream input = new ObjectInputStream(GZIP);
-		Object readObject = input.readObject();
-		input.close();
-		
-		
-		//If the object read is not a hashmap
-		if(!(readObject instanceof HashMap))
-		{
-			throw new IOException("Object in " + fileName + " is not a HashMap.");
-		}
-			
-		HashMap<String, String> serializedLocations = (HashMap<String, String>) readObject;
-		HashMap<String, Location> convertedLocations = new HashMap<String, Location>();
-		//Updates HashMap to deserialized locations
-		for(String s : serializedLocations.keySet())
-		{
-			Location deserializedLocation = Utils.deserializeLocation(serializedLocations.get(s));
-			convertedLocations.put(s, deserializedLocation);
-			System.out.println("Location loaded: " + convertedLocations.get(s));
-		}
-			
-		return convertedLocations;	
-	}
+//	public HashMap<String, Location> loadLocationFile(String fileDir, String fileName) throws FileNotFoundException, IOException, ClassNotFoundException
+//	{
+//		File dir = new File(fileDir);
+//		//If the directory doesnt exist, create it.
+//		if(!dir.exists())
+//		{
+//			dir.mkdirs();
+//		}
+//		
+//		File file = new File(fileDir + fileName);
+//		//If the file doesnt exist
+//		if(!file.exists()) {
+//			try {
+//			    file.createNewFile();
+//			    return new HashMap<String, Location>();
+//			} catch(IOException e) {
+//			    e.printStackTrace();
+//			}
+//		}
+//		
+//		//Gets the files information
+//		FileInputStream stream = new FileInputStream(file);
+//		GZIPInputStream GZIP = new GZIPInputStream(stream);
+//		ObjectInputStream input = new ObjectInputStream(GZIP);
+//		Object readObject = input.readObject();
+//		input.close();
+//		
+//		
+//		//If the object read is not a hashmap
+//		if(!(readObject instanceof HashMap))
+//		{
+//			throw new IOException("Object in " + fileName + " is not a HashMap.");
+//		}
+//			
+//		HashMap<String, String> serializedLocations = (HashMap<String, String>) readObject;
+//		HashMap<String, Location> convertedLocations = new HashMap<String, Location>();
+//		//Updates HashMap to deserialized locations
+//		for(String s : serializedLocations.keySet())
+//		{
+//			Location deserializedLocation = Utils.deserializeLocation(serializedLocations.get(s));
+//			convertedLocations.put(s, deserializedLocation);
+//			System.out.println("Location loaded: " + convertedLocations.get(s));
+//		}
+//			
+//		return convertedLocations;	
+//	}
 	
 	/**
 	 * Sets the new location of one of the available keys

@@ -1,13 +1,13 @@
 package com.twostudentsllc.gladiator.arenas;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
+import org.bukkit.Bukkit;
 
 import com.twostudentsllc.gladiator.Main;
+import com.twostudentsllc.gladiator.generic_classes.GameMap;
 import com.twostudentsllc.gladiator.generic_classes.MapRound;
+import com.twostudentsllc.gladiator.generic_classes.Team;
 /**
  * An round for an arena
  * Copyright 2019 Casey Puentes. All rights reserved.
@@ -18,18 +18,9 @@ public class ArenaRound extends MapRound {
 	
 	private STATUS state = STATUS.WAITING;
 	
-	HashMap<String, Location> spawnpoints;
-	
-	private Main plugin;
-	
-	//TODO: Add player list and team list. Also make it so the constructor requires it.
-	//TODO: Make Team class have and ID and require each team to have one spawnpoint
-	
-	public ArenaRound(Main plugin, HashMap<String, Location> spawnpoints, int timeLimit)
+	public ArenaRound(Main plugin, GameMap map, int timeLimit, ArrayList<Team> teams)
 	{
-		super(plugin, timeLimit);
-		this.plugin = plugin;
-		this.spawnpoints = spawnpoints;
+		super(plugin, map, timeLimit, teams);
 	}
 	
 	@Override
@@ -40,6 +31,7 @@ public class ArenaRound extends MapRound {
 			System.out.println("Round not started as round did not have the status of: WAITING");
 			return false;
 		}
+		sendAllPlayersToSpawn();
 		//Starts the rounds time limit
 		startTimelimitCountdown();
 		//Add logic to start round
@@ -62,7 +54,19 @@ public class ArenaRound extends MapRound {
 	}
 	
 	@Override
-	public Player getWinner() {
+	public boolean hasWinner()
+	{
+		int alive = 0;
+		for(Team t : teams)
+		{
+			if(!t.isEliminated())
+				alive++;
+		}
+		return alive == 1;
+	}
+	
+	@Override
+	public Team getWinner() {
 		// TODO: Return winner
 		return null;
 	}
@@ -76,6 +80,7 @@ public class ArenaRound extends MapRound {
 	@Override
 	public void handleTimelimitRemaining(int time) {
 		
+		Bukkit.broadcastMessage("Time left: " + time);
 		//If the round is over
 		if(time == 0)
 		{

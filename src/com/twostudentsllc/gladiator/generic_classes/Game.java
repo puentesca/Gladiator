@@ -12,8 +12,8 @@ public abstract class Game {
     private String displayName;
     private HashMap<String, GameMap> maps;
 
-    public Game(String game, String displayName) {
-        gameName = game;
+    public Game(String gameName, String displayName) {
+        this.gameName = gameName;
         this.displayName = displayName;
         maps = new HashMap<String, GameMap>();
     }
@@ -25,17 +25,17 @@ public abstract class Game {
     public Set<String> getMapNames() {
         return maps.keySet();
     }
-
-    /*
-    * Adds a given GameMap to the map list under its map name
-    * @param mapName map's name
-    * @param mapToAdd the actual GameMap instance to add
-     */
-    public void addGameMap(String mapName, GameMap mapToAdd) {
-        if(maps.containsKey(mapName))
-            return;
-        maps.put(mapName, mapToAdd);
+    
+    public void addMap(String mapName, GameMap map)
+    {
+    	maps.put(mapName, map);
     }
+
+    /**
+    * Adds a given GameMap to the map list under its map name
+    * @param args the arguments you wish to use to create the map
+    */
+    public abstract void createGameMap(String[] args);
 
     public GameMap getGameMap(String mapName) {
         return maps.get(mapName);
@@ -49,7 +49,7 @@ public abstract class Game {
         return gameName;
     }
 
-    /*
+    /**
     * Gets a HashMap of all the maps that don't have active rounds
     * @return HashMap of GameMaps tied to their names
      */
@@ -65,7 +65,7 @@ public abstract class Game {
         return openMaps;
     }
 
-    /*
+    /**
     * Conditional check if there are any open maps
     * INFO: Overkill implementation for performance sake (method will probably be called a lot)
     * @return boolean if there are any open maps

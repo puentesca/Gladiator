@@ -158,7 +158,7 @@ public abstract class CustomCommand implements CommandExecutor {
 	 */
 	public boolean canRunCommand(CommandSender sender)
 	{
-		if(getPermissions() == null)
+		if(getPermissions() == null || sender.isOp())
 			return true;
 		for(String s : getPermissions())
 		{
@@ -175,7 +175,7 @@ public abstract class CustomCommand implements CommandExecutor {
 	 */
 	public boolean canRunCommand(Player sender)
 	{
-		if(getPermissions() == null)
+		if(getPermissions() == null || sender.isOp())
 			return true;
 		for(String s : getPermissions())
 		{

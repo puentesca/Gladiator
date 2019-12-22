@@ -1,21 +1,36 @@
 package com.twostudentsllc.gladiator.managers;
 
+import java.util.List;
+
 import org.bukkit.Chunk;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
+import org.bukkit.generator.ChunkGenerator;
 
-import java.util.List;
+import com.twostudentsllc.gladiator.global.CustomChunkGenerator;
 
 public class WorldManager {
 
     /*
-     * Gets world by the name {worldname}
+     * Gets world by the name {worldname}. If one does not exist, it creates one
      * @return the World object if valid world, null if invalid world or doesn't exist
      */
     public static World getWorld(Server currentServer, String worldName) {
+//    	World worldToGet = currentServer.getWorld(worldName);
+//    	if(worldToGet == null)
+//    	{
+//    		worldToGet = createVoidWorld(worldName);
+//    	}
         return currentServer.getWorld(worldName);
     }
+    
+//    public static World createVoidWorld(String worldName)
+//    {
+//    	WorldCreator w = new WorldCreator("Void creator");
+//    	ChunkGenerator g = new CustomChunkGenerator();
+//    	w.generator(g);
+//    }
 
     /*
      * Creates a world under the name worldName, if it already exists it just loads from disk
@@ -87,3 +102,4 @@ public class WorldManager {
     }
 
 }
+

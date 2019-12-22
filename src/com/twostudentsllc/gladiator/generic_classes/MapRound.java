@@ -1,11 +1,14 @@
 package com.twostudentsllc.gladiator.generic_classes;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import com.twostudentsllc.gladiator.Main;
-import com.twostudentsllc.gladiator.runnables.*;
+import com.twostudentsllc.gladiator.global.Utils;
+import com.twostudentsllc.gladiator.runnables.RoundTimelimitUpdater;
 
 /**
  * An interface for each round in an arena.
@@ -13,8 +16,6 @@ import com.twostudentsllc.gladiator.runnables.*;
  * @author Casey Puentes
  *
  */
-
-//TODO: Add timelimit variables
 
 public abstract class MapRound {
 	/**
@@ -26,7 +27,12 @@ public abstract class MapRound {
 		WAITING, LOADING, IN_PROGRESS, COMPLETED, ERROR
 	};
 	
-	private Main plugin;
+	protected Main plugin;
+	
+	/**
+	 * The map that this current round is taking place on
+	 */
+	protected GameMap map;
 	
 	/**
 	 * Holds the starting time limit of the round, in seconds
@@ -38,20 +44,47 @@ public abstract class MapRound {
 	 */
 	private Countdown timelimitCountdown;
 	
+	/**
+	 * The teams currently participating in the round
+	 */
+	protected ArrayList<Team> teams;
 	
 	
-	//TODO: Add logic to accept the teams and players
-	//Also add appropriate variables
-	public MapRound(Main plugin, int timeLimit)
+	public MapRound(Main plugin, GameMap map, int timeLimit, ArrayList<Team> teams)
 	{
 		this.plugin = plugin;
+		this.map = map;
 		this.timeLimit = timeLimit;
+		this.teams = teams;
 	}
+
+	/**
+	 * Tells the GameMap to teleport the player to the spectating area
+	 * @param p
+	 */
+	public void sendPlayerToSpectate(Player p)
+	{
+		map.sendPlayerToSpectate(p);
+	}
+	
+	//Method is called by Java when an object is going to be deleted
+	@Override
+	protected void finalize() {
+		//Unloads loaded chunks in the world when the object is removed
+		map.unloadChunks();
+	}
+	
+	/**
+	 * Gets if there is a winner
+	 * @return True if the round has a winner
+	 */
+	public abstract boolean hasWinner();
+	
 	/**
 	 * Gets the winner of the round
 	 * @return
 	 */
-	public abstract Player getWinner();
+	public abstract Team getWinner();
 	/**
 	 * Gets the current status of the round
 	 * @return The status of the round
@@ -69,6 +102,38 @@ public abstract class MapRound {
 	 * @return True if the round was successfully started
 	 */
 	public abstract boolean startRound();
+	
+	/**
+	 * Teleports all players to the spawn
+	 */
+	public void sendAllPlayersToSpawn()
+	{
+		for(Team t : teams)
+		{
+			HashMap<Player, Location> playerSpawns = t.getPlayerSpawns();
+			for(Player p : playerSpawns.keySet())
+			{
+				p.teleport(playerSpawns.get(p));
+			}
+		}
+	}
+	
+	/**
+	 * Sends a player to their assigned spawn
+	 * @param p The player to send to spawn
+	 */
+	public void sendPlayerToSpawn(Player p)
+	{
+		for(Team t : teams)
+		{
+			if(t.containsPlayer(p))
+			{
+				p.teleport(t.getPlayerSpawns().get(p));
+				return;
+			}
+		}
+		throw new IllegalArgumentException("Player '" + p.getName() + "' is not part of a team in this round on map: '" + map.getMapDisplayName() + "'!");
+	}
 	
 	/**
 	 * Starts the time limit coundown for the round
@@ -98,5 +163,34 @@ public abstract class MapRound {
 	public Countdown getTimelimitCountdown()
 	{
 		return timelimitCountdown;
+	}
+	
+	/**
+	 * Maps every player a spawnpoint
+	 */
+	public void assignPlayerSpawnpoints()
+	{
+		HashMap<String, Location> locations = map.getLocations();
+		//Loops through every team
+		for(Team t : teams)
+		{
+			HashMap<Player, Location> playerSpawns = new HashMap<Player, Location>();
+			int teamNum = t.getTeamID();
+			ArrayList<Player> teamMembers = t.getPlayers();
+			//Every player in every team
+			for(int playerNum = 0; playerNum < t.getTotalPlayers(); playerNum++)
+			{
+				String spawnString = Utils.getPlayerSpawnLocationString(teamNum, playerNum);
+				//If the spawn doesn't exist, there arent enough spawns set for players
+				if(!locations.containsKey(spawnString))
+					throw new IllegalArgumentException("This map has not been assigned enough player spawns! Confirmed missing spawn: '" + spawnString + "' and possibly others.");
+				
+				Location spawn = locations.get(spawnString);
+				Player p = teamMembers.get(playerNum);
+				
+				playerSpawns.put(p, spawn);
+			}
+			t.setPlayerSpawns(playerSpawns);
+		}
 	}
 }

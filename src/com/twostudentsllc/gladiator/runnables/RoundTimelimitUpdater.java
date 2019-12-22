@@ -7,6 +7,12 @@ import org.bukkit.entity.Player;
 import com.twostudentsllc.gladiator.Main;
 import com.twostudentsllc.gladiator.generic_classes.MapRound;
 
+/**
+ * A runnable class that sends the current countdown time to the map round
+ * Copyright 2019 Casey Puentes. All rights reserved.
+ * @author Casey Puentes
+ *
+ */
 public class RoundTimelimitUpdater implements Runnable {
 
 	/**

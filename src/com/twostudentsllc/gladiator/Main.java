@@ -2,13 +2,12 @@ package com.twostudentsllc.gladiator;
 
 import java.io.IOException;
 
+import org.bukkit.WorldCreator;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.twostudentsllc.gladiator.arenas.ArenaRound;
 import com.twostudentsllc.gladiator.commands.location.SetLocationCommand;
 import com.twostudentsllc.gladiator.commands.location.TeleportToLocationCommand;
 import com.twostudentsllc.gladiator.commands.misc.HelpCommand;
-import com.twostudentsllc.gladiator.generic_classes.MapRound;
 import com.twostudentsllc.gladiator.managers.CommandManager;
 import com.twostudentsllc.gladiator.managers.LocationManager;
 
@@ -32,6 +31,7 @@ public class Main extends JavaPlugin{
 	@Override
 	public void onEnable()
 	{
+		System.out.println("Generator Settings: " + new WorldCreator("Void creator").generatorSettings());
 		initializeManagers();
 		initialzeCommands();
 		registerListeners();

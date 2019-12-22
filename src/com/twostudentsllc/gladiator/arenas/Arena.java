@@ -1,9 +1,12 @@
 package com.twostudentsllc.gladiator.arenas;
 
+import java.util.ArrayList;
+
 import com.twostudentsllc.gladiator.Main;
 import com.twostudentsllc.gladiator.generic_classes.GameMap;
+import com.twostudentsllc.gladiator.generic_classes.Team;
 
-public class Arena extends GameMap {
+public class Arena extends GameMap{
 	
 	//TODO: Figure out how to get spawnpoints for teams as well as lobbies and such
 	
@@ -24,13 +27,10 @@ public class Arena extends GameMap {
 	}
 
 	@Override
-	//TODO: Create round class and send the teams.
-	public void startRound() {
-		if(!canStartRound())
+	public void startRound(ArrayList<Team> teams) {
+		if(!canStartRound(teams))
 			return;
-		
-		//TODO: CHange to send tams to created round
-		ArenaRound round = null;
+		ArenaRound round = new ArenaRound(plugin, this, 100, teams);
 		currentRound = round;
 		hasRunningRound = true;
 	}

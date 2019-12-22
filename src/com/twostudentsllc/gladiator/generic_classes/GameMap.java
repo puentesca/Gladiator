@@ -1,14 +1,16 @@
 package com.twostudentsllc.gladiator.generic_classes;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.twostudentsllc.gladiator.managers.WorldManager;
 import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.entity.Player;
 
 import com.twostudentsllc.gladiator.Main;
-import com.twostudentsllc.gladiator.managers.LocationManager;
-import org.bukkit.World;
+import com.twostudentsllc.gladiator.global.DatabaseManager;
+import com.twostudentsllc.gladiator.managers.WorldManager;
 
 /**
  * Super class that stores all data relating to a maps special information
@@ -19,7 +21,7 @@ import org.bukkit.World;
 public abstract class GameMap {
 	
 	//TODO: Load maps from the Game's subclasses. Have abstract methods to load in the Game super class.
-	//TODO: Create DatabaseManager to load and save strings in files from directories
+	//TODO: Make game track the world the map is in
 	
 	/**
 	 * The main plugin
@@ -38,9 +40,9 @@ public abstract class GameMap {
 	protected String mapName;
 
 	/*
-	* The actual map instance
+	* The world the map is located in
 	 */
-	protected World map;
+	protected World mapWorld;
 	
 	/**
 	 * <p>The display name of this map.</p>
@@ -78,6 +80,12 @@ public abstract class GameMap {
 	protected MapRound currentRound;
 	
 	/**
+	 * The locations for the map
+	 */
+	private HashMap<String, Location> locations;
+	
+	
+	/**
 	 * Creates a map with the data given. Must be called from a class extending the Game superclass
 	 * @param plugin
 	 * @param minigameName The minigame that this map is associated with.
@@ -98,36 +106,17 @@ public abstract class GameMap {
 		this.maxTeams = maxTeams;
 		this.minPlayers = minPlayers;
 		this.maxPlayers = maxPlayers;
-		this.map = WorldManager.getWorld(plugin.getServer(), mapName);
+		this.mapWorld = WorldManager.getWorld(plugin.getServer(), mapName);
 		hasRunningRound = false;
 		loadLocations();
 	}
-
-	//Method is called by Java when an object is going to be deleted
-	@Override
-	protected void finalize() {
-		//Unloads loaded chunks in the world when the object is removed
-		unloadChunks();
-	}
-	
-	/**
-	 * The locations for the map
-	 */
-	private HashMap<String, Location> locations;
 	
 	/**
 	 * Loads all locations associated with this minigames map
 	 */
 	public void loadLocations()
 	{
-		LocationManager locMan = plugin.getLocationManager();
-		//Pull locations from the location manager
-		try {
-			locations = locMan.loadLocationFile(LocationManager.getDatabaseDirectoryString(minigameName), LocationManager.getDatabaseFileString(mapName));
-		} catch (ClassNotFoundException | IOException e) {
-			e.printStackTrace();
-			System.out.println("ERROR: " + mapName + " locations did not load successfully!");
-		}
+		locations = DatabaseManager.loadLocations(minigameName, mapName);
 		System.out.println("Successfully loaded map " + mapName + " locations for Minigame: " + minigameName + "");
 	}
 	
@@ -136,23 +125,15 @@ public abstract class GameMap {
 	 */
 	public void saveLocations()
 	{
-		LocationManager locMan = plugin.getLocationManager();
-		//Pull locations from the location manager
-		try {
-			locMan.saveLocationFile(locations, LocationManager.getDatabaseDirectoryString(minigameName), LocationManager.getDatabaseFileString(mapName));
-		} catch (IOException e) {
-			e.printStackTrace();
-			System.out.println("ERROR: " + mapName + " locations did not save successfully!");
-		}
+		DatabaseManager.saveLocations(locations, minigameName, mapName);
 		System.out.println("Successfully saved map " + mapName + " locations for Minigame: " + minigameName + "");
 	}
-
-
+	
 	/*
 	* Unload loaded chunks on the map
 	 */
 	public void unloadChunks() {
-		WorldManager.unloadLoadedChunks(plugin.getServer(), map);
+		WorldManager.unloadLoadedChunks(plugin.getServer(), mapWorld);
 	}
 	
 	/**
@@ -163,7 +144,7 @@ public abstract class GameMap {
 	/**
 	 * General method to start a round
 	 */
-	public abstract void startRound();
+	public abstract void startRound(ArrayList<Team> teams);
 	
 	/**
 	 * General method to end a round
@@ -174,18 +155,29 @@ public abstract class GameMap {
 	 * Gets whether or not a round can be started
 	 * @return True if a round can be started
 	 */
-	public boolean canStartRound()
+	public boolean canStartRound(ArrayList<Team> teams)
 	{
 		if(hasRunningRound())
 		{
 			System.out.println("Round is already runing!");
 			return false;
 		}
-	
-		//TODO: Add check to see if the Arraylist of teams passed in has a number of teams inside the minTeams and maxTeams bounds
-		//Also check to see if there is a valid number of total players in the teams that is with the minPlayers and maxPlayers bounds
-		//TODO: Check to see if there is one spawnpoint for every team.
+		//If the team amount is not within bounds set by the map
+		if(teams.size() < minTeams || teams.size() > minTeams)
+		{
+			throw new IllegalArgumentException("Team amount now within map bounds!");
+		}
 		
+		int players = 0;
+		for(Team t : teams)
+		{
+			players += t.getTotalPlayers();
+		}
+		//If the player amount isnt within bounds set by the map
+		if(players < minPlayers || players > maxPlayers)
+		{
+			throw new IllegalArgumentException("Player amount not within bounds set by map!");
+		}
 		return true;
 		
 	}
@@ -246,6 +238,23 @@ public abstract class GameMap {
 	 */
 	public HashMap<String, Location> getLocations() {
 		return locations;
+	}
+	
+	/**
+	 * @return This maps set spectating location
+	 */
+	public Location getSpectatingLocation()
+	{
+		return locations.get("spectate");
+	}
+	
+	/**
+	 * Teleports a player to the spectating location
+	 * @param p The player to teleport
+	 */
+	public void sendPlayerToSpectate(Player p)
+	{
+		p.teleport(getSpectatingLocation());
 	}
 	
 	/**

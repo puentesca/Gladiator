@@ -1,4 +1,4 @@
-package com.twostudentsllc.gladiator.commands.location;
+package com.twostudentsllc.gladiator.commands.testing;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -10,25 +10,27 @@ import com.twostudentsllc.gladiator.generic_classes.CustomCommand;
 import com.twostudentsllc.gladiator.global.Utils;
 
 /**
- * Command that teleports a player to a spawnpoint
+ * A command
  * Copyright 2019 Casey Puentes. All rights reserved.
  * @author Casey Puentes
  *
  */
-public class TeleportToLocationCommand extends CustomCommand{
+public class TestCommand extends CustomCommand {
 	
 	private Main plugin;
-
-	public TeleportToLocationCommand(Main plugin)
+	
+	public TestCommand(Main plugin)
 	{
-		super.setName("teleporttolocation")
-		 .setDescription("Teleports a player to a specified spawn location")
-		 .setUsage("/gladiator teleporttolocation <minigameName> <mapName> <locationKey>")
-		 .setPermissions(new String[] {"minigames.teleporttolocation"})
-		 .setMinArgs(4)
-		 .setMaxArgs(4)
-		 .setPlayerOnly(true);
 		
+		super.setName("createmap")
+			 .setDescription("Creates a new map")
+			 .setUsage("/gladiator createmap <minigameName> <mapName> <mapDisplayName> <minTeams> <maxTeams> <minPlayers> <maxPlayers>")
+			 .setPermissions(new String[] {"gladiator.createmap"})
+			 .setMinArgs(8)
+			 .setMaxArgs(8)
+			 .setPlayerOnly(true);
+		
+		//Initializes data
 		this.plugin = plugin;
 		plugin.getCommandManager().registerCommand(getName(), this);
 	}
@@ -37,8 +39,10 @@ public class TeleportToLocationCommand extends CustomCommand{
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		String commandName = args[0];
 		
+		//Signifies the command has been called
 		commandCalled(sender, cmd, label, args);
-		Utils.commandCompletedMessage(sender, getName());
+		
+		Utils.commandCompletedMessage(sender, getName()); //Command completion confirmation
 		return true;
 	}
 	
@@ -47,8 +51,7 @@ public class TeleportToLocationCommand extends CustomCommand{
 	 */
 	private void commandCalled(CommandSender sender, Command cmd, String label, String[] args)
 	{
-		//Execute command logic
-		plugin.getLocationManager().teleportToLocation((Player)sender, args);
+		
 	}
 	
 
