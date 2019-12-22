@@ -190,7 +190,7 @@ public class LocationManager {
 //			return;
 //		
 		
-		plugin.getGameManager().getGame(minigameName).getGameMap(mapName).getLocation(key);
+		p.teleport(plugin.getGameManager().getGame(minigameName).getGameMap(mapName).getLocation(key));
 		//TODO: 
 		//Check if minigameName exists and gets the Game
 		//Check if the mapName exists in the minigame and get the locations

@@ -4,12 +4,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import com.twostudentsllc.gladiator.Main;
 import com.twostudentsllc.gladiator.global.DatabaseManager;
+import com.twostudentsllc.gladiator.global.Utils;
 import com.twostudentsllc.gladiator.managers.WorldManager;
 
 /**
@@ -116,7 +118,30 @@ public abstract class GameMap {
 	 */
 	public void loadLocations()
 	{
-		locations = DatabaseManager.loadLocations(minigameName, mapName);
+		HashMap<String, String> serializedLocations = DatabaseManager.loadLocations(minigameName, mapName);
+		
+		locations = new HashMap<String, Location>();
+		for(String s : serializedLocations.keySet())
+		{
+			String locationKey = s;
+			String[] parts = serializedLocations.get(locationKey).split(":");
+			String worldName = parts[0];
+			double x = Double.parseDouble(parts[1]);
+			double y = Double.parseDouble(parts[2]);
+			double z = Double.parseDouble(parts[3]);
+			float yaw = Float.parseFloat(parts[4]);
+			float pitch = Float.parseFloat(parts[5]);
+			Location l = new Location(Bukkit.getServer().getWorld(worldName), x, y, z, yaw, pitch);
+			locations.put(locationKey, l);
+			
+		}
+		
+		//If the locations dont exist
+//		if(locations == null)
+//		{
+//			System.out.println("No saved locations found. Creating new hashmap.");
+//			locations = new HashMap<String, Location>();
+//		}
 		System.out.println("Successfully loaded map " + mapName + " locations for Minigame: " + minigameName + "");
 	}
 	
@@ -125,7 +150,14 @@ public abstract class GameMap {
 	 */
 	public void saveLocations()
 	{
-		DatabaseManager.saveLocations(locations, minigameName, mapName);
+		HashMap<String, String> serializedLocations = new HashMap<String, String>();
+		
+		for(String s : locations.keySet())
+		{
+			serializedLocations.put(s, Utils.serializeLocation(locations.get(s)));
+		}
+		
+		DatabaseManager.saveLocations(serializedLocations, minigameName, mapName);
 		System.out.println("Successfully saved map " + mapName + " locations for Minigame: " + minigameName + "");
 	}
 	

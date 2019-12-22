@@ -9,17 +9,18 @@ import com.twostudentsllc.gladiator.global.DatabaseManager;
 
 public abstract class Game {
 
-    private String minigameName;
-    private String minigameDisplayName;
-    private HashMap<String, GameMap> maps;
+    protected String minigameName;
+    protected String minigameDisplayName;
+    protected HashMap<String, GameMap> maps;
 
-    private Main plugin;
+    protected Main plugin;
     
     public Game(Main plugin, String game, String displayName) {
         this.plugin = plugin;
     	minigameName = game;
         this.minigameDisplayName = displayName;
         maps = new HashMap<String, GameMap>();
+        loadAllMaps();
     }
 
     public HashMap<String, GameMap> getMaps() {
@@ -35,9 +36,19 @@ public abstract class Game {
     * 
     */
     public abstract void createGameMap(String[] args);
-
+    
+    /**
+     * Gets whether or not the map exists
+     * @param mapName The name of the map (Not display name)
+     * @return True if the map exists
+     */
+    public boolean hasGameMap(String mapName)
+    {
+    	return maps.containsKey(mapName);
+    }
+    
     public GameMap getGameMap(String mapName) {
-    	if(!maps.containsKey(mapName))
+    	if(!hasGameMap(mapName))
     		throw new IllegalArgumentException("The minigame '" + minigameName + "' does not have map '" + mapName + "'!");
         return maps.get(mapName);
     }
@@ -50,19 +61,16 @@ public abstract class Game {
         return minigameName;
     }
 
-    //TODO: Add saveAllData() method which uses the DatabaseManager to save the hashmap of maps
-    public boolean saveAllData()
-    {
-    	for(String s : maps.keySet())
-    	{
-    		GameMap map = maps.get(s);
-    		map.saveLocations();
-    		DatabaseManager.saveMap(map, minigameName, map.getMapName());
-    	}
-    	
-    	
-    	return true;
-    }
+    /**
+     * Saves all map data
+     * @return True if all data was saved successfully
+     */
+    public abstract boolean saveAllData();
+
+    /**
+     * Loads all maps associated with this Game
+     */
+    public abstract void loadAllMaps();
     
     /**
      * Registers the game with the GameManager

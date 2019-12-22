@@ -22,12 +22,35 @@ import com.twostudentsllc.gladiator.generic_classes.GameMap;
  */
 public class DatabaseManager {
 	
-	public static void saveLocations(HashMap<String, Location> locations, String minigameName, String mapName)
+	public static void saveLocations(HashMap<String, String> locations, String minigameName, String mapName)
 	{
 		String fileDir = getDatabaseDirectoryString(minigameName);
 		String fileName = getLocationFileNameString(mapName);
 		
+		System.out.println("Saving location data for minigame '" + minigameName  + "' and map '" + mapName + "' at file: '" + fileDir + fileName + "'!");
+		
+		File dir = new File(fileDir);
+		//If the directory doesnt exist, create it.
+		if(!dir.exists())
+		{
+			dir.mkdirs();
+		}
+		
+		
 		File file = new File(fileDir + fileName);
+		
+		System.out.println("Actual file path: '" + file.getPath() + "'");
+		
+		//If the file doesnt exist
+		if(!file.exists()) {
+			try {
+				file.mkdirs();
+			    file.createNewFile();
+			} catch(IOException e) {
+			    e.printStackTrace();
+			}
+		}
+		
 		ObjectOutputStream output = null;
 		try {
 			output = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream(file)));
@@ -51,12 +74,33 @@ public class DatabaseManager {
 		
 	}
 	
-	public static void saveMap(GameMap map, String minigameName, String mapName)
+	public static void saveMaps(HashMap<String, String> serializedMaps, String minigameName, String fileN)
 	{
 		String fileDir = getDatabaseDirectoryString(minigameName);
-		String fileName = getLocationFileNameString(mapName);
+		String fileName = getDataFileNameString(fileN);
+		
+		System.out.println("Saving map data for minigame '" + minigameName  + "' at file: '" + fileDir + fileName + "'!");
 		
 		File file = new File(fileDir + fileName);
+		
+		System.out.println("Actual file path: '" + file.getPath() + "'");
+		
+		File dir = new File(fileDir);
+		//If the directory doesnt exist, create it.
+		if(!dir.exists())
+		{
+			dir.mkdirs();
+		}
+		
+		if(!file.exists()) {
+			try {
+				file.mkdirs();
+			    file.createNewFile();
+			} catch(IOException e) {
+			    e.printStackTrace();
+			}
+		}
+		
 		ObjectOutputStream output = null;
 		try {
 			output = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream(file)));
@@ -69,7 +113,7 @@ public class DatabaseManager {
 			return;
 		
 		try {
-			output.writeObject(map);
+			output.writeObject(serializedMaps);
 			output.flush();
 			output.close();
 		}
@@ -79,11 +123,12 @@ public class DatabaseManager {
 		}
 	}
 	
-	public static HashMap<String, Location> loadLocations(String minigameName, String mapName)
+	public static HashMap<String, String> loadLocations(String minigameName, String mapName)
 	{
 		String fileDir = getDatabaseDirectoryString(minigameName);
 		String fileName = getLocationFileNameString(mapName);
 		
+		System.out.println("Loading location data for minigame '" + minigameName  + "' and map '" + mapName + "' at file: '" + fileDir + fileName + "'!");
 		File dir = new File(fileDir);
 		//If the directory doesnt exist, create it.
 		if(!dir.exists())
@@ -92,11 +137,14 @@ public class DatabaseManager {
 		}
 		
 		File file = new File(fileDir + fileName);
+		
+		System.out.println("Actual file path: '" + file.getPath() + "'");
 		//If the file doesnt exist
 		if(!file.exists()) {
 			try {
+				//file.mkdirs();
 			    file.createNewFile();
-			    return new HashMap<String, Location>();
+			    return new HashMap<String, String>();
 			} catch(IOException e) {
 			    e.printStackTrace();
 			}
@@ -129,14 +177,19 @@ public class DatabaseManager {
 //			return null;
 //		}
 		
-		return (HashMap<String, Location>) readObject;
+		return (HashMap<String, String>) readObject;
 		
 	}
 	
-	public static GameMap loadMap(String minigameName, String mapName)
+	//TODO: Make a check to stop from loading a duplicate world
+	
+	public static HashMap<String, String> loadMap(String minigameName, String fileN)
 	{
+		
 		String fileDir = getDatabaseDirectoryString(minigameName);
-		String fileName = getLocationFileNameString(mapName);
+		String fileName = getDataFileNameString(fileN);
+		
+		System.out.println("Loading map data for minigame '" + minigameName  + "' at file: '" + fileDir + fileName + "'!");
 		
 		File dir = new File(fileDir);
 		//If the directory doesnt exist, create it.
@@ -146,9 +199,18 @@ public class DatabaseManager {
 		}
 		
 		File file = new File(fileDir + fileName);
+		
+		System.out.println("Actual file path: '" + file.getPath() + "'");
 		//If the file doesnt exist
 		if(!file.exists()) {
-			throw new NullPointerException("Map does not exist!!");
+			System.out.println("Maps HashMap does not exist! Creating an empty one.");
+			try {
+				//file.mkdirs();
+			    file.createNewFile();
+			    return new HashMap<String, String>();
+			} catch(IOException e) {
+			    e.printStackTrace();
+			}
 		}
 		
 		Object readObject = null;
@@ -178,7 +240,7 @@ public class DatabaseManager {
 //			return null;
 //		}
 		
-		return (GameMap) readObject;
+		return (HashMap<String, String>) readObject;
 		
 	}
 	
@@ -190,7 +252,7 @@ public class DatabaseManager {
 	 */
 	public static String getDatabaseDirectoryString(String minigameName)
 	{
-		String dir = "/minigames/" + minigameName + "/";
+		String dir = "plugins/minigames/" + minigameName + "/";
 		return dir;
 	}
 	
@@ -202,6 +264,17 @@ public class DatabaseManager {
 	public static String getLocationFileNameString(String mapName)
 	{
 		String file = mapName + "_locations.dat";
+		return file;
+	}
+	
+	/**
+	 * Creates a string representing the file name of any data file
+	 * @param fileName The name you want the data file to have
+	 * @return A string representing the file name
+	 */
+	public static String getDataFileNameString(String fileName)
+	{
+		String file = fileName + ".dat";
 		return file;
 	}
 }
