@@ -1,7 +1,7 @@
 package com.twostudentsllc.gladiator.runnables;
 
 import com.twostudentsllc.gladiator.Main;
-import com.twostudentsllc.gladiator.generic_classes.Match;
+import com.twostudentsllc.gladiator.generic_classes.MatchRound;
 
 /**
  * A runnable class that sends the current countdown time to the map round
@@ -14,11 +14,12 @@ public class RoundTimelimitUpdater implements Runnable {
 	/**
 	 * The round that the time left should be sent to
 	 */
-	private Match round;
+	private MatchRound round;
 	
+	//TODO: Change this class so it is handled by the MatchRound class
 	private Main plugin;
 	
-	public RoundTimelimitUpdater(Main plugin, Match round)
+	public RoundTimelimitUpdater(Main plugin, MatchRound round)
 	{
 		this.plugin = plugin;
 		this.round = round;
@@ -36,7 +37,7 @@ public class RoundTimelimitUpdater implements Runnable {
 	public void sendTimeLeft()
 	{
 		int timeLeft = round.getTimelimitCountdown().getSecondsLeft();
-		round.handleTimelimitRemaining(timeLeft);
+		round.handleTimeRemaining(timeLeft);
 	}
 
 }

@@ -90,7 +90,7 @@ public abstract class Game {
         HashMap<String, GameMap> openMaps = new HashMap<>();
 
         for(Map.Entry<String, GameMap> mapEntry: getMaps().entrySet()) {
-            if(!mapEntry.getValue().hasRunningRound) {
+            if(!mapEntry.getValue().hasRunningMatch) {
                 openMaps.put(mapEntry.getKey(), mapEntry.getValue());
             }
         }

@@ -159,7 +159,7 @@ public class QueueManager {
 		 */
 		public boolean canMakeGame() {
 
-			//O(n^2) method to find group combos TODO: Improve somehow?
+			//O(n^2) method to find group combos TODO: Improve somehow? 
 			for(PlayerGroup group: playerList) {
 				int sum = group.groupMembers.size();
 

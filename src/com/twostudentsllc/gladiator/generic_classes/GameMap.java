@@ -73,17 +73,31 @@ public abstract class GameMap {
 	/**
 	 * Whether or not a round is currently running
 	 */
-	protected boolean hasRunningRound;
+	protected boolean hasRunningMatch;
 	
 	/**
 	 * The current round being played. Null if no round is being played
 	 */
-	protected Match currentRound;
+	protected MapMatch currentMatch;
 	
 	/**
 	 * The locations for the map
 	 */
-	private HashMap<String, Location> locations;
+	protected HashMap<String, Location> locations;
+	
+	/**
+	 * The time that the warmup takes before starting a round
+	 */
+	protected int warmupTimeLimit;
+	
+	/**
+	 * The time that the cooldown takes before starting a new round or ending the match
+	 */
+	protected int cooldownTimeLimit;
+	/**
+	 * Holds the total number of rounds that a match takes
+	 */
+	protected int totalRounds;
 	
 	
 	/**
@@ -97,7 +111,7 @@ public abstract class GameMap {
 	 * @param minPlayers The minimum players the map can have to function
 	 * @param maxPlayers The maximum players the map can have to function
 	 */
-	public GameMap(Main plugin, String minigameName, String mapName, String mapDisplayName, int minTeams, int maxTeams, int minPlayers, int maxPlayers)
+	public GameMap(Main plugin, String minigameName, String mapName, String mapDisplayName, int minTeams, int maxTeams, int minPlayers, int maxPlayers, int warmupTime, int cooldownTime, int totalRounds)
 	{
 		this.plugin = plugin;
 		this.minigameName = minigameName;
@@ -107,8 +121,12 @@ public abstract class GameMap {
 		this.maxTeams = maxTeams;
 		this.minPlayers = minPlayers;
 		this.maxPlayers = maxPlayers;
+		this.warmupTimeLimit = warmupTime;
+		this.cooldownTimeLimit = cooldownTime;
+		this.totalRounds = totalRounds;
+		//TODO: Make map creation generate a void world with the mapName as its name
 		this.mapWorld = WorldManager.getWorld(plugin.getServer(), mapName);
-		hasRunningRound = false;
+		hasRunningMatch = false;
 		loadLocations();
 	}
 	
@@ -204,20 +222,20 @@ public abstract class GameMap {
 	public abstract String serialize();
 	
 	/**
-	 * This function is in charge of initializing a new round
+	 * This function is in charge of starting a new match
 	 */
-	public abstract void startRound(ArrayList<Team> teams);
+	public abstract void startMatch(ArrayList<Team> teams);
 	
 	/**
-	 * General method to end a round
+	 * General method to end a match
 	 */
-	public abstract void endRound();
+	public abstract void endMatch();
 	
 	/**
 	 * Gets whether or not a round can be started
 	 * @return True if a round can be started
 	 */
-	public boolean canStartRound(ArrayList<Team> teams)
+	public boolean canStartMatch(ArrayList<Team> teams)
 	{
 		if(hasRunningRound())
 		{
@@ -294,6 +312,22 @@ public abstract class GameMap {
 	{
 		return maxPlayers;
 	}
+	
+	public int getWarmupTimeLimit()
+	{
+		return warmupTimeLimit;
+	}
+	
+	public int getCooldownTimeLimit()
+	{
+		return cooldownTimeLimit;
+	}
+	
+	public int getTotalRounds()
+	{
+		
+		return totalRounds;
+	}
 
 	/**
 	 * @return The locations associated with this map
@@ -325,7 +359,7 @@ public abstract class GameMap {
 	 */
 	public boolean hasRunningRound()
 	{
-		return hasRunningRound;
+		return hasRunningMatch;
 	}
 	
 	

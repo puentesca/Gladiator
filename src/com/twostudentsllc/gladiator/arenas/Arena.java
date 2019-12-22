@@ -12,8 +12,8 @@ public class Arena extends GameMap{
 	
 	
 	public Arena(Main plugin, String minigameName, String mapName, String mapDisplayName, int minTeams, int maxTeams,
-			int minPlayers, int maxPlayers) {
-		super(plugin, minigameName, mapName, mapDisplayName, minTeams, maxTeams, minPlayers, maxPlayers);
+			int minPlayers, int maxPlayers, int warmupTimeLimit, int cooldownTimeLimit, int totalRounds) {
+		super(plugin, minigameName, mapName, mapDisplayName, minTeams, maxTeams, minPlayers, maxPlayers, warmupTimeLimit, cooldownTimeLimit, totalRounds);
 	}
 
 	/**
@@ -22,24 +22,26 @@ public class Arena extends GameMap{
 	 */
 	@Override
 	public String serialize() {
-		String string = getMinigameName() + ":" + getMapName() + ":" + getMapDisplayName() + ":" + getMinTeams() + ":" + getMaxTeams() + ":" + getMinPlayers() + ":" + getMaxPlayers();
+		String string = getMinigameName() + ":" + getMapName() + ":" + getMapDisplayName() + ":" + getMinTeams() + ":" + getMaxTeams() + ":" + getMinPlayers() + ":" + getMaxPlayers() + ":" + getWarmupTimeLimit() + ":" + getCooldownTimeLimit() + ":" + getTotalRounds();
 		return string;
 	}
 
+	//TODO: Add startRound in MapMatch that instantiates a MatchRound object
+	
 	@Override
-	public void startRound(ArrayList<Team> teams) {
-		if(!canStartRound(teams))
+	public void startMatch(ArrayList<Team> teams) {
+		if(!canStartMatch(teams))
 			return;
-		ArenaMatch round = new ArenaMatch(plugin, this, 100, teams);
-		currentRound = round;
-		hasRunningRound = true;
+		ArenaMatch match = new ArenaMatch(plugin, this, 100, warmupTimeLimit, cooldownTimeLimit, totalRounds, teams);
+		currentMatch = match;
+		hasRunningMatch = true;
 	}
 	
 	@Override
-	public void endRound()
+	public void endMatch()
 	{
-		currentRound = null;
-		hasRunningRound = false;
+		currentMatch = null;
+		hasRunningMatch = false;
 		unloadChunks();
 	}
 

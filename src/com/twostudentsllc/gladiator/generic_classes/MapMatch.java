@@ -17,7 +17,7 @@ import com.twostudentsllc.gladiator.runnables.RoundTimelimitUpdater;
  *
  */
 
-public abstract class Match {
+public abstract class MapMatch {
 
 
 	//TODO: Implement Warmup/Cooldown functionality
@@ -29,7 +29,7 @@ public abstract class Match {
 	 *
 	 */
 	public static enum STATUS {
-		WAITING, WARMUP, LOADING, IN_PROGRESS, COMPLETED, COOLDOWN, ERROR
+		WAITING, WARMUP, IN_PROGRESS, COOLDOWN, COMPLETED, ERROR
 	};
 	
 	protected Main plugin;
@@ -42,50 +42,63 @@ public abstract class Match {
 	/**
 	 * Holds the starting time limit of the round, in seconds
 	 */
-	private int timeLimit;
+	protected int timeLimit;
 	
 	/**
-	 * Holds the time limit countdown for when a round is running.
+	 * Holds the countdown for a warmup. Null when there is no warmup countdown currently happening
 	 */
-	private Countdown timelimitCountdown;
+	protected Countdown warmupTimelimitCountdown;
+	/**
+	 * Holds the countdown for a cooldown. Null when there is no cooldown countdown currently happening
+	 */
+	protected Countdown cooldownTimelimitCountdown;
 
 	/**
 	 * How long should the warm up last
 	 */
-	private int warmUpTimeLimit;
+	protected int warmupTimeLimit;
 
 	/**
 	 * How long should the cooldown period last
 	 */
-	private int coolDownTimeLimit;
+	protected int cooldownTimeLimit;
 
 
 	/**
 	 * Number of rounds this Match has
 	 */
-	private int totalRounds;
+	protected int totalRounds;
 
 	/**
 	 * What round the Match is currently on
 	 */
-	private int currentRound;
+	protected int currentRoundCount;
+	
+	/**
+	 * The current round that is happening on the match
+	 */
+	protected MatchRound currentRound;
 	
 	/**
 	 * The teams currently participating in the round
 	 */
 	protected ArrayList<Team> teams;
 	
+	//TODO: Check for method that ends the match and timelimit countdown based on an event like team elim
 	
-	public Match(Main plugin, GameMap map, int timeLimit, int warmUpTimeLimit, int coolDownTimeLimit, int totalRounds, ArrayList<Team> teams)
+	public MapMatch(Main plugin, GameMap map, int timeLimit, int warmupTimeLimit, int cooldownTimeLimit, int totalRounds, ArrayList<Team> teams)
 	{
+		setStatus(STATUS.WAITING);
 		this.plugin = plugin;
 		this.map = map;
 		this.timeLimit = timeLimit;
 		this.teams = teams;
-		this.warmUpTimeLimit = warmUpTimeLimit;
-		this.coolDownTimeLimit = coolDownTimeLimit;
+		this.warmupTimeLimit = warmupTimeLimit;
+		this.cooldownTimeLimit = cooldownTimeLimit;
 		this.totalRounds = totalRounds;
-		this.currentRound = 0;
+		this.currentRoundCount = 0;
+		assignPlayerSpawnpoints();
+		doWarmup();
 	}
 
 	/**
@@ -121,17 +134,33 @@ public abstract class Match {
 	 */
 	public abstract STATUS getStatus();
 	
-	/**
-	 * Receieves the round time limits time (in seconds) every second and handles a reaction
-	 * @param time The amount of time left in the round
-	 */
-	public abstract void handleTimelimitRemaining(int time);
+	public abstract void setStatus(STATUS status);
 	
 	/**
-	 * Starts a round with the players and teams assigned, also needs to increment round counter
+	 * In charge of handling the way the warmup time left is handled. Should instantiate a MatchRound when its zero.
+	 * Should also nullify the instance of warmupTimelimitCounter when the countdown is finished.
+	 * @param time
+	 */
+	public abstract void handleWarmupTimeRemaining(int time);
+	
+	/**
+	 * In charge of handling the way the cooldown time left is handled.
+	 * Should also nullify the instance of cooldownTimelimitCounter when the countdown is finished and stop warmup counter.
+	 * @param time
+	 */
+	public abstract void handleCooldownTimeRemaining(int time);
+	
+	/**
+	 * Starts a round with the players and teams assigned, also needs to increment round counter and stop cooldown counter
 	 * @return True if the round was successfully started
 	 */
 	public abstract boolean startRound();
+	
+	/**
+	 * Ends a round. Responsible for starting cooldown.
+	 * @return True if the round was successfully ended
+	 */
+	public abstract boolean endRound();
 
 	/**
 	 * Handles the warmup period, also in charge of setting state to WARMUP
@@ -142,13 +171,29 @@ public abstract class Match {
 	 * Handles the cooldown period, also in charge of setting state to COOLDOWN
 	 */
 	public abstract void doCooldown();
+	
+	/**
+	 * Handles what happens after the cooldown is completed. If there is another round to be played, start the warmup for it
+	 */
+	public void cooldownCompleted()
+	{
+		cooldownTimelimitCountdown.stopCountdown();
+		cooldownTimelimitCountdown = null;
+		if(hasAnotherRound())
+			doWarmup();
+		else
+		{
+			map.endMatch();
+			setStatus(STATUS.COMPLETED);
+		}
+	}
 
 	/**
 	 * Whether or not there are any rounds remaining
 	 * @return true/false
 	 */
 	public boolean hasAnotherRound() {
-		return currentRound >= totalRounds;
+		return currentRoundCount < totalRounds;
 	}
 	
 	/**
@@ -183,35 +228,17 @@ public abstract class Match {
 		throw new IllegalArgumentException("Player '" + p.getName() + "' is not part of a team in this round on map: '" + map.getMapDisplayName() + "'!");
 	}
 	
-	/**
-	 * Starts the time limit coundown for the round
-	 */
-	public void startTimelimitCountdown()
+	
+	public Countdown getWarmupCountdown()
 	{
-		Countdown c;
-		
-		Runnable task = new RoundTimelimitUpdater(plugin, this);
-		c = new Countdown(plugin, timeLimit, task, true);
-		timelimitCountdown = c;
-	}
-	/**
-	 * Stops the rounds timelimit countdown
-	 */
-	public void stopTimelimitCountdown()
-	{
-		timelimitCountdown.stopCountdown();
+		return warmupTimelimitCountdown;
 	}
 	
-	/**
-	 * Ends a round
-	 * @return True if the round was successfully ended
-	 */
-	public abstract boolean endRound();
-	
-	public Countdown getTimelimitCountdown()
+	public Countdown getCooldownCountdown()
 	{
-		return timelimitCountdown;
+		return cooldownTimelimitCountdown;
 	}
+	
 	
 	/**
 	 * Maps every player a spawnpoint

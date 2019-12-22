@@ -116,33 +116,6 @@ public class Utils {
 		return l;	
 	}
 	
-	
-	/**
-	 * Creates a Arena from a serialized arena string
-	 * @param s The serialized Arena 
-	 * @return The deserialized Arena
-	 */
-	//TODO: Move to Gladiator game class and change plugin to not null
-	public static Arena deserializeArena(String s)
-	{
-		Arena a;
-		
-		String[] parts = s.split(":");
-		
-		Main plugin = null;
-		String minigameName = parts[0];
-		String mapName = parts[1];
-		String mapDisplayName = parts[2];
-		int minTeams = Integer.parseInt(parts[3]);
-		int maxTeams = Integer.parseInt(parts[4]);
-		int minPlayers = Integer.parseInt(parts[5]);
-		int maxPlayers = Integer.parseInt(parts[6]);
-		
-		a = new Arena(plugin, minigameName, mapName, mapDisplayName, minTeams, maxTeams, minPlayers, maxPlayers);
-		
-		return a;
-	}
-	
 	/**
 	 * Checks to see if a string is in a string array.
 	 * @param ray is the array in which you wish to search for the target in

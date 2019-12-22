@@ -14,11 +14,11 @@ public class WorldManager {
      * @return the World object if valid world, null if invalid world or doesn't exist
      */
     public static World getWorld(Server currentServer, String worldName) {
-//    	World worldToGet = currentServer.getWorld(worldName);
-//    	if(worldToGet == null)
-//    	{
-//    		worldToGet = createVoidWorld(worldName);
-//    	}
+    	World worldToGet = currentServer.getWorld(worldName);
+    	if(worldToGet == null)
+    	{
+    		worldToGet = createVoidWorld(worldName);
+    	}
         return currentServer.getWorld(worldName);
     }
 
@@ -27,8 +27,9 @@ public class WorldManager {
     {
         WorldCreator wc = new WorldCreator(worldName);
         wc.type(WorldType.FLAT);
-        wc.generatorSettings("2;0;1;"); //This is what makes the world empty (void)
-        return wc.createWorld();
+        wc.generator("2;0;1");
+        return wc.createWorld(); //FIXME: This throws an error on generation, and generates a superflat world, not void. 
+        						 //The error: Could not set generator for world 'testmap': Plugin '2;0;1' does not exist
     }
 
     /*

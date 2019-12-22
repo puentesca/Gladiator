@@ -7,8 +7,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.twostudentsllc.gladiator.commands.location.SetLocationCommand;
 import com.twostudentsllc.gladiator.commands.location.TeleportToLocationCommand;
+import com.twostudentsllc.gladiator.commands.maps.CreateMapCommand;
 import com.twostudentsllc.gladiator.commands.misc.HelpCommand;
-import com.twostudentsllc.gladiator.commands.testing.CreateMapCommand;
+import com.twostudentsllc.gladiator.commands.testing.JoinCommand;
+import com.twostudentsllc.gladiator.commands.testing.TeleportToWorld;
 import com.twostudentsllc.gladiator.games.Gladiator;
 import com.twostudentsllc.gladiator.managers.CommandManager;
 import com.twostudentsllc.gladiator.managers.GameManager;
@@ -72,6 +74,10 @@ public class Main extends JavaPlugin{
 		new TeleportToLocationCommand(this);
 		new HelpCommand(this);
 		new CreateMapCommand(this);
+		
+		//TEST COMMANDS
+		new JoinCommand(this);
+		new TeleportToWorld(this);
 	}
 	
 	private void initializeGames()

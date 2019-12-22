@@ -10,10 +10,6 @@ import java.util.HashMap;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-import org.bukkit.Location;
-
-import com.twostudentsllc.gladiator.generic_classes.GameMap;
-
 /**
  * A global class that can save and load strings from locations
  * Copyright 2019 Casey Puentes. All rights reserved.
@@ -29,12 +25,12 @@ public class DatabaseManager {
 		
 		System.out.println("Saving location data for minigame '" + minigameName  + "' and map '" + mapName + "' at file: '" + fileDir + fileName + "'!");
 		
-		File dir = new File(fileDir);
-		//If the directory doesnt exist, create it.
-		if(!dir.exists())
-		{
-			dir.mkdirs();
-		}
+//		File dir = new File(fileDir);
+//		//If the directory doesnt exist, create it.
+//		if(!dir.exists())
+//		{
+//			dir.mkdirs();
+//		}
 		
 		
 		File file = new File(fileDir + fileName);
@@ -44,7 +40,7 @@ public class DatabaseManager {
 		//If the file doesnt exist
 		if(!file.exists()) {
 			try {
-				file.mkdirs();
+				file.getParentFile().mkdirs();
 			    file.createNewFile();
 			} catch(IOException e) {
 			    e.printStackTrace();
@@ -85,16 +81,16 @@ public class DatabaseManager {
 		
 		System.out.println("Actual file path: '" + file.getPath() + "'");
 		
-		File dir = new File(fileDir);
-		//If the directory doesnt exist, create it.
-		if(!dir.exists())
-		{
-			dir.mkdirs();
-		}
+//		File dir = new File(fileDir);
+//		//If the directory doesnt exist, create it.
+//		if(!dir.exists())
+//		{
+//			dir.mkdirs();
+//		}
 		
 		if(!file.exists()) {
 			try {
-				file.mkdirs();
+				file.getParentFile().mkdirs();
 			    file.createNewFile();
 			} catch(IOException e) {
 			    e.printStackTrace();
@@ -129,12 +125,12 @@ public class DatabaseManager {
 		String fileName = getLocationFileNameString(mapName);
 		
 		System.out.println("Loading location data for minigame '" + minigameName  + "' and map '" + mapName + "' at file: '" + fileDir + fileName + "'!");
-		File dir = new File(fileDir);
-		//If the directory doesnt exist, create it.
-		if(!dir.exists())
-		{
-			dir.mkdirs();
-		}
+//		File dir = new File(fileDir);
+//		//If the directory doesnt exist, create it.
+//		if(!dir.exists())
+//		{
+//			dir.mkdirs();
+//		}
 		
 		File file = new File(fileDir + fileName);
 		
@@ -142,7 +138,7 @@ public class DatabaseManager {
 		//If the file doesnt exist
 		if(!file.exists()) {
 			try {
-				//file.mkdirs();
+				file.getParentFile().mkdirs();
 			    file.createNewFile();
 			    return new HashMap<String, String>();
 			} catch(IOException e) {
@@ -192,12 +188,12 @@ public class DatabaseManager {
 		
 		System.out.println("Loading map data for minigame '" + minigameName  + "' at file: '" + fileDir + fileName + "'!");
 		
-		File dir = new File(fileDir);
-		//If the directory doesnt exist, create it.
-		if(!dir.exists())
-		{
-			dir.mkdirs();
-		}
+//		File dir = new File(fileDir);
+//		//If the directory doesnt exist, create it.
+//		if(!dir.exists())
+//		{
+//			dir.mkdirs();
+//		}
 		
 		File file = new File(fileDir + fileName);
 		
@@ -206,7 +202,7 @@ public class DatabaseManager {
 		if(!file.exists()) {
 			System.out.println("Maps HashMap does not exist! Creating an empty one.");
 			try {
-				//file.mkdirs();
+				file.getParentFile().mkdirs();
 			    file.createNewFile();
 			    return new HashMap<String, String>();
 			} catch(IOException e) {
@@ -275,7 +271,7 @@ public class DatabaseManager {
 	 */
 	public static String getDataFileNameString(String fileName)
 	{
-		String file = fileName + ".dat";
+		String file = "" + fileName + ".dat";
 		return file;
 	}
 }

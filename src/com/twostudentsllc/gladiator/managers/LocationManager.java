@@ -34,21 +34,7 @@ public class LocationManager {
 	//TODO: Add reset location(s)
 	
 	private Main plugin;
-	
-	/**
-	 * Database directory location
-	 */
-	//private String databaseFileDirectory = "plugins/GladiatorData/";
-	
-	/**
-	 * Database file name
-	 */
-	//private String databaseFileName = "locations.dat";
-	
-	/**
-	 * Stores location data for plugin. Available locations are: "spawn", "lobby", "spectate", "hub", "objective"
-	 */
-	//private HashMap<String, Location> locations;
+
 	/**
 	 * Stores possible keys for locations to be stored at
 	 */
@@ -57,8 +43,6 @@ public class LocationManager {
 	public LocationManager(Main plugin) throws FileNotFoundException, ClassNotFoundException, IOException
 	{
 		this.plugin = plugin;
-		//locations = new HashMap<String, Location>();
-		//loadLocationFile();
 	}
 	
 	/**
@@ -68,9 +52,11 @@ public class LocationManager {
 	 */
 	public void setLocation(Player sender, String[] args, Location location)
 	{
+		
 		String minigameName = args[1];
 		String mapName = args[2];
 		String key = args[3];
+		System.out.println("Setting location for '" + key + "' for map '" + mapName + "' and minigame '" + minigameName + "'.");
 
 		//Handle input argument validation
 		validateArguments(sender, args);
@@ -78,6 +64,7 @@ public class LocationManager {
 		//Gets the game from the game manager, then gets the GameMap from the game, and adds the location.
 		//Will throw IllegalArgumentException if any of them do not exist
 		plugin.getGameManager().getGame(minigameName).getGameMap(mapName).addLocation(key, location);
+		System.out.println("Location '" + key + "' for map '" + mapName + "' and minigame '" + minigameName + "' successfully set.");
 		//TODO: Add confirmation that the map location was added. Make a confirmation method in Utils.
 	}
 	
@@ -101,6 +88,7 @@ public class LocationManager {
 		Location targetLoc = targetMap.getLocation(key);
 		if(targetLoc == null) {
 			Utils.Error(p, key + " does not exist as a stored location for " + targetMap.getMapDisplayName());
+			return;
 		}
 		
 		p.teleport(plugin.getGameManager().getGame(minigameName).getGameMap(mapName).getLocation(key));
@@ -170,28 +158,6 @@ public class LocationManager {
 			return false;
 		}
 		return true;
-	}
-	
-	/**
-	 * Creates a string representing the directory name of the database of a minigame
-	 * @param minigameName The name of the directory the databases are linked to
-	 * @return A string representing the file name
-	 */
-	public static String getDatabaseDirectoryString(String minigameName)
-	{
-		String dir = "/minigames/" + minigameName + "/";
-		return dir;
-	}
-	
-	/**
-	 * Creates a string representing the file name of the locations of a game map
-	 * @param mapName The name of the map the locations are linked to
-	 * @return A string representing the file name
-	 */
-	public static String getDatabaseFileString(String mapName)
-	{
-		String file = mapName + "_locations.dat";
-		return file;
 	}
 	
 }
