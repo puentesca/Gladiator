@@ -10,19 +10,8 @@ import com.twostudentsllc.gladiator.global.CustomChunkGenerator;
 
 public class WorldManager {
 
-    /*
-     * Gets world by the name {worldname}. If one does not exist, it creates one
-     * @return the World object if valid world, null if invalid world or doesn't exist
-     */
-    public static World getWorld(Server currentServer, String worldName) {
-    	World worldToGet = currentServer.getWorld(worldName);
-    	if(worldToGet == null)
-    	{
-    		worldToGet = createVoidWorld(worldName);
-    	}
-        return currentServer.getWorld(worldName);
-    }
 
+    //Chunk generator for creating an empty world
     public static class EmptyChunkGenerator extends ChunkGenerator {
 
         @Override
@@ -31,16 +20,34 @@ public class WorldManager {
         }
     }
 
-    //TODO: Create a void world
+    /**
+     * Gets world by the name {worldname}. If one does not exist, it creates one
+     * @return the World object if valid world, null if invalid world or doesn't exist
+     */
+    public static World getWorld(Server currentServer, String worldName) {
+    	World worldToGet = currentServer.getWorld(worldName);
+    	if(worldToGet == null)
+    	{
+    		worldToGet = createVoidWorld(worldName);
+
+    	}
+        return worldToGet;
+    }
+
+
+    /**
+     * Creates an empty void world under the name worldName
+     * @param worldName name of the world to be created
+     * @return New void World instance
+     */
     public static World createVoidWorld(String worldName)
     {
         WorldCreator wc = new WorldCreator("test");
         wc.generator(new WorldManager.EmptyChunkGenerator());
         return wc.createWorld();
-
     }
 
-    /*
+    /**
      * Creates a world under the name worldName, if it already exists it just loads from disk
      * @return World object associated with worldName
      */
@@ -49,7 +56,7 @@ public class WorldManager {
         return generator.createWorld();
     }
 
-    /*
+    /**
      * Unloads world with name worldName
      * @param worldName name of world
      * @param save whether or not to save chunks before unloading
@@ -59,13 +66,13 @@ public class WorldManager {
         return currentServer.unloadWorld(worldName, save);
     }
 
-    /*
+    /**
     * Unloads all loaded chunks on a world
     * @param currentServer the server the plugin is operating on
     * @param worldName the name of the world to have chunks unloaded
      */
-    public static void unloadLoadedChunks(Server currentSever, String worldName) {
-        World targetWorld = getWorld(currentSever, worldName);
+    public static void unloadLoadedChunks(Server currentServer, String worldName) {
+        World targetWorld = getWorld(currentServer, worldName);
 
         Chunk[] loadedChunks = targetWorld.getLoadedChunks();
 
@@ -74,7 +81,7 @@ public class WorldManager {
         }
     }
 
-    public static void unloadLoadedChunks(Server currentSever, World world) {
+    public static void unloadLoadedChunks(World world) {
         Chunk[] loadedChunks = world.getLoadedChunks();
 
         for(Chunk chunk: loadedChunks) {

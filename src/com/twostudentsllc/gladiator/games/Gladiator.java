@@ -19,7 +19,8 @@ public class Gladiator extends Game{
 	
 	@Override
 	public void createGameMap(String[] args) {
-		
+
+		//TODO: I think there might be a better way to do this
 		String minigameName = args[1];
 		String mapName = args[2];
 		if(hasGameMap(mapName))

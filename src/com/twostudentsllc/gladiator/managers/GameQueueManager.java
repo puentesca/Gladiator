@@ -2,16 +2,21 @@ package com.twostudentsllc.gladiator.managers;
 
 import java.util.*;
 
+import com.twostudentsllc.gladiator.generic_classes.Game;
+import com.twostudentsllc.gladiator.generic_classes.Team;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-public class QueueManager {
+/**
+ * Manages a queue of players for a Game
+ */
+public class GameQueueManager {
 
-	/**
-	 * Format for the String references in the map is
-	 * minigameName:map
-	 */
+	//String key is the name of the map
 	private Map<String, PlayerQueue> queueList;
+
+	//Game the gamequeue is registered to
+	private Game game;
 
 	//Maintains a group of players (used for group queuing together)
 	private class PlayerGroup {
@@ -58,12 +63,22 @@ public class QueueManager {
 	}
 	//Maintains a queue of PlayerGroups
 	private class PlayerQueue {
-		
-		private int playersNeeded;
+
+		//Minimum number of teams
+		private int teamMinimum;
+
+		//Max number of teams
+		private int teamMaximum;
+
+		//The expected size of each team
+		private int teamSize;
+
 		private Queue<PlayerGroup> playerList;
 		
-		public PlayerQueue(int playersNeeded) {
-			this.playersNeeded = playersNeeded;
+		public PlayerQueue(int teamMinimum, int teamMaximum, int teamSize) {
+			this.teamMinimum = teamMinimum;
+			this.teamMaximum = teamMaximum;
+			this.teamSize = teamSize;
 			this.playerList = new LinkedList<PlayerGroup>();
 		}
 
@@ -161,7 +176,7 @@ public class QueueManager {
 			for(PlayerGroup group: playerList) {
 				int sum = group.groupMembers.size();
 
-				if(sum == playersNeeded) {
+				if(sum >= teamMinimum * teamSize && sum <= teamMaximum * teamSize && sum % teamSize == 0) {
 					return true;
 				}
 
@@ -169,7 +184,7 @@ public class QueueManager {
 					if(!group2.equals(group)) {
 						sum += group2.groupMembers.size();
 
-						if(sum == playersNeeded) {
+						if(sum >= teamMinimum * teamSize && sum <= teamMaximum * teamSize && sum % teamSize == 0) {
 							return true;
 						}
 					}
@@ -193,7 +208,7 @@ public class QueueManager {
 				groupList = new ArrayList<PlayerGroup>();
 
 				//If one group is already enough players for the required game size
-				if(sum == playersNeeded) {
+				if(sum >= teamMinimum * teamSize && sum <= teamMaximum * teamSize && sum % teamSize == 0) {
 					playerList.remove(group);
 					return group.groupMembers;
 				}
@@ -205,7 +220,7 @@ public class QueueManager {
 						groupList.add(group2);
 
 						//If the combined groupList has enough players for the game
-						if(sum == playersNeeded) {
+						if(sum >= teamMinimum * teamSize && sum <= teamMaximum * teamSize && sum % teamSize == 0) {
 
 							//Combine all the groups into a single list of players
 							ArrayList<Player> players = new ArrayList<Player>();
@@ -226,17 +241,27 @@ public class QueueManager {
 
 	}
 	
-    public QueueManager() {
-    	queueList = new TreeMap<>();
+    public GameQueueManager(Game game) {
+		this.game = game;
+		queueList = new TreeMap<>();
     }
+
+
+	/**
+	 * Get the game the queues is registered to
+	 * @return Game instance
+	 */
+	public Game getGame() {
+		return game;
+	}
     
     /**
      * Adds player to a game queue
      * @return boolean whether the player was successfully added
      */
-    public boolean addPlayerToQueue(String gameName, String mapName, Player toAdd) {
+    public boolean addPlayerToQueue(String mapName, Player toAdd) {
 
-    	String key = gameName + ":" + mapName;
+    	String key = mapName;
 
     	if(!queueList.containsKey(key)) {
     		return false;
@@ -249,9 +274,9 @@ public class QueueManager {
 	 * Adds a group of players to a game queue
 	 * @return boolean whether the group was successfully added
 	 */
-    public boolean addGroupToQueue(String gameName, String mapName, ArrayList<Player> group) {
+    public boolean addGroupToQueue(String mapName, ArrayList<Player> group) {
 
-		String key = gameName + ":" + mapName;
+		String key = mapName;
 
 		if(!queueList.containsKey(key)) {
 			return false;
@@ -264,9 +289,9 @@ public class QueueManager {
      * Removes player or group from game queue (same remove method since removal dependant on group leaders)
      * @return boolean whether the player was successfully removed
      */
-    public boolean removePlayerOrGroupFromQueue(String gameName, String mapName, Player toRemove) {
+    public boolean removePlayerOrGroupFromQueue(String mapName, Player toRemove) {
 
-		String key = gameName + ":" + mapName;
+		String key = mapName;
     	
     	if(!queueList.containsKey(key)) {
     		return false;
@@ -277,23 +302,32 @@ public class QueueManager {
     
     /**
      * Creates a game queue with some base requirement of players per game
+	 * @param mapName map to add game queue for
+	 * @param minimumTeams Minimum number of teams allowed on map
+	 * @param maximumTeams Maximum number of teams allowed on map
+	 * @param teamSize Size of each team
      * @return boolean whether the player was successfully removed
      */
-    public boolean addGameQueue(String gameName, String mapName, int playersNeeded) {
+    public boolean addGameQueue(String mapName, int minimumTeams, int maximumTeams, int teamSize) {
 
-		String key = gameName + ":" + mapName;
+		String key = mapName;
 
     	if(queueList.containsKey(key)) {
     		return false;
     	}
 
-    	queueList.put(key, new PlayerQueue(playersNeeded));
+    	queueList.put(key, new PlayerQueue(minimumTeams, maximumTeams, teamSize));
     	return true;
     }
 
-    public boolean removeGameQueue(String gameName, String mapName) {
+	/**
+	 * Remove a game queue for a map
+	 * @param mapName name of the map to remove the game queue for
+	 * @return true/false whether removing queue was successful
+	 */
+	public boolean removeGameQueue(String mapName) {
 
-		String key = gameName + ":" + mapName;
+		String key = mapName;
 
     	if(!queueList.containsKey(key))
     		return false;
@@ -306,9 +340,9 @@ public class QueueManager {
     /**
      * Removes all disconnected players from queue
      */
-    public void removeDisconnectedPlayers(String gameName, String mapName) {
+    public void removeDisconnectedPlayers(String mapName) {
 
-		String key = gameName + ":" + mapName;
+		String key =  mapName;
 
     	if(!queueList.containsKey(key)) {
     		return;
@@ -325,16 +359,16 @@ public class QueueManager {
      * Checks if you have enough players to make a new game
      * @return boolean if there are enough players to make new game
      */
-    public boolean canMakeGame(String gameName, String mapName) {
+    public boolean canMakeGame(String mapName) {
 
-		String key = gameName + ":" + mapName;
+		String key = mapName;
 
        	if(!queueList.containsKey(key)) {
     		return false;
     	}
 
        	//Removes any disconnected players
-       	removeDisconnectedPlayers(gameName, mapName);
+       	removeDisconnectedPlayers(mapName);
        	PlayerQueue targetGame = queueList.get(key);
        	
        	return targetGame.canMakeGame();
@@ -345,18 +379,42 @@ public class QueueManager {
      * @return null if there are not enough players or if the game queue does not exist,
      * 				otherwise it returns an ArrayList of Player instances
      */
-    public ArrayList<Player> getPlayers(String gameName, String mapName) {
+    public ArrayList<Team> getTeams(String mapName) {
 
-		String key = gameName + ":" + mapName;
+		String key = mapName;
 
        	if(!queueList.containsKey(key)) {
     		return null;
     	}
        	
-       	if(canMakeGame(gameName, mapName)) {
+       	if(canMakeGame(mapName)) {
 
 	       	PlayerQueue targetGame = queueList.get(key);
-	       	return targetGame.getPlayers();
+	       	ArrayList<Player> players = targetGame.getPlayers();
+
+	       	//Split players into teams
+			//TODO: This version splits people into teams randomly
+			ArrayList<Team> teamList = new ArrayList<Team>();
+
+			int q = 0;
+			while(!players.isEmpty()) {
+
+				Team newTeam = new Team(q);
+				teamList.add(newTeam);
+
+				//Fill a team with the required number of players and add them to their team
+				for(int z = 0; z < targetGame.teamSize; z++) {
+
+					int i = (int) (Math.random() * players.size()) - 1;
+					Player toAdd = players.remove(i);
+
+					newTeam.addPlayer(toAdd);
+				}
+
+				q++;
+			}
+
+			return teamList;
 
        	}
        	

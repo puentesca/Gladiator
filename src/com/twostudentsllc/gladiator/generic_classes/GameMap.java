@@ -60,15 +60,20 @@ public abstract class GameMap {
 	 */
 	protected int maxTeams;
 	
-	/**
+	/**TODO: Might not need if use teamSize instead
 	 * The minimum players the map can have to function
 	 */
 	protected int minPlayers;
 	
-	/**
+	/**TODO: Might not need if use teamSize instead
 	 * The maximum players the map can have to function
 	 */
 	protected int maxPlayers;
+
+	/**
+	 * Number of players per team
+	 */
+	protected int teamSize;
 	
 	/**
 	 * Whether or not a round is currently running
@@ -111,7 +116,7 @@ public abstract class GameMap {
 	 * @param minPlayers The minimum players the map can have to function
 	 * @param maxPlayers The maximum players the map can have to function
 	 */
-	public GameMap(Main plugin, String minigameName, String mapName, String mapDisplayName, int minTeams, int maxTeams, int minPlayers, int maxPlayers, int warmupTime, int cooldownTime, int totalRounds)
+	public GameMap(Main plugin, String minigameName, String mapName, String mapDisplayName, int minTeams, int maxTeams, int minPlayers, int maxPlayers, int teamSize, int warmupTime, int cooldownTime, int totalRounds)
 	{
 		this.plugin = plugin;
 		this.minigameName = minigameName;
@@ -121,6 +126,7 @@ public abstract class GameMap {
 		this.maxTeams = maxTeams;
 		this.minPlayers = minPlayers;
 		this.maxPlayers = maxPlayers;
+		this.teamSize = teamSize;
 		this.warmupTimeLimit = warmupTime;
 		this.cooldownTimeLimit = cooldownTime;
 		this.totalRounds = totalRounds;
@@ -213,7 +219,7 @@ public abstract class GameMap {
 	* Unload loaded chunks on the map
 	 */
 	public void unloadChunks() {
-		WorldManager.unloadLoadedChunks(plugin.getServer(), mapWorld);
+		WorldManager.unloadLoadedChunks(mapWorld);
 	}
 	
 	/**
@@ -235,14 +241,15 @@ public abstract class GameMap {
 	 * Gets whether or not a round can be started
 	 * @return True if a round can be started
 	 */
-	public boolean canStartMatch(ArrayList<Team> teams)
+	public boolean canStartMatch()//ArrayList<Team> teams)
 	{
 		if(hasRunningRound())
 		{
 			System.out.println("Round is already runing!");
 			return false;
 		}
-		//If the team amount is not within bounds set by the map
+		//FIXME: These checks should be handled by queue in game
+/*		//If the team amount is not within bounds set by the map
 		if(teams.size() < minTeams || teams.size() > minTeams)
 		{
 			throw new IllegalArgumentException("Team amount now within map bounds!");
@@ -257,7 +264,7 @@ public abstract class GameMap {
 		if(players < minPlayers || players > maxPlayers)
 		{
 			throw new IllegalArgumentException("Player amount not within bounds set by map!");
-		}
+		}*/
 		return true;
 		
 	}

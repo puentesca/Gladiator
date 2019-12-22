@@ -18,6 +18,16 @@ public class Team {
      */
     private HashMap<Player, Location> playerSpawns;
 
+
+    /**
+     * Default constructor with only known teamid
+     * @param teamID
+     */
+    public Team(int teamID) {
+        this.teamID = teamID;
+        this.teamMembers = new HashMap<>();
+    }
+
     /*
      * Takes in a team id and a list of players
      */
@@ -29,6 +39,18 @@ public class Team {
         for(Player player: teamMembers) {
             this.teamMembers.put(player, new PlayerStats());
         }
+    }
+
+    /**
+     * Adds a player to the team
+     * @param toAdd player to add
+     * @return returns whether adding was successful
+     */
+    public boolean addPlayer(Player toAdd) {
+        if(teamMembers.containsKey(toAdd))
+            return false;
+        teamMembers.put(toAdd, new PlayerStats());
+        return true;
     }
 
     /**
