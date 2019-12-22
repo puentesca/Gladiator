@@ -1,11 +1,15 @@
-package com.twostudentsllc.gladiator.commands.maps;
+package com.twostudentsllc.gladiator.commands.testing;
 
+import java.io.File;
+import java.io.IOException;
+
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.libs.org.apache.commons.io.FileUtils;
 
 import com.twostudentsllc.gladiator.Main;
 import com.twostudentsllc.gladiator.generic_classes.CustomCommand;
-import com.twostudentsllc.gladiator.generic_classes.Game;
 import com.twostudentsllc.gladiator.global.Utils;
 
 /**
@@ -14,19 +18,19 @@ import com.twostudentsllc.gladiator.global.Utils;
  * @author Casey Puentes
  *
  */
-public class CreateMapCommand extends CustomCommand {
+public class DeleteWorldCommand extends CustomCommand {
 	
 	private Main plugin;
 	
-	public CreateMapCommand(Main plugin)
+	public DeleteWorldCommand(Main plugin)
 	{
 		
-		super.setName("createmap")
-			 .setDescription("Creates a new map")
-			 .setUsage("/gladiator createmap <minigameName> <mapName> <mapDisplayName> <minTeams> <maxTeams> <teamSize> <warmupTime> <cooldownTime> <totalRounds>")
-			 .setPermissions(new String[] {"gladiator.createmap"})
-			 .setMinArgs(10)
-			 .setMaxArgs(10)
+		super.setName("deleteworld")
+			 .setDescription("Deletes a world")
+			 .setUsage("/gladiator deleteworld <worldName>")
+			 .setPermissions(new String[] {"gladiator.deleteworlds"})
+			 .setMinArgs(2)
+			 .setMaxArgs(2)
 			 .setPlayerOnly(false);
 		
 		//Initializes data
@@ -50,9 +54,14 @@ public class CreateMapCommand extends CustomCommand {
 	 */
 	private void commandCalled(CommandSender sender, Command cmd, String label, String[] args)
 	{
-		String minigameName = args[1];
-		Game game = plugin.getGameManager().getGame(minigameName);
-		game.createGameMap(args);
+		String worldName = args[1];
+		Bukkit.unloadWorld(worldName, false);
+		try {
+			FileUtils.deleteDirectory(new File(worldName));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 

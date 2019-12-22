@@ -28,7 +28,9 @@ public class WorldManager {
     	World worldToGet = currentServer.getWorld(worldName);
     	if(worldToGet == null)
     	{
+    		System.out.println("Generating void world");
     		worldToGet = createVoidWorld(worldName);
+    		System.out.println("Worlds name: " + worldToGet.getName());
 
     	}
         return worldToGet;
@@ -42,7 +44,7 @@ public class WorldManager {
      */
     public static World createVoidWorld(String worldName)
     {
-        WorldCreator wc = new WorldCreator("test");
+        WorldCreator wc = new WorldCreator(worldName);
         wc.generator(new WorldManager.EmptyChunkGenerator());
         return wc.createWorld();
     }

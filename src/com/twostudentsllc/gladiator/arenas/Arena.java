@@ -12,8 +12,8 @@ public class Arena extends GameMap{
 	
 	
 	public Arena(Main plugin, String minigameName, String mapName, String mapDisplayName, int minTeams, int maxTeams,
-			int minPlayers, int maxPlayers, int teamSize, int warmupTimeLimit, int cooldownTimeLimit, int totalRounds) {
-		super(plugin, minigameName, mapName, mapDisplayName, minTeams, maxTeams, minPlayers, maxPlayers, teamSize, warmupTimeLimit, cooldownTimeLimit, totalRounds);
+			int teamSize, int warmupTimeLimit, int cooldownTimeLimit, int totalRounds) {
+		super(plugin, minigameName, mapName, mapDisplayName, minTeams, maxTeams, teamSize, warmupTimeLimit, cooldownTimeLimit, totalRounds);
 	}
 
 	/**
@@ -22,7 +22,7 @@ public class Arena extends GameMap{
 	 */
 	@Override
 	public String serialize() {
-		String string = getMinigameName() + ":" + getMapName() + ":" + getMapDisplayName() + ":" + getMinTeams() + ":" + getMaxTeams() + ":" + getMinPlayers() + ":" + getMaxPlayers() + ":" + getWarmupTimeLimit() + ":" + getCooldownTimeLimit() + ":" + getTotalRounds();
+		String string = getMinigameName() + ":" + getMapName() + ":" + getMapDisplayName() + ":" + getMinTeams() + ":" + getMaxTeams() + ":" + getTeamSize() + ":" + getWarmupTimeLimit() + ":" + getCooldownTimeLimit() + ":" + getTotalRounds();
 		return string;
 	}
 

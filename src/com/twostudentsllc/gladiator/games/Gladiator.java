@@ -28,13 +28,12 @@ public class Gladiator extends Game{
 		String mapDisplayName = args[3];
 		int minTeams = Integer.parseInt(args[4]);
 		int maxTeams = Integer.parseInt(args[5]);
-		int minPlayers = Integer.parseInt(args[6]);
-		int maxPlayers = Integer.parseInt(args[7]);
-		int warmupTimeLimit = Integer.parseInt(args[8]);
-		int cooldownTimeLimit = Integer.parseInt(args[9]);
-		int totalRounds = Integer.parseInt(args[10]);
+		int teamSize = Integer.parseInt(args[6]);
+		int warmupTimeLimit = Integer.parseInt(args[7]);
+		int cooldownTimeLimit = Integer.parseInt(args[8]);
+		int totalRounds = Integer.parseInt(args[9]);
 		
-		maps.put(mapName, new Arena(plugin, minigameName, mapName, mapDisplayName, minTeams, maxTeams, minPlayers, maxPlayers, warmupTimeLimit, cooldownTimeLimit, totalRounds));
+		maps.put(mapName, new Arena(plugin, minigameName, mapName, mapDisplayName, minTeams, maxTeams, teamSize, warmupTimeLimit, cooldownTimeLimit, totalRounds));
 	}
 	
 	@Override
@@ -70,13 +69,12 @@ public class Gladiator extends Game{
 			String mapDisplayName = parts[2];
 			int minTeams = Integer.parseInt(parts[3]);
 			int maxTeams = Integer.parseInt(parts[4]);
-			int minPlayers = Integer.parseInt(parts[5]);
-			int maxPlayers = Integer.parseInt(parts[6]);
-			int warmupTimeLimit = Integer.parseInt(parts[7]);
-			int cooldownTimeLimit = Integer.parseInt(parts[8]);
-			int totalRounds = Integer.parseInt(parts[9]);
+			int teamSize = Integer.parseInt(parts[5]);
+			int warmupTimeLimit = Integer.parseInt(parts[6]);
+			int cooldownTimeLimit = Integer.parseInt(parts[7]);
+			int totalRounds = Integer.parseInt(parts[8]);
 			
-			maps.put(mapName, new Arena(plugin, minigameName, mapName, mapDisplayName, minTeams, maxTeams, minPlayers, maxPlayers, warmupTimeLimit, cooldownTimeLimit, totalRounds));
+			maps.put(mapName, new Arena(plugin, minigameName, mapName, mapDisplayName, minTeams, maxTeams, teamSize, warmupTimeLimit, cooldownTimeLimit, totalRounds));
 		}
 	}
 

@@ -116,7 +116,7 @@ public abstract class GameMap {
 	 * @param minPlayers The minimum players the map can have to function
 	 * @param maxPlayers The maximum players the map can have to function
 	 */
-	public GameMap(Main plugin, String minigameName, String mapName, String mapDisplayName, int minTeams, int maxTeams, int minPlayers, int maxPlayers, int teamSize, int warmupTime, int cooldownTime, int totalRounds)
+	public GameMap(Main plugin, String minigameName, String mapName, String mapDisplayName, int minTeams, int maxTeams, int teamSize, int warmupTime, int cooldownTime, int totalRounds)
 	{
 		this.plugin = plugin;
 		this.minigameName = minigameName;
@@ -124,8 +124,6 @@ public abstract class GameMap {
 		this.mapDisplayName = mapDisplayName;
 		this.minTeams = minTeams;
 		this.maxTeams = maxTeams;
-		this.minPlayers = minPlayers;
-		this.maxPlayers = maxPlayers;
 		this.teamSize = teamSize;
 		this.warmupTimeLimit = warmupTime;
 		this.cooldownTimeLimit = cooldownTime;
@@ -304,21 +302,11 @@ public abstract class GameMap {
 		return maxTeams;
 	}
 	
-	/**
-	 * @return the minimum players that the map can be played with
-	 */
-	public int getMinPlayers()
+	public int getTeamSize()
 	{
-		return minPlayers;
+		return teamSize;
 	}
 	
-	/**
-	 * @return the maximum players that the map can be played with
-	 */
-	public int getMaxPlayers()
-	{
-		return maxPlayers;
-	}
 	
 	public int getWarmupTimeLimit()
 	{

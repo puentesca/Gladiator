@@ -9,6 +9,7 @@ import com.twostudentsllc.gladiator.commands.location.SetLocationCommand;
 import com.twostudentsllc.gladiator.commands.location.TeleportToLocationCommand;
 import com.twostudentsllc.gladiator.commands.maps.CreateMapCommand;
 import com.twostudentsllc.gladiator.commands.misc.HelpCommand;
+import com.twostudentsllc.gladiator.commands.testing.DeleteWorldCommand;
 import com.twostudentsllc.gladiator.commands.testing.JoinCommand;
 import com.twostudentsllc.gladiator.commands.testing.TeleportToWorld;
 import com.twostudentsllc.gladiator.games.Gladiator;
@@ -33,7 +34,6 @@ public class Main extends JavaPlugin{
 	private LocationManager locMan;
 	private CommandManager cmdMan;
 	private GameManager gameMan;
-	
 	@Override
 	public void onEnable()
 	{
@@ -78,6 +78,7 @@ public class Main extends JavaPlugin{
 		//TEST COMMANDS
 		new JoinCommand(this);
 		new TeleportToWorld(this);
+		new DeleteWorldCommand(this);
 	}
 	
 	private void initializeGames()
