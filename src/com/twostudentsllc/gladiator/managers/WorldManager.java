@@ -1,6 +1,7 @@
 package com.twostudentsllc.gladiator.managers;
 
 import java.util.List;
+import java.util.Random;
 
 import org.bukkit.*;
 import org.bukkit.generator.ChunkGenerator;
@@ -22,14 +23,21 @@ public class WorldManager {
         return currentServer.getWorld(worldName);
     }
 
+    public static class EmptyChunkGenerator extends ChunkGenerator {
+
+        @Override
+        public ChunkData generateChunkData(World world, Random random, int x, int z, BiomeGrid biome) {
+            return createChunkData(world);
+        }
+    }
+
     //TODO: Create a void world
     public static World createVoidWorld(String worldName)
     {
-        WorldCreator wc = new WorldCreator(worldName);
-        wc.type(WorldType.FLAT);
-        wc.generator("2;0;1");
-        return wc.createWorld(); //FIXME: This throws an error on generation, and generates a superflat world, not void. 
-        						 //The error: Could not set generator for world 'testmap': Plugin '2;0;1' does not exist
+        WorldCreator wc = new WorldCreator("test");
+        wc.generator(new WorldManager.EmptyChunkGenerator());
+        return wc.createWorld();
+
     }
 
     /*

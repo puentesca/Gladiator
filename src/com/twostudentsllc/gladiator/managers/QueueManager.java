@@ -7,8 +7,6 @@ import org.jetbrains.annotations.NotNull;
 
 public class QueueManager {
 
-	//TODO: Some way to distignuish the different maps along with minigame
-
 	/**
 	 * Format for the String references in the map is
 	 * minigameName:map
