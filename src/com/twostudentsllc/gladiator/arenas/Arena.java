@@ -12,8 +12,8 @@ public class Arena extends GameMap{
 	
 	
 	public Arena(Main plugin, String minigameName, String mapName, String mapDisplayName, int minTeams, int maxTeams,
-			int minPlayers, int maxPlayers, int warmupTimeLimit, int cooldownTimeLimit, int totalRounds) {
-		super(plugin, minigameName, mapName, mapDisplayName, minTeams, maxTeams, minPlayers, maxPlayers, warmupTimeLimit, cooldownTimeLimit, totalRounds);
+			int minPlayers, int maxPlayers, int teamSize, int warmupTimeLimit, int cooldownTimeLimit, int totalRounds) {
+		super(plugin, minigameName, mapName, mapDisplayName, minTeams, maxTeams, minPlayers, maxPlayers, teamSize, warmupTimeLimit, cooldownTimeLimit, totalRounds);
 	}
 
 	/**
@@ -30,7 +30,7 @@ public class Arena extends GameMap{
 	
 	@Override
 	public void startMatch(ArrayList<Team> teams) {
-		if(!canStartMatch(teams))
+		if(!canStartMatch())
 			return;
 		ArenaMatch match = new ArenaMatch(plugin, this, 100, warmupTimeLimit, cooldownTimeLimit, totalRounds, teams);
 		currentMatch = match;
