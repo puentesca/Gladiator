@@ -1,6 +1,5 @@
 package com.twostudentsllc.gladiator.generic_classes;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -79,7 +78,7 @@ public abstract class GameMap {
 	/**
 	 * The current round being played. Null if no round is being played
 	 */
-	protected MapRound currentRound;
+	protected Match currentRound;
 	
 	/**
 	 * The locations for the map

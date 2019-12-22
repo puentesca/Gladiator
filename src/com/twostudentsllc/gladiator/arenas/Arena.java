@@ -30,7 +30,7 @@ public class Arena extends GameMap{
 	public void startRound(ArrayList<Team> teams) {
 		if(!canStartRound(teams))
 			return;
-		ArenaRound round = new ArenaRound(plugin, this, 100, teams);
+		ArenaMatch round = new ArenaMatch(plugin, this, 100, teams);
 		currentRound = round;
 		hasRunningRound = true;
 	}

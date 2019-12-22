@@ -6,7 +6,7 @@ import org.bukkit.Bukkit;
 
 import com.twostudentsllc.gladiator.Main;
 import com.twostudentsllc.gladiator.generic_classes.GameMap;
-import com.twostudentsllc.gladiator.generic_classes.MapRound;
+import com.twostudentsllc.gladiator.generic_classes.Match;
 import com.twostudentsllc.gladiator.generic_classes.Team;
 /**
  * An round for an arena
@@ -14,11 +14,11 @@ import com.twostudentsllc.gladiator.generic_classes.Team;
  * @author Casey Puentes
  *
  */
-public class ArenaRound extends MapRound {
+public class ArenaMatch extends Match {
 	
 	private STATUS state = STATUS.WAITING;
 	
-	public ArenaRound(Main plugin, GameMap map, int timeLimit, ArrayList<Team> teams)
+	public ArenaMatch(Main plugin, GameMap map, int timeLimit, ArrayList<Team> teams)
 	{
 		super(plugin, map, timeLimit, teams);
 	}

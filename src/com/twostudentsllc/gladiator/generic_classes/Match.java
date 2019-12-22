@@ -17,7 +17,11 @@ import com.twostudentsllc.gladiator.runnables.RoundTimelimitUpdater;
  *
  */
 
-public abstract class MapRound {
+public abstract class Match {
+
+
+	//TODO: Implement Warmup/Cooldown functionality
+
 	/**
 	 * Contains the status of the current round
 	 * @author Casey Puentes
@@ -50,7 +54,7 @@ public abstract class MapRound {
 	protected ArrayList<Team> teams;
 	
 	
-	public MapRound(Main plugin, GameMap map, int timeLimit, ArrayList<Team> teams)
+	public Match(Main plugin, GameMap map, int timeLimit, ArrayList<Team> teams)
 	{
 		this.plugin = plugin;
 		this.map = map;

@@ -9,8 +9,10 @@ import java.util.TreeMap;
 import org.bukkit.entity.Player;
 
 public class QueueManager {
-	
-	
+
+	//TODO: Group queues
+	//TODO: Some way to distignuish the different maps along with minigame
+
 	private Map<String, PlayerQueue> queueList;
 	
 	private class PlayerQueue {

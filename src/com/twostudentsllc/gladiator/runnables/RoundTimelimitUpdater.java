@@ -1,11 +1,7 @@
 package com.twostudentsllc.gladiator.runnables;
 
-import java.util.HashMap;
-
-import org.bukkit.entity.Player;
-
 import com.twostudentsllc.gladiator.Main;
-import com.twostudentsllc.gladiator.generic_classes.MapRound;
+import com.twostudentsllc.gladiator.generic_classes.Match;
 
 /**
  * A runnable class that sends the current countdown time to the map round
@@ -18,11 +14,11 @@ public class RoundTimelimitUpdater implements Runnable {
 	/**
 	 * The round that the time left should be sent to
 	 */
-	private MapRound round;
+	private Match round;
 	
 	private Main plugin;
 	
-	public RoundTimelimitUpdater(Main plugin, MapRound round)
+	public RoundTimelimitUpdater(Main plugin, Match round)
 	{
 		this.plugin = plugin;
 		this.round = round;

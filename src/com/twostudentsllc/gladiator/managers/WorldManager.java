@@ -2,10 +2,7 @@ package com.twostudentsllc.gladiator.managers;
 
 import java.util.List;
 
-import org.bukkit.Chunk;
-import org.bukkit.Server;
-import org.bukkit.World;
-import org.bukkit.WorldCreator;
+import org.bukkit.*;
 import org.bukkit.generator.ChunkGenerator;
 
 import com.twostudentsllc.gladiator.global.CustomChunkGenerator;
@@ -24,13 +21,15 @@ public class WorldManager {
 //    	}
         return currentServer.getWorld(worldName);
     }
-    
-//    public static World createVoidWorld(String worldName)
-//    {
-//    	WorldCreator w = new WorldCreator("Void creator");
-//    	ChunkGenerator g = new CustomChunkGenerator();
-//    	w.generator(g);
-//    }
+
+    //TODO: Create a void world
+    public static World createVoidWorld(String worldName)
+    {
+        WorldCreator wc = new WorldCreator(worldName);
+        wc.type(WorldType.FLAT);
+        wc.generatorSettings("2;0;1;"); //This is what makes the world empty (void)
+        return wc.createWorld();
+    }
 
     /*
      * Creates a world under the name worldName, if it already exists it just loads from disk
