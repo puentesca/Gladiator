@@ -1,20 +1,24 @@
 package com.twostudentsllc.gladiator.generic_classes;
 
-import org.bukkit.Server;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import com.twostudentsllc.gladiator.Main;
+import com.twostudentsllc.gladiator.global.DatabaseManager;
+
 public abstract class Game {
 
-    private String gameName;
-    private String displayName;
+    private String minigameName;
+    private String minigameDisplayName;
     private HashMap<String, GameMap> maps;
 
-    public Game(String gameName, String displayName) {
-        this.gameName = gameName;
-        this.displayName = displayName;
+    private Main plugin;
+    
+    public Game(Main plugin, String game, String displayName) {
+        this.plugin = plugin;
+    	minigameName = game;
+        this.minigameDisplayName = displayName;
         maps = new HashMap<String, GameMap>();
     }
 
@@ -25,31 +29,51 @@ public abstract class Game {
     public Set<String> getMapNames() {
         return maps.keySet();
     }
-    
-    public void addMap(String mapName, GameMap map)
-    {
-    	maps.put(mapName, map);
-    }
 
     /**
     * Adds a given GameMap to the map list under its map name
-    * @param args the arguments you wish to use to create the map
+    * 
     */
     public abstract void createGameMap(String[] args);
 
     public GameMap getGameMap(String mapName) {
+    	if(!maps.containsKey(mapName))
+    		throw new IllegalArgumentException("The minigame '" + minigameName + "' does not have map '" + mapName + "'!");
         return maps.get(mapName);
     }
 
     public String getDisplayName() {
-        return displayName;
+        return minigameDisplayName;
     }
 
     public String getGameName() {
-        return gameName;
+        return minigameName;
     }
 
+    //TODO: Add saveAllData() method which uses the DatabaseManager to save the hashmap of maps
+    public boolean saveAllData()
+    {
+    	for(String s : maps.keySet())
+    	{
+    		GameMap map = maps.get(s);
+    		map.saveLocations();
+    		DatabaseManager.saveMap(map, minigameName, map.getMapName());
+    	}
+    	
+    	
+    	return true;
+    }
+    
     /**
+     * Registers the game with the GameManager
+     * @param game The game to register
+     */
+    public void registerGame(Game game)
+    {
+    	plugin.getGameManager().registerGame(minigameName, game, true);
+    }
+    
+    /*
     * Gets a HashMap of all the maps that don't have active rounds
     * @return HashMap of GameMaps tied to their names
      */
@@ -65,7 +89,7 @@ public abstract class Game {
         return openMaps;
     }
 
-    /**
+    /*
     * Conditional check if there are any open maps
     * INFO: Overkill implementation for performance sake (method will probably be called a lot)
     * @return boolean if there are any open maps

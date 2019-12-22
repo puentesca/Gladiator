@@ -8,7 +8,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.twostudentsllc.gladiator.commands.location.SetLocationCommand;
 import com.twostudentsllc.gladiator.commands.location.TeleportToLocationCommand;
 import com.twostudentsllc.gladiator.commands.misc.HelpCommand;
+import com.twostudentsllc.gladiator.commands.testing.CreateMapCommand;
+import com.twostudentsllc.gladiator.games.Gladiator;
 import com.twostudentsllc.gladiator.managers.CommandManager;
+import com.twostudentsllc.gladiator.managers.GameManager;
 import com.twostudentsllc.gladiator.managers.LocationManager;
 
 /**
@@ -27,6 +30,7 @@ public class Main extends JavaPlugin{
 	
 	private LocationManager locMan;
 	private CommandManager cmdMan;
+	private GameManager gameMan;
 	
 	@Override
 	public void onEnable()
@@ -34,6 +38,7 @@ public class Main extends JavaPlugin{
 		System.out.println("Generator Settings: " + new WorldCreator("Void creator").generatorSettings());
 		initializeManagers();
 		initialzeCommands();
+		initializeGames();
 		registerListeners();
 		System.out.println("[GLADIATOR]: Successfully loaded!");
 	}
@@ -47,6 +52,7 @@ public class Main extends JavaPlugin{
 //		} catch (IOException e) {
 //			e.printStackTrace();
 //		}
+		gameMan.saveAllData();
 		System.out.println("[GLADIATOR]: Successfully shut down!");
 	}
 	
@@ -58,12 +64,19 @@ public class Main extends JavaPlugin{
 			e.printStackTrace();
 		}
 		cmdMan = new CommandManager(this);
+		gameMan = new GameManager(this);
 	}
 	private void initialzeCommands()
 	{
 		new SetLocationCommand(this);
 		new TeleportToLocationCommand(this);
 		new HelpCommand(this);
+		new CreateMapCommand(this);
+	}
+	
+	private void initializeGames()
+	{
+		new Gladiator(this, "gladiator", "Gladiator");
 	}
 	
 	private void registerListeners()
@@ -78,6 +91,10 @@ public class Main extends JavaPlugin{
 	public CommandManager getCommandManager()
 	{
 		return cmdMan;
+	}
+	public GameManager getGameManager()
+	{
+		return gameMan;
 	}
 	
 }

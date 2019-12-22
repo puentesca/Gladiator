@@ -16,6 +16,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import com.twostudentsllc.gladiator.Main;
+import com.twostudentsllc.gladiator.generic_classes.GameMap;
 import com.twostudentsllc.gladiator.global.Utils;
 
 /**
@@ -154,31 +155,21 @@ public class LocationManager {
 	 * @param key The key of the new location
 	 * @param l The location to save
 	 */
-	public void setLocation(Player sender, String[] args, Location l)
+	public void setLocation(Player sender, String[] args, Location location)
 	{
 		String minigameName = args[1];
 		String mapName = args[2];
 		String key = args[3];
-		
+
+		//TODO: Recreate a check to verify that the map key is valid. Check for formatting like spawn#_# where the first # is the team number starting at 0, and the second is the count of the current player
 		//If the key is an invalid key
-		if(!isValidKey(sender, key))
-			return;
+//		if(!isValidKey(sender, key))
+//			return;
 		
-		//TODO: 
-		//Check if minigameName exists and gets the Game
-		//Check if the mapName exists in the minigame and get the locations
-		//Check if the key exists in the locations
-		//Set or replace the key and location
-		
-		//If the key is already in the hashmap, replace it.
-//		if(locations.containsKey(key))
-//		{
-//			locations.replace(key, l);
-//		}
-//		else
-//		{
-//			locations.put(key, l);
-//		}
+		//Gets the game from the game manager, then gets the GameMap from the game, and adds the location.
+		//Will throw IllegalArgumentException if any of them do not exist
+		plugin.getGameManager().getGame(minigameName).getGameMap(mapName).addLocation(key, location);
+		//TODO: Add confirmation that the map location was added. Make a confirmation method in Utils.
 	}
 	
 	/**
@@ -192,10 +183,14 @@ public class LocationManager {
 		String mapName = args[2];
 		String key = args[3];
 		
+		//TODO: Recreate a check to verify that the map key is valid. Check for formatting like spawn#_# where the first # is the team number starting at 0, and the second is the count of the current player
+				//If the key is an invalid key
 		//If the key is an invalid key
-		if(!isValidKey(p, key))
-			return;
+//		if(!isValidKey(p, key))
+//			return;
+//		
 		
+		plugin.getGameManager().getGame(minigameName).getGameMap(mapName).getLocation(key);
 		//TODO: 
 		//Check if minigameName exists and gets the Game
 		//Check if the mapName exists in the minigame and get the locations

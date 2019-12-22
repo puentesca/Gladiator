@@ -1,24 +1,29 @@
 package com.twostudentsllc.gladiator.managers;
 
-import org.bukkit.entity.Player;
-
-import com.twostudentsllc.gladiator.generic_classes.Game;
-
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Queue;
+
+import org.bukkit.entity.Player;
+
+import com.twostudentsllc.gladiator.Main;
+import com.twostudentsllc.gladiator.generic_classes.Game;
 
 public class GameManager {
 
+	//TODO: Verify on shutdown that all appropriate saving methods are called
+	
     private HashMap<String, Game> games;
     private QueueManager queues;
+    
+    private Main plugin;
 
-    public GameManager() {
+    public GameManager(Main plugin) {
+    	this.plugin = plugin;
         games = new HashMap<>();
         queues = new QueueManager();
     }
-
-    public boolean addGame(String gameName, Game game, boolean createQueue) {
+    
+    public boolean registerGame(String gameName, Game game, boolean createQueue) {
         if(games.containsKey(gameName))
             return false;
 
@@ -34,6 +39,42 @@ public class GameManager {
         return true;
     }
 
+    public Game getGame(String gameName)
+    {
+    	if(!hasGame(gameName))
+    		throw new IllegalArgumentException("Game '" + gameName + "' does not exist!");
+    	return games.get(gameName);
+    }
+    
+    /**
+     * Attemps to save all maps and data
+     */
+    public void saveAllData()
+    {
+    	for(String s : games.keySet())
+    	{
+    		Game g = games.get(s);
+    		if(g.saveAllData())
+    		{
+    			System.out.println("Game '" + g.getGameName() + "' saved all data successfully!");
+    		}
+    		else
+    		{
+    			System.out.println("Error when attempting to save data in game '" + g.getGameName() + "'!");
+    		}
+    	}
+    }
+    
+    /**
+     * Evaluates whether or not the game exists
+     * @param gameName The name of the game (not display name)
+     * @return True if the game exists
+     */
+    public boolean hasGame(String gameName)
+    {
+    	return games.containsKey(gameName);
+    }
+    
     public Game removeGame(String gameName) {
         if(!games.containsKey(gameName))
             return null;

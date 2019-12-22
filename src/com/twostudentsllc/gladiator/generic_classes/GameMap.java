@@ -129,6 +129,37 @@ public abstract class GameMap {
 		System.out.println("Successfully saved map " + mapName + " locations for Minigame: " + minigameName + "");
 	}
 	
+	/**
+	 * Adds a location to the database. If it exists, it replaces it
+	 * @param key The name of the location to be added
+	 * @param location The position of the location to be added
+	 */
+	public void addLocation(String key, Location location)
+	{
+		//If the key already exists, replace it
+		if(locations.containsKey(key))
+		{
+			locations.replace(key, location);
+		}
+		else
+		{
+			locations.put(key, location);
+		}
+	}
+	
+	/**
+	 * Gets a specified location. Throws IllegalArgumentException if the location does not exist
+	 * @return
+	 */
+	public Location getLocation(String locationKey)
+	{
+		if(!locations.containsKey(locationKey))
+		{
+			throw new IllegalArgumentException("The location '" + locationKey + "' for map '" + mapName + "' does not exist!");
+		}
+		return locations.get(locationKey);
+	}
+	
 	/*
 	* Unload loaded chunks on the map
 	 */

@@ -1,7 +1,6 @@
 package com.twostudentsllc.gladiator.commands.location;
 
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -47,8 +46,9 @@ public class SetLocationCommand extends CustomCommand{
 	 */
 	private void commandCalled(CommandSender sender, Command cmd, String label, String[] args)
 	{
+		Player p = (Player)sender;
 		//Execute command logic
-		plugin.getLocationManager().setLocation(((Player)sender), args, ((Player)sender).getLocation());
+		plugin.getLocationManager().setLocation(p, args, p.getLocation());
 	}
 	
 

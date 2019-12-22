@@ -1,12 +1,11 @@
 package com.twostudentsllc.gladiator.commands.testing;
 
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import com.twostudentsllc.gladiator.Main;
 import com.twostudentsllc.gladiator.generic_classes.CustomCommand;
+import com.twostudentsllc.gladiator.generic_classes.Game;
 import com.twostudentsllc.gladiator.global.Utils;
 
 /**
@@ -15,11 +14,11 @@ import com.twostudentsllc.gladiator.global.Utils;
  * @author Casey Puentes
  *
  */
-public class TestCommand extends CustomCommand {
+public class CreateMapCommand extends CustomCommand {
 	
 	private Main plugin;
 	
-	public TestCommand(Main plugin)
+	public CreateMapCommand(Main plugin)
 	{
 		
 		super.setName("createmap")
@@ -51,7 +50,9 @@ public class TestCommand extends CustomCommand {
 	 */
 	private void commandCalled(CommandSender sender, Command cmd, String label, String[] args)
 	{
-		
+		String minigameName = args[1];
+		Game game = plugin.getGameManager().getGame(minigameName);
+		game.createGameMap(args);
 	}
 	
 
