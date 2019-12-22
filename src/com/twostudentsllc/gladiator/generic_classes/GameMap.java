@@ -205,7 +205,7 @@ public abstract class GameMap {
 	public abstract String serialize();
 	
 	/**
-	 * This function is in charge of intializing a new round
+	 * This function is in charge of initializing a new round
 	 */
 	public abstract void startRound(ArrayList<Team> teams);
 	
