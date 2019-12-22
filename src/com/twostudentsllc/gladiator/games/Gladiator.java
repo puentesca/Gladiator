@@ -16,6 +16,8 @@ public class Gladiator extends Game{
 		loadAllMaps();
 	}
 
+	//TODO: Add round creation from GameManager
+	
 	@Override
 	public void createGameMap(String[] args) {
 		

@@ -48,6 +48,7 @@ public class ArenaRound extends MapRound {
 			return false;
 		}
 		stopTimelimitCountdown();
+		//TODO: Make GameMap hasRunningRound = false
 		//Add logic to end round
 		state = STATUS.COMPLETED;
 		return true;

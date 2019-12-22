@@ -68,7 +68,8 @@ public abstract class Game {
     public abstract boolean saveAllData();
 
     /**
-     * Loads all maps associated with this Game
+     * Loads all map
+     * s associated with this Game
      */
     public abstract void loadAllMaps();
     

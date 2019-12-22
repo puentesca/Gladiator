@@ -40,6 +40,7 @@ public class Arena extends GameMap{
 	{
 		currentRound = null;
 		hasRunningRound = false;
+		unloadChunks();
 	}
 
 }
