@@ -6,6 +6,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.twostudentsllc.gladiator.global.Utils;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 /**
  * A common command super class
@@ -183,6 +186,18 @@ public abstract class CustomCommand implements CommandExecutor {
 				return true;
 		}
 		return false;
+	}
+
+	/**
+	 * Support for tabComplete (if you don't need autocomplete just don't override)
+	 * @param commandSender person who sent command
+	 * @param command command itself
+	 * @param s
+	 * @param args args
+	 * @return List that contains suggested terms for that completion
+	 */
+	public List<String> tabComplete(CommandSender commandSender, Command command, String s, String[] args) {
+		return null;
 	}
 	
 	/**

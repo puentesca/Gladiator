@@ -1,19 +1,21 @@
 package com.twostudentsllc.gladiator.commands.testing;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 
 import com.twostudentsllc.gladiator.generic_classes.Game;
 import com.twostudentsllc.gladiator.generic_classes.GameMap;
 import com.twostudentsllc.gladiator.managers.GameManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
 import com.twostudentsllc.gladiator.Main;
 import com.twostudentsllc.gladiator.generic_classes.CustomCommand;
 import com.twostudentsllc.gladiator.generic_classes.Team;
 import com.twostudentsllc.gladiator.global.Utils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 
 public class ListCommand extends CustomCommand {
@@ -93,5 +95,42 @@ public class ListCommand extends CustomCommand {
 
     }
 
+    public List<String> tabComplete(CommandSender commandSender, Command command, String s, String[] args) {
 
+        if(args.length == 2) {
+
+            return Arrays.asList("games","maps","locations");
+
+        } else if (args.length == 3) {
+
+            if(args[1].equals("maps") || args[1].equals("locations")) {
+
+                //Suggest the games if they are looking for maps or locations
+                GameManager manager = plugin.getGameManager();
+                HashMap<String, Game> games = manager.getGames();
+                ArrayList<String> list = new ArrayList<>();
+
+                list.addAll(games.keySet());
+
+                return list;
+            }
+        } else if (args.length ==4 ) {
+
+            if(args[1].equals("locations")) {
+
+                //Suggest the maps if they are looking for locations
+                GameManager manager = plugin.getGameManager();
+                HashMap<String, Game> games = manager.getGames();
+                Game game = games.get(args[2]);
+                ArrayList<String> list = new ArrayList<>();
+
+                HashMap<String, GameMap> maps = game.getMaps();
+
+                list.addAll(maps.keySet());
+
+                return list;
+            }
+        }
+        return new ArrayList<>();
+    }
 }

@@ -1,15 +1,20 @@
 package com.twostudentsllc.gladiator.managers;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
 import com.twostudentsllc.gladiator.Main;
 import com.twostudentsllc.gladiator.generic_classes.CustomCommand;
 import com.twostudentsllc.gladiator.global.Utils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * A custom command manager that stores and calls all subcommands of /gladiator
@@ -30,6 +35,28 @@ public class CommandManager implements CommandExecutor {
 		this.plugin = plugin;
 		subcommands = new HashMap<String, CustomCommand>();
 		plugin.getCommand(mainCommand).setExecutor(this);
+		plugin.getCommand(mainCommand).setTabCompleter(new MainCommandTabCompleter());
+	}
+
+	/**
+	 * Class for handling tab autocompletion
+	 */
+	private class MainCommandTabCompleter implements TabCompleter {
+
+		@Override
+		public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
+
+			if(args.length == 1){
+				ArrayList<String> list = new ArrayList<>();
+				list.addAll(subcommands.keySet());
+				return list;
+			}
+
+			if(!subcommands.containsKey(args[0]))
+				return null;
+
+			return subcommands.get(args[0]).tabComplete(commandSender, command, s, args);
+		}
 	}
 
 	@Override
