@@ -34,6 +34,8 @@ public abstract class CustomCommand implements CommandExecutor {
 	 * The player can run the command if they have any of these permissions
 	 */
 	protected String[] commandPermissions;
+
+	//TODO: Make minArgs and maxArgs not include the calling command name
 	/**
 	 * The minimum arguments the command must have to properly function
 	 */
