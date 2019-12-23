@@ -2,6 +2,7 @@ package com.twostudentsllc.gladiator;
 
 import java.io.IOException;
 
+import com.twostudentsllc.gladiator.commands.testing.ListCommand;
 import org.bukkit.WorldCreator;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -79,6 +80,7 @@ public class Main extends JavaPlugin{
 		new JoinCommand(this);
 		new TeleportToWorld(this);
 		new DeleteWorldCommand(this);
+		new ListCommand(this);
 	}
 	
 	private void initializeGames()

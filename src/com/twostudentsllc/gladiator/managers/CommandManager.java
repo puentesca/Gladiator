@@ -52,7 +52,7 @@ public class CommandManager implements CommandExecutor {
 			//Verifies that, if a player is required to execute the command, only the player is able to execute it.
 			if(command.onlyPlayer() && !(sender instanceof Player))
 			{
-				Utils.Error(sender, "You must be a player to exectue this command!");
+				Utils.Error(sender, "You must be a player to execute this command!");
 				return false;
 			}
 			//Verifies the entity has permissions to run the command

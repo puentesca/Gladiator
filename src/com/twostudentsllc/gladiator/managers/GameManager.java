@@ -84,4 +84,12 @@ public class GameManager {
         return targetGame.startGame(mapName);
     }
 
+
+    /**
+     * Returns a list of all the games
+     * @return a hashmap containing games
+     */
+    public HashMap<String, Game> getGames() {
+        return games;
+    }
 }

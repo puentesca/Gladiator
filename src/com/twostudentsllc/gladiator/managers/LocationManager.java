@@ -80,7 +80,8 @@ public class LocationManager {
 		String key = args[3];
 
 		//Handle input argument validation
-		validateArguments(p, args);
+		if(!validateArguments(p, args))
+			return;
 
 		GameMap targetMap = plugin.getGameManager().getGame(minigameName).getGameMap(mapName);
 
@@ -98,7 +99,7 @@ public class LocationManager {
 	* Checks whether arguments passed in for locations are valid
 	* Sends chat error message to sender if inputs invalid
 	 */
-	private void validateArguments(Player sender, String[] args) {
+	private boolean validateArguments(Player sender, String[] args) {
 
 		String minigameName = args[1];
 		String mapName = args[2];
@@ -108,19 +109,27 @@ public class LocationManager {
 		Game targetGame = plugin.getGameManager().getGame(minigameName);
 		if(plugin.getGameManager().getGame(minigameName) != null) {
 			Utils.Error(sender, "Minigame does not exist!");
+			return false;
 		}
 
 		//Validate that the map exists
 		GameMap targetMap = targetGame.getGameMap(mapName);
 		if(targetGame.getGameMap(mapName) == null) {
 			Utils.Error(sender, "Map does not exist!");
+			return false;
 		}
 
 		//Is the location is one of the valid location keys
+		boolean invalidKey = true;
 		for(String possibleKey: possibleLocationKeys) {
 			if(!key.contains(possibleKey)) {
-				Utils.Error(sender, "Invalid Location");
+				invalidKey = false;
 			}
+		}
+
+		if(invalidKey) {
+			Utils.Error(sender, "Invalid Location");
+			return false;
 		}
 
 		//Custom validation for whether the location is a spawn-point
@@ -129,8 +138,10 @@ public class LocationManager {
 			Matcher matcher = spawnValidate.matcher(key);
 			boolean spawnValid = matcher.matches();
 
-			if(!spawnValid)
+			if(!spawnValid) {
 				Utils.Error(sender, "Spawn-point configuration invalid, the format is spawn#_#");
+				return false;
+			}
 		}
 
 		//Custom validation for whether the location is an objective
@@ -139,9 +150,13 @@ public class LocationManager {
 			Matcher matcher = spawnValidate.matcher(key);
 			boolean spawnValid = matcher.matches();
 
-			if(!spawnValid)
+			if(!spawnValid) {
 				Utils.Error(sender, "Objective configuration invalid, the format is objective#");
+				return false;
+			}
 		}
+
+		return true;
 	}
 	
 	/**
