@@ -1,0 +1,60 @@
+package com.twostudentsllc.gladiator.commands.testing;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import com.twostudentsllc.gladiator.managers.WorldManager;
+import org.bukkit.Bukkit;
+import org.bukkit.World;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.libs.org.apache.commons.io.FileUtils;
+
+import com.twostudentsllc.gladiator.Main;
+import com.twostudentsllc.gladiator.generic_classes.CustomCommand;
+import com.twostudentsllc.gladiator.global.Utils;
+
+public class CreateWorldCommand extends CustomCommand {
+
+    private Main plugin;
+
+    public CreateWorldCommand(Main plugin)
+    {
+
+        super.setName("createworld")
+                .setDescription("Creates a world")
+                .setUsage("/gladiator createworld <worldName>")
+                .setPermissions(new String[] {"gladiator.createworld"})
+                .setMinArgs(2)
+                .setMaxArgs(2)
+                .setPlayerOnly(false);
+
+        //Initializes data
+        this.plugin = plugin;
+        plugin.getCommandManager().registerCommand(getName(), this);
+    }
+
+    @Override
+    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+        String commandName = args[0];
+
+        //Signifies the command has been called
+        commandCalled(sender, cmd, label, args);
+
+        Utils.commandCompletedMessage(sender, getName()); //Command completion confirmation
+        return true;
+    }
+
+    /**
+     * Called when the command listed is called
+     */
+    private void commandCalled(CommandSender sender, Command cmd, String label, String[] args)
+    {
+        String worldName = args[1];
+        WorldManager.createVoidWorld(worldName);
+
+    }
+}

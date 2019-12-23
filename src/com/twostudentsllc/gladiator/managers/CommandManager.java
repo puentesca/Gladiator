@@ -48,14 +48,41 @@ public class CommandManager implements CommandExecutor {
 
 			if(args.length == 1){
 				ArrayList<String> list = new ArrayList<>();
-				list.addAll(subcommands.keySet());
+				for(String possibleCommand: subcommands.keySet()) {
+					if(possibleCommand.contains(args[0])){
+						list.add(possibleCommand);
+					}
+				}
 				return list;
 			}
 
 			if(!subcommands.containsKey(args[0]))
 				return null;
 
-			return subcommands.get(args[0]).tabComplete(commandSender, command, s, args);
+			//Remove the command name from the args passed in to the tabComplete function
+			String[] truncatedArgs = new String[args.length-1];
+			for(int i = 1 ; i < args.length; i++){
+				truncatedArgs[i-1] = args[i];
+			}
+
+
+			//Match the command parts spelling as the sender types
+			String stringToMatch = truncatedArgs[truncatedArgs.length - 1];
+			List<String> possibleValues = subcommands.get(args[0]).tabComplete(commandSender, command, s, truncatedArgs);
+
+			//Break out early if there are no possible values
+			if(possibleValues == null)
+				return null;
+
+			ArrayList<String> matchValues = new ArrayList<>();
+
+			for(String matchPart: possibleValues) {
+				if(matchPart.contains(stringToMatch)) {
+					matchValues.add(matchPart);
+				}
+			}
+
+			return matchValues;
 		}
 	}
 

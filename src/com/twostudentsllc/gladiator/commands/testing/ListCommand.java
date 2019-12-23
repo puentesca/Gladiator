@@ -97,13 +97,13 @@ public class ListCommand extends CustomCommand {
 
     public List<String> tabComplete(CommandSender commandSender, Command command, String s, String[] args) {
 
-        if(args.length == 2) {
+        if(args.length == 1) {
 
             return Arrays.asList("games","maps","locations");
 
-        } else if (args.length == 3) {
+        } else if (args.length == 2) {
 
-            if(args[1].equals("maps") || args[1].equals("locations")) {
+            if(args[0].equals("maps") || args[0].equals("locations")) {
 
                 //Suggest the games if they are looking for maps or locations
                 GameManager manager = plugin.getGameManager();
@@ -114,14 +114,14 @@ public class ListCommand extends CustomCommand {
 
                 return list;
             }
-        } else if (args.length ==4 ) {
+        } else if (args.length == 3) {
 
-            if(args[1].equals("locations")) {
+            if(args[0].equals("locations")) {
 
                 //Suggest the maps if they are looking for locations
                 GameManager manager = plugin.getGameManager();
                 HashMap<String, Game> games = manager.getGames();
-                Game game = games.get(args[2]);
+                Game game = games.get(args[1]);
                 ArrayList<String> list = new ArrayList<>();
 
                 HashMap<String, GameMap> maps = game.getMaps();

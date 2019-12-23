@@ -2,7 +2,7 @@ package com.twostudentsllc.gladiator;
 
 import java.io.IOException;
 
-import com.twostudentsllc.gladiator.commands.testing.ListCommand;
+import com.twostudentsllc.gladiator.commands.testing.*;
 import org.bukkit.WorldCreator;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -10,9 +10,6 @@ import com.twostudentsllc.gladiator.commands.location.SetLocationCommand;
 import com.twostudentsllc.gladiator.commands.location.TeleportToLocationCommand;
 import com.twostudentsllc.gladiator.commands.maps.CreateMapCommand;
 import com.twostudentsllc.gladiator.commands.misc.HelpCommand;
-import com.twostudentsllc.gladiator.commands.testing.DeleteWorldCommand;
-import com.twostudentsllc.gladiator.commands.testing.JoinCommand;
-import com.twostudentsllc.gladiator.commands.testing.TeleportToWorld;
 import com.twostudentsllc.gladiator.games.Gladiator;
 import com.twostudentsllc.gladiator.managers.CommandManager;
 import com.twostudentsllc.gladiator.managers.GameManager;
@@ -81,6 +78,7 @@ public class Main extends JavaPlugin{
 		new TeleportToWorld(this);
 		new DeleteWorldCommand(this);
 		new ListCommand(this);
+		new CreateWorldCommand(this);
 	}
 	
 	private void initializeGames()

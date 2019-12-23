@@ -59,7 +59,8 @@ public class LocationManager {
 		System.out.println("Setting location for '" + key + "' for map '" + mapName + "' and minigame '" + minigameName + "'.");
 
 		//Handle input argument validation
-		validateArguments(sender, args);
+		if(!validateArguments(sender, args))
+			return;
 		
 		//Gets the game from the game manager, then gets the GameMap from the game, and adds the location.
 		//Will throw IllegalArgumentException if any of them do not exist
@@ -105,12 +106,16 @@ public class LocationManager {
 		String mapName = args[2];
 		String key = args[3];
 
+		System.out.println(minigameName + ":" + mapName + ":" + key);
+
 		//Validate that the mini-game exists
 		Game targetGame = plugin.getGameManager().getGame(minigameName);
 		if(plugin.getGameManager().getGame(minigameName) != null) {
 			Utils.Error(sender, "Minigame does not exist!");
 			return false;
 		}
+
+
 
 		//Validate that the map exists
 		GameMap targetMap = targetGame.getGameMap(mapName);
