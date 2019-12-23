@@ -228,7 +228,6 @@ public abstract class MapMatch {
 		throw new IllegalArgumentException("Player '" + p.getName() + "' is not part of a team in this round on map: '" + map.getMapDisplayName() + "'!");
 	}
 	
-	
 	public Countdown getWarmupCountdown()
 	{
 		return warmupTimelimitCountdown;
@@ -239,6 +238,16 @@ public abstract class MapMatch {
 		return cooldownTimelimitCountdown;
 	}
 	
+	/**
+	 * Resets all players stats to default state after a round has been completed
+	 */
+	public void resetPlayerStats()
+	{
+		for(Team t: teams)
+		{
+			t.resetAllPlayerStats();
+		}
+	}
 	
 	/**
 	 * Maps every player a spawnpoint

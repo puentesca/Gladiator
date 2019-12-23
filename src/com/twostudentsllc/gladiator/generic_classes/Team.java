@@ -68,9 +68,37 @@ public class Team {
     	return true;
     }
     
+    /**
+     * Increments a players deaths
+     * @param p The player that died
+     */
+    public void incrementPlayerDeaths(Player p)
+    {
+    	getPlayerStats(p).incrementDeaths();
+    }
+    
+    /**
+     * Increments a players kills
+     * @param p The player that earned a kill
+     */
+    public void incrementPlayerKills(Player p)
+    {
+    	getPlayerStats(p).incrementKills();
+    }
+    
     public void setPlayerSpawns(HashMap<Player, Location> playerSpawns)
     {
     	this.playerSpawns = playerSpawns;
+    }
+    
+    //Resets all players stats
+    public void resetAllPlayerStats()
+    {
+    	HashMap<Player, PlayerStats> resetMembersStats = new HashMap<Player, PlayerStats>();
+    	for(Player p : teamMembers.keySet())
+    	{
+    		resetMembersStats.put(p, new PlayerStats());
+    	}
     }
     
     public HashMap<Player, Location> getPlayerSpawns()

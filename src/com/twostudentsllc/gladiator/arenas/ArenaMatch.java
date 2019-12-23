@@ -37,7 +37,8 @@ public class ArenaMatch extends MapMatch {
 		}
 		//Add logic to unfreeze players
 		currentRoundCount++;
-		currentRound = new ArenaRound(plugin, this, teams, timeLimit);
+		//TODO: Make timeLimit and lives be changeable dynamically
+		currentRound = new ArenaRound(plugin, this, teams, timeLimit, 2);
 		setStatus(STATUS.IN_PROGRESS);
 		return true;
 	}
@@ -51,6 +52,7 @@ public class ArenaMatch extends MapMatch {
 			return false;
 		}
 		//Add logic to end round
+		resetPlayerStats();
 		currentRound = null;
 		doCooldown();
 		return true;

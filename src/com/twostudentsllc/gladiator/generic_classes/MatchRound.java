@@ -2,6 +2,8 @@ package com.twostudentsllc.gladiator.generic_classes;
 
 import java.util.ArrayList;
 
+import org.bukkit.entity.Player;
+
 import com.twostudentsllc.gladiator.Main;
 import com.twostudentsllc.gladiator.runnables.RoundTimelimitUpdater;
 
@@ -23,37 +25,52 @@ public abstract class MatchRound {
 	 */
 	protected int roundTotalTimelimit;
 	
+	/**
+	 * The amount of lives a player has 
+	 */
+	protected int livesPerPlayer;
+	
 	//TODO: Add total lives per player in match and methods to add deaths, respawn players, and start
 	//countdown for respawn. Also need to define respawn delay.
 	
 	protected Countdown roundCountdown;
 	
-	public MatchRound(Main plugin, MapMatch match, ArrayList<Team> teams, int roundTotalTimeLimit)
+	protected ArrayList<MinigameListener> registeredListeners;
+	
+	public MatchRound(Main plugin, MapMatch match, ArrayList<Team> teams, int roundTotalTimeLimit, int livesPerPlayer)
 	{
 		this.plugin = plugin;
 		this.match = match;
 		this.teams = teams;
 		this.roundTotalTimelimit = roundTotalTimeLimit;
+		this.livesPerPlayer = livesPerPlayer;
+		registeredListeners = new ArrayList<MinigameListener>();
 		startRound();
 	}
 	
 	/**
 	 * Creates listeners for all events that will need to be handled by this round
 	 */
-	public abstract void registerListeners();
+	public abstract void registerRoundListeners();
 	
 	/**
 	 * Destroys all of the listeners to increase server performance
 	 */
-	public abstract void unregisterListeners();
+	public void unregisterRoundListeners() {
+		for(MinigameListener ml : registeredListeners)
+		{
+			ml.unregisterEvent();
+		}
+		
+	}
 	
 	/**
-	 * Ends the round
+	 * Ends the round.  Responsible for calling unregisterListeners()
 	 */
 	public abstract void endRound();
 	
 	/**
-	 * Starts the round
+	 * Starts the round. Responsible for calling registerListeners()
 	 */
 	public abstract void startRound();
 	
@@ -79,4 +96,51 @@ public abstract class MatchRound {
 	{
 		return roundCountdown;
 	}
+	
+	/**
+	 * Checks to see if the given player is currently in this round
+	 * @param p The player to check for
+	 * @return True if the player is in this round
+	 */
+	public boolean hasPlayer(Player p)
+	{
+		for(Team t : teams)
+		{
+			if(t.containsPlayer(p))
+				return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * Similar to hasPlayer(Player p), but instead returns null if the player is not in this round and a Team if the player is found
+	 * @param p The player to check for
+	 * @return True if the player is in this round
+	 */
+	public Team getTeam(Player p)
+	{
+		for(Team t : teams)
+		{
+			if(t.containsPlayer(p))
+				return t;
+		}
+		return null;
+	}
+	
+	/**
+	 * Called when a player in this round has died. Responsible for calling playerEliminated() when a played has been eliminated
+	 * @param p
+	 */
+	public abstract void playerDied(Player p);
+	
+	/**
+	 * Called by playerDied() when a player has been eliminated
+	 * @param p
+	 */
+	public abstract void playerEliminated(Player p);
+	/**
+	 * Called when a player in this round has earned a kill
+	 * @param p
+	 */
+	public abstract void playerEarnedKill(Player p);
 }

@@ -110,7 +110,7 @@ public class LocationManager {
 
 		//Validate that the mini-game exists
 		Game targetGame = plugin.getGameManager().getGame(minigameName);
-		if(plugin.getGameManager().getGame(minigameName) != null) {
+		if(plugin.getGameManager().getGame(minigameName) == null) {
 			Utils.Error(sender, "Minigame does not exist!");
 			return false;
 		}
@@ -124,7 +124,7 @@ public class LocationManager {
 			return false;
 		}
 
-		//Is the location is one of the valid location keys
+		//If the location is one of the valid location keys
 		boolean invalidKey = true;
 		for(String possibleKey: possibleLocationKeys) {
 			if(!key.contains(possibleKey)) {

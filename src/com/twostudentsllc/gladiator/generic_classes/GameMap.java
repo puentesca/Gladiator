@@ -59,16 +59,6 @@ public abstract class GameMap {
 	 * The maximum amount of teams the map must have to function
 	 */
 	protected int maxTeams;
-	
-	/**TODO: Might not need if use teamSize instead
-	 * The minimum players the map can have to function
-	 */
-	protected int minPlayers;
-	
-	/**TODO: Might not need if use teamSize instead
-	 * The maximum players the map can have to function
-	 */
-	protected int maxPlayers;
 
 	/**
 	 * Number of players per team
@@ -128,7 +118,6 @@ public abstract class GameMap {
 		this.warmupTimeLimit = warmupTime;
 		this.cooldownTimeLimit = cooldownTime;
 		this.totalRounds = totalRounds;
-		//TODO: Make map creation generate a void world with the mapName as its name
 		this.mapWorld = WorldManager.getWorld(plugin.getServer(), mapName);
 		hasRunningMatch = false;
 		loadLocations();
