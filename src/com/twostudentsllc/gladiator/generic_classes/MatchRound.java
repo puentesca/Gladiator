@@ -1,14 +1,19 @@
 package com.twostudentsllc.gladiator.generic_classes;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 
 import com.twostudentsllc.gladiator.Main;
 import com.twostudentsllc.gladiator.runnables.RoundTimelimitUpdater;
 
 public abstract class MatchRound {
 	protected Main plugin;
+	
+	//TODO: Add listener that prevents teammates from damaging each other and stops people in the warmup from shooting arrows or throwing stuff(Do the second part in the maps classes)
 	
 	/**
 	 * The teams playing in this round
@@ -30,8 +35,15 @@ public abstract class MatchRound {
 	 */
 	protected int livesPerPlayer;
 	
-	//TODO: Add total lives per player in match and methods to add deaths, respawn players, and start
-	//countdown for respawn. Also need to define respawn delay.
+	/**
+	 * The time (in seconds) that a player must wait to respawn
+	 */
+	protected int respawnTime;
+	
+	/**
+	 * Holds countdown respawn timers. Here so the current ones can be cancelled when a round is ended
+	 */
+	protected HashMap<Player, Countdown> respawnCountdowns;
 	
 	protected Countdown roundCountdown;
 	
@@ -44,7 +56,9 @@ public abstract class MatchRound {
 		this.teams = teams;
 		this.roundTotalTimelimit = roundTotalTimeLimit;
 		this.livesPerPlayer = livesPerPlayer;
+		this.respawnTime = 7; //FIXME: Make this time customizable! It is not taken in by the constructor
 		registeredListeners = new ArrayList<MinigameListener>();
+		respawnCountdowns = new HashMap<Player, Countdown>();
 		startRound();
 	}
 	
@@ -65,7 +79,7 @@ public abstract class MatchRound {
 	}
 	
 	/**
-	 * Ends the round.  Responsible for calling unregisterListeners()
+	 * Ends the round.  Responsible for calling unregisterListeners() and stopping all respawn countdowns
 	 */
 	public abstract void endRound();
 	
@@ -79,6 +93,36 @@ public abstract class MatchRound {
 	 * @param time The amount of time left in the round
 	 */
 	public abstract void handleTimeRemaining(int time);
+	
+	/**
+	 * Called whenever the countdown for a player to respawn is incremented by one second. Need to add and remove countdown from respawnCountdowns
+	 * @param timer The Countdown tracking the respawn time left
+	 * @param time The time left on the countdown
+	 * @param p The player the countdown is tracking
+	 */
+	public abstract void handleRespawnTimeRemaining(int time, Player p);
+	
+	/**
+	 * Called when a player in this round has been killed by another player
+	 * @param e The event from the PlayerDamageEvent
+	 * @param killed The player who was killed
+	 * @param killer The player who killed the other player
+	 */
+	public abstract void handlePVPDeathEvent(Event e, Player killed, Player killer);
+	
+	/**
+	 * Called when a player in this round has been killed by something other than a player
+	 * @param e The event from the PlayerDamageEvent
+	 * @param killed The player who was killed
+	 * @param entity The player who killed the other player
+	 */
+	public abstract void handleNaturalPlayerDeathEvent(Event e, Player killed, Entity killer);
+	
+	/**
+	 * Respawns a player
+	 * @param p The player to respawn
+	 */
+	public abstract void respawnPlayer(Player p);
 	
 	/**
 	 * Starts the time limit coundown for the round
@@ -95,6 +139,16 @@ public abstract class MatchRound {
 	public Countdown getTimelimitCountdown()
 	{
 		return roundCountdown;
+	}
+	
+	public HashMap<Player, Countdown> getRespawnCountdowns()
+	{
+		return respawnCountdowns;
+	}
+	
+	public Countdown getPlayerRespawnCountdown(Player p)
+	{
+		return respawnCountdowns.get(p);
 	}
 	
 	/**

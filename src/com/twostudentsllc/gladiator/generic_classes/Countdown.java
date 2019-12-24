@@ -55,7 +55,8 @@ public class Countdown implements Runnable {
 		//If all the time has elapsed
 		if(secondsCounter == -1)
 		{
-			cancel();
+			stopCountdown();
+			return;
 		}
 		taskToExecute.run();
 		

@@ -1,20 +1,22 @@
 package com.twostudentsllc.gladiator.listeners.gladiator;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 
 import com.twostudentsllc.gladiator.Main;
 import com.twostudentsllc.gladiator.generic_classes.MatchRound;
 import com.twostudentsllc.gladiator.generic_classes.MinigameListener;
 
+
 public class DeathListener extends MinigameListener{
 	
-	//FIXME: Change it so this listens for lowering of health and if its to the point where the player will die,
-	//cancel the damage, set the health to full, and respawn the player
 	public DeathListener(Main plugin, MatchRound round)
 	{
 		super(plugin, round);	
@@ -28,27 +30,56 @@ public class DeathListener extends MinigameListener{
 	}
 	
 	@EventHandler
-	public void onDeath(PlayerDeathEvent e)
-	{
-		//TODO: Make it so events are only triggered by players in the current round
-		//If the player is in the round this event is tracking
-		if(round.hasPlayer(e.getEntity().getPlayer()))
-			eventCalled(e);
+	public void onDeath(EntityDamageEvent e)
+	{	
+		eventCalled(e);
 	}
 	
 	@Override
 	public void eventCalled(Event e)
 	{
-		PlayerDeathEvent pd = (PlayerDeathEvent)e;
-		Player died = pd.getEntity().getPlayer();
-		round.playerDied(died);
+		//Making sure its the correct type of event
+		if(!(e instanceof EntityDamageEvent))
+			return;
 		
-		Player killer = pd.getEntity().getPlayer().getKiller();
-		if(!(killer instanceof Player) || killer == null || !round.hasPlayer(killer))
+		EntityDamageEvent ede = (EntityDamageEvent)e;
+		if(!(ede.getEntity() instanceof Player))
 		{
-			System.out.println("Killer not detected.");
+			System.out.println("Entity in damage event is not a player. Instead is: '" + ede.getEntity() + "'");
 			return;
 		}
-		round.playerEarnedKill(killer);
+		
+		Player damagee = (Player)ede.getEntity();
+		double damageDone = ede.getFinalDamage();
+		boolean playerWillDie = false;
+		if(damageDone >= damagee.getHealth())
+			playerWillDie = true;
+		
+		//If the player will die
+		if(playerWillDie)
+		{	
+			//Checks to see if the player was killed by another player
+			EntityDamageByEntityEvent damageEvent = (EntityDamageByEntityEvent)e;
+			Entity damager = damageEvent.getDamager();
+			
+			//If the damager is a player and the player is in the round
+			if(damager instanceof Player && round.hasPlayer((Player)damager))
+			{
+				round.handlePVPDeathEvent(e, damagee, (Player)damager);
+				return;
+			}
+			//If the damager is any other entity
+			else
+			{
+				round.handleNaturalPlayerDeathEvent(e, damagee, damager);
+			}
+		}
+		
+		
+		
+		
+		
+
+		
 	}
 }

@@ -328,6 +328,11 @@ public abstract class GameMap {
 		return locations.get("spectate");
 	}
 	
+	public Location getLobbyLocation()
+	{
+		return locations.get("lobby");
+	}
+	
 	/**
 	 * Teleports a player to the spectating location
 	 * @param p The player to teleport
@@ -335,6 +340,14 @@ public abstract class GameMap {
 	public void sendPlayerToSpectate(Player p)
 	{
 		p.teleport(getSpectatingLocation());
+	}
+	/**
+	 * Teleports a player to the lobby location
+	 * @param p The player to teleport
+	 */
+	public void sendPlayerToLobby(Player p)
+	{
+		p.teleport(getLobbyLocation());
 	}
 	
 	/**

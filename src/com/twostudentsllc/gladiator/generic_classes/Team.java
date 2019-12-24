@@ -91,13 +91,28 @@ public class Team {
     	this.playerSpawns = playerSpawns;
     }
     
-    //Resets all players stats
+    /**
+     * Sets all player stats back to their default states and erases all new stats.
+     */
     public void resetAllPlayerStats()
     {
     	HashMap<Player, PlayerStats> resetMembersStats = new HashMap<Player, PlayerStats>();
     	for(Player p : teamMembers.keySet())
     	{
     		resetMembersStats.put(p, new PlayerStats());
+    	}
+    	teamMembers = resetMembersStats;
+    }
+    
+    /**
+     * Resets playerDeaths and elimination status while leaving other status untouched
+     */
+    public void resetAllPlayerLives()
+    {
+    	for(Player p : teamMembers.keySet())
+    	{
+    		PlayerStats stats = teamMembers.get(p);
+    		stats.resetDeaths();
     	}
     }
     

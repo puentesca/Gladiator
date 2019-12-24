@@ -8,9 +8,6 @@ import com.twostudentsllc.gladiator.generic_classes.Team;
 
 public class Arena extends GameMap{
 	
-	//TODO: Figure out how to get spawnpoints for teams as well as lobbies and such
-	
-	
 	public Arena(Main plugin, String minigameName, String mapName, String mapDisplayName, int minTeams, int maxTeams,
 			int teamSize, int warmupTimeLimit, int cooldownTimeLimit, int totalRounds) {
 		super(plugin, minigameName, mapName, mapDisplayName, minTeams, maxTeams, teamSize, warmupTimeLimit, cooldownTimeLimit, totalRounds);
@@ -25,8 +22,6 @@ public class Arena extends GameMap{
 		String string = getMinigameName() + ":" + getMapName() + ":" + getMapDisplayName() + ":" + getMinTeams() + ":" + getMaxTeams() + ":" + getTeamSize() + ":" + getWarmupTimeLimit() + ":" + getCooldownTimeLimit() + ":" + getTotalRounds();
 		return string;
 	}
-
-	//TODO: Add startRound in MapMatch that instantiates a MatchRound object
 	
 	@Override
 	public void startMatch(ArrayList<Team> teams) {
@@ -43,6 +38,7 @@ public class Arena extends GameMap{
 		currentMatch = null;
 		hasRunningMatch = false;
 		unloadChunks();
+		//TODO: Verify this works. Might want to add a 5 second timer until this calls to verify everyone has been teleported out
 	}
 
 }

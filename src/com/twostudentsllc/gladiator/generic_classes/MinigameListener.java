@@ -12,10 +12,19 @@ public abstract class MinigameListener implements Listener{
 	
 	protected MatchRound round;
 	
+	protected MapMatch match;
+	
 	public MinigameListener(Main plugin, MatchRound round)
 	{
 		this.plugin = plugin;
 		this.round = round;
+		registerEvent();
+	}
+	
+	public MinigameListener(Main plugin, MapMatch match)
+	{
+		this.plugin = plugin;
+		this.match = match;
 		registerEvent();
 	}
 	
