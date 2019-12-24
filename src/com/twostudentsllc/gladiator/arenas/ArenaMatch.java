@@ -46,7 +46,7 @@ public class ArenaMatch extends MapMatch {
 			for(Player p : team.getPlayers())
 			{
 				map.sendPlayerToLobby(p);
-				p.setGameMode(GameMode.SURVIVAL);
+				p.setGameMode(GameMode.ADVENTURE);
 			}
 		}
 		setStatus(STATUS.COMPLETED);

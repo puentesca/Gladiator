@@ -100,7 +100,7 @@ public class ArenaRound extends MatchRound{
 	public void respawnPlayer(Player p)
 	{
 		match.sendPlayerToSpawn(p, true);
-		p.setGameMode(GameMode.SURVIVAL);
+		p.setGameMode(GameMode.ADVENTURE);
 	}
 	
 

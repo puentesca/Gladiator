@@ -244,7 +244,7 @@ public abstract class MapMatch {
 			HashMap<Player, Location> playerSpawns = t.getPlayerSpawns();
 			for (Player p : playerSpawns.keySet()) {
 				p.teleport(playerSpawns.get(p));
-				p.setGameMode(GameMode.SURVIVAL);
+				p.setGameMode(GameMode.ADVENTURE);
 			}
 		}
 	}
