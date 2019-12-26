@@ -12,7 +12,6 @@ public class Gladiator extends Game{
 	
 	public Gladiator(Main plugin, String game, String displayName) {
 		super(plugin, game, displayName);
-		registerGame(this);
 	}
 
 	//TODO: Add round creation from GameManager
@@ -33,7 +32,8 @@ public class Gladiator extends Game{
 		int cooldownTimeLimit = Integer.parseInt(args[8]);
 		int totalRounds = Integer.parseInt(args[9]);
 		
-		maps.put(mapName, new Arena(plugin, minigameName, mapName, mapDisplayName, minTeams, maxTeams, teamSize, warmupTimeLimit, cooldownTimeLimit, totalRounds));
+		Arena map = new Arena(plugin, minigameName, mapName, mapDisplayName, minTeams, maxTeams, teamSize, warmupTimeLimit, cooldownTimeLimit, totalRounds);
+		maps.put(mapName, map);
 	}
 	
 	@Override
@@ -74,7 +74,10 @@ public class Gladiator extends Game{
 			int cooldownTimeLimit = Integer.parseInt(parts[7]);
 			int totalRounds = Integer.parseInt(parts[8]);
 			
-			maps.put(mapName, new Arena(plugin, minigameName, mapName, mapDisplayName, minTeams, maxTeams, teamSize, warmupTimeLimit, cooldownTimeLimit, totalRounds));
+			Arena map = new Arena(plugin, minigameName, mapName, mapDisplayName, minTeams, maxTeams, teamSize, warmupTimeLimit, cooldownTimeLimit, totalRounds);
+			
+			maps.put(mapName, map);
+			
 		}
 	}
 

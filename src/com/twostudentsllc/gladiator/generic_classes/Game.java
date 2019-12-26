@@ -5,10 +5,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import com.twostudentsllc.gladiator.Main;
-import com.twostudentsllc.gladiator.global.DatabaseManager;
-import com.twostudentsllc.gladiator.managers.GameQueueManager;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+
+import com.twostudentsllc.gladiator.Main;
+import com.twostudentsllc.gladiator.managers.GameQueueManager;
+import com.twostudentsllc.gladiator.runnables.GameMapStartCountdown;
 
 public abstract class Game {
 
@@ -16,6 +18,13 @@ public abstract class Game {
     protected String minigameDisplayName;
     protected HashMap<String, GameMap> maps;
     protected GameQueueManager mapQueues;
+    
+    //TODO: Add calls to removePlayerFromQueue and stuff to allow players to instantly /gladiator join to another queue
+    
+    /**
+     * Holds the countdowns for each map starting after enough players have joined a queue
+     */
+    protected HashMap<String, Countdown> mapStartCountdowns;
 
     protected Main plugin;
     
@@ -24,8 +33,10 @@ public abstract class Game {
     	minigameName = game;
         this.minigameDisplayName = displayName;
         maps = new HashMap<String, GameMap>();
+        mapStartCountdowns = new HashMap<String, Countdown>();
+        mapQueues = new GameQueueManager(plugin, this);
+        registerGame(this);
         loadAllMaps();
-        mapQueues = new GameQueueManager(this);
     }
 
     public HashMap<String, GameMap> getMaps() {
@@ -65,6 +76,40 @@ public abstract class Game {
         return minigameName;
     }
 
+    
+    /**
+     * Starts a countdown until the map match starts after enough players have joined
+     * @param mapName The name of the map
+     */
+    public void startMapCountdown(String mapName)
+    {
+    	System.out.println("Starting map countdown for map: " + mapName);
+    	//TODO: Add ability to remove player from queue and stop countdown if someone disconnets and not enough players are left
+    	Runnable r = new GameMapStartCountdown(plugin, this, mapName);
+    	Countdown c = new Countdown(plugin, 15, r, true); //TODO: Add flexibility on the countdown for a match to start
+    	mapStartCountdowns.put(mapName, c);
+    	System.out.println("Started map countdown for map: " + mapName);
+    }
+    
+    public Countdown getMapStartCountdown(String mapName)
+    {
+    	return mapStartCountdowns.get(mapName);
+    }
+    
+    /**
+     * Handles the time left in a map start countdown
+     * @param mapName The name of the map that is starting soon
+     * @param time The time left until starting
+     */
+    public void handleMapStartCountdown(String mapName, int time)
+    {
+    	Bukkit.broadcastMessage(minigameDisplayName + " match on map " + mapName + " is starting is " + time);
+    	if(time <= 0)
+    	{
+    		startGame(mapName);
+    		mapStartCountdowns.remove(mapName);
+    	}
+    }
 
     /**
      * Create a queue for a specific map
@@ -74,9 +119,9 @@ public abstract class Game {
     public boolean createMapQueue(String mapName) {
         if(!maps.containsKey(mapName))
             return false;
-
+        
         GameMap targetMap = maps.get(mapName);
-        return mapQueues.addGameQueue(mapName, targetMap.minTeams, targetMap.maxTeams, targetMap.teamSize);
+        return mapQueues.addGameQueue(mapName, targetMap.getMinTeams(), targetMap.getMaxTeams(), targetMap.getTeamSize());
     }
 
     /**
@@ -97,7 +142,7 @@ public abstract class Game {
     public boolean addPlayerToQueue(String mapName, Player toAdd) {
         if(!maps.containsKey(mapName))
             return false;
-
+        maps.get(mapName).sendPlayerToLobby(toAdd);
         return mapQueues.addPlayerToQueue(mapName, toAdd);
     }
 
@@ -110,7 +155,10 @@ public abstract class Game {
     public boolean addGroupToQueue(String mapName, ArrayList<Player> group) {
         if(!maps.containsKey(mapName))
             return false;
-
+        for(Player p : group)
+        {
+        	maps.get(mapName).sendPlayerToLobby(p);
+        } 
         return mapQueues.addGroupToQueue(mapName, group);
     }
 
@@ -202,6 +250,12 @@ public abstract class Game {
     public void registerGame(Game game)
     {
     	plugin.getGameManager().registerGame(minigameName, game);
+    }
+    
+    public void registerMap(GameMap map)
+    {
+    	String mapName = map.getMapName();
+    	maps.put(mapName, map);
     }
     
     /**

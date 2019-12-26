@@ -1,17 +1,24 @@
 package com.twostudentsllc.gladiator.managers;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Queue;
+import java.util.TreeMap;
 
-import com.twostudentsllc.gladiator.generic_classes.Game;
-import com.twostudentsllc.gladiator.generic_classes.Team;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
+
+import com.twostudentsllc.gladiator.Main;
+import com.twostudentsllc.gladiator.generic_classes.Game;
+import com.twostudentsllc.gladiator.generic_classes.GameMap;
+import com.twostudentsllc.gladiator.generic_classes.Team;
 
 /**
  * Manages a queue of players for a Game
  */
 public class GameQueueManager {
-
+	
+	private Main plugin;
 	//String key is the name of the map
 	private Map<String, PlayerQueue> queueList;
 
@@ -63,7 +70,9 @@ public class GameQueueManager {
 	}
 	//Maintains a queue of PlayerGroups
 	private class PlayerQueue {
-
+		
+		private GameMap map;
+		
 		//Minimum number of teams
 		private int teamMinimum;
 
@@ -75,11 +84,13 @@ public class GameQueueManager {
 
 		private Queue<PlayerGroup> playerList;
 		
-		public PlayerQueue(int teamMinimum, int teamMaximum, int teamSize) {
+		public PlayerQueue(GameMap map, int teamMinimum, int teamMaximum, int teamSize) {
+			this.map = map;
 			this.teamMinimum = teamMinimum;
 			this.teamMaximum = teamMaximum;
 			this.teamSize = teamSize;
 			this.playerList = new LinkedList<PlayerGroup>();
+			System.out.println("Created queue for map " + map.getMapName() + " with minTeams: " + teamMinimum + " maxTeams: " + teamMaximum + " teamSize: " + teamSize);
 		}
 
 		/**
@@ -165,6 +176,7 @@ public class GameQueueManager {
 			}
 			return total;
 		}
+		
 
 		/**
 		 * Tries to see if there is a group combination that produces the required number of players
@@ -172,25 +184,30 @@ public class GameQueueManager {
 		 */
 		public boolean canMakeGame() {
 
+			System.out.println("Checking if can make game for map: " + map.getMapName());
 			//O(n^2) method to find group combos TODO: Improve somehow? 
 			for(PlayerGroup group: playerList) {
 				int sum = group.groupMembers.size();
 
+				System.out.println("Current sum: " + sum);
 				if(sum >= teamMinimum * teamSize && sum <= teamMaximum * teamSize && sum % teamSize == 0) {
+					System.out.println("Can make game! Sum: " + sum);
 					return true;
 				}
 
 				for(PlayerGroup group2: playerList) {
 					if(!group2.equals(group)) {
 						sum += group2.groupMembers.size();
-
+						System.out.println("Current inside loop sum: " + sum);
 						if(sum >= teamMinimum * teamSize && sum <= teamMaximum * teamSize && sum % teamSize == 0) {
+							System.out.println("Can make game! Sum: " + sum);
 							return true;
 						}
 					}
 				}
 			}
 
+			System.out.println("Cannot make game.");
 			return false;
 		}
 
@@ -241,7 +258,8 @@ public class GameQueueManager {
 
 	}
 	
-    public GameQueueManager(Game game) {
+    public GameQueueManager(Main plugin, Game game) {
+    	this.plugin = plugin;
 		this.game = game;
 		queueList = new TreeMap<>();
     }
@@ -264,10 +282,33 @@ public class GameQueueManager {
     	String key = mapName;
 
     	if(!queueList.containsKey(key)) {
+    		System.out.println("No queue exists for the map: " + mapName);
     		return false;
     	}
 
-    	return queueList.get(key).addPlayer(toAdd);
+    	boolean result = queueList.get(key).addPlayer(toAdd);
+    	checkQueueStatus(mapName);
+    	if(result)
+    		System.out.println("Successfully added player to the queue for map: " + mapName);
+    	else
+    		System.out.println("Unsuccessfully added player to the queue for map: " + mapName);
+    	return result;
+    }
+    
+    /**
+     * Checks a queues status and sees if the queue has enough players to start. If so, it starts the countdown
+     * @param mapName
+     */
+    public void checkQueueStatus(String mapName)
+    {
+    	if(canMakeGame(mapName)) {
+    		game.startMapCountdown(mapName);
+    	}
+    	else
+    	{
+    		System.out.println("Not enough player to start a match for map: '" + mapName + "'. Current players: " + queueList.get(mapName).getTotalPlayersInQueue());
+    	}
+    	
     }
 
 	/**
@@ -279,10 +320,18 @@ public class GameQueueManager {
 		String key = mapName;
 
 		if(!queueList.containsKey(key)) {
+			System.out.println("No queue exists for the map: " + mapName);
 			return false;
 		}
 
-		return queueList.get(key).addGroup(group);
+		boolean result = queueList.get(key).addGroup(group);
+    	checkQueueStatus(mapName);
+    	if(result)
+    		System.out.println("Successfully added player to the queue for map: " + mapName);
+    	else
+    		System.out.println("Unsuccessfully added player to the queue for map: " + mapName);
+    	
+    	return result;
 	}
     
     /**
@@ -316,7 +365,12 @@ public class GameQueueManager {
     		return false;
     	}
 
-    	queueList.put(key, new PlayerQueue(minimumTeams, maximumTeams, teamSize));
+    	if(!game.hasGameMap(mapName))
+    		return false;
+    	
+    	
+    	queueList.put(key, new PlayerQueue(game.getGameMap(mapName), minimumTeams, maximumTeams, teamSize));
+    	System.out.println("Successfuly created a queue for map: " + mapName);
     	return true;
     }
 
@@ -364,6 +418,7 @@ public class GameQueueManager {
 		String key = mapName;
 
        	if(!queueList.containsKey(key)) {
+       		System.out.println("QueueList does not contain a queue for: " + mapName);
     		return false;
     	}
 
@@ -405,7 +460,7 @@ public class GameQueueManager {
 				//Fill a team with the required number of players and add them to their team
 				for(int z = 0; z < targetGame.teamSize; z++) {
 
-					int i = (int) (Math.random() * players.size()) - 1;
+					int i = (int) (Math.random() * players.size()); //FIXME: I removed this part as it was causing an indexoutofbounds exception. Is it significant?: ' - 1;'
 					Player toAdd = players.remove(i);
 
 					newTeam.addPlayer(toAdd);

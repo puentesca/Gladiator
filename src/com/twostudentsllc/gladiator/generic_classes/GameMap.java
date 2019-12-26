@@ -103,8 +103,7 @@ public abstract class GameMap {
 	 * @param mapDisplayName The display name of this map
 	 * @param minTeams The minimum amount of teams the map must have to function
 	 * @param maxTeams The maximum amount of teams the map must have to function
-	 * @param minPlayers The minimum players the map can have to function
-	 * @param maxPlayers The maximum players the map can have to function
+	 * @teamSize the size that each team should be
 	 */
 	public GameMap(Main plugin, String minigameName, String mapName, String mapDisplayName, int minTeams, int maxTeams, int teamSize, int warmupTime, int cooldownTime, int totalRounds)
 	{
@@ -120,7 +119,16 @@ public abstract class GameMap {
 		this.totalRounds = totalRounds;
 		this.mapWorld = WorldManager.getWorld(plugin.getServer(), mapName);
 		hasRunningMatch = false;
+		plugin.getGameManager().getGame(minigameName).registerMap(this);
 		loadLocations();
+		createQueue();
+	}
+	
+	//Creates a queue for this map
+	public void createQueue()
+	{
+		//Creates a queue for the map
+		getGame().createMapQueue(mapName);
 	}
 	
 	/**
@@ -256,6 +264,11 @@ public abstract class GameMap {
 		
 	}
 
+	public Game getGame()
+	{
+		return plugin.getGameManager().getGame(minigameName);
+	}
+	
 	/**
 	 * @return The name of the minigame this map is associated with
 	 */

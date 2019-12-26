@@ -37,8 +37,7 @@ public class Arena extends GameMap{
 	{
 		currentMatch = null;
 		hasRunningMatch = false;
-		unloadChunks();
-		//TODO: Verify this works. Might want to add a 5 second timer until this calls to verify everyone has been teleported out
+		unloadChunks();	//TODO: Verify this works. Might want to add a 5 second timer until this calls to verify everyone has been teleported out
 	}
 
 }

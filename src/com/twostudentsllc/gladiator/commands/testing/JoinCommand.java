@@ -55,10 +55,7 @@ public class JoinCommand extends CustomCommand {
 	{
 		String minigameName = args[1];
 		String mapName = args[2];
-		ArrayList<Player> p = new ArrayList<Player>();
-		p.add((Player)sender);
-		ArrayList<Team> team = Utils.assignTeams(1, p);
-		plugin.getGameManager().getGame(minigameName).getGameMap(mapName).startMatch(team);
+		plugin.getGameManager().getGame(minigameName).addPlayerToQueue(mapName, (Player)sender);
 	}
 	
 

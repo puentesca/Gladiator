@@ -35,7 +35,6 @@ public class Main extends JavaPlugin{
 	@Override
 	public void onEnable()
 	{
-		System.out.println("Generator Settings: " + new WorldCreator("Void creator").generatorSettings());
 		initializeManagers();
 		initialzeCommands();
 		initializeGames();
@@ -46,12 +45,6 @@ public class Main extends JavaPlugin{
 	@Override
 	public void onDisable()
 	{
-		//TODO: Convert to calling onShutdown() method on all games in the gamemanager or something along these lines
-//		try {
-//			locMan.saveLocationFile();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
 		gameMan.saveAllData();
 		System.out.println("[GLADIATOR]: Successfully shut down!");
 	}
