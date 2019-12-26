@@ -80,6 +80,7 @@ public class ArenaRound extends MatchRound{
 		playerDied(killed);
 		Bukkit.broadcastMessage(""
 				+ "Player earned kill! Player: " + killer.getName());
+		//FIXME: Registers the 'arrow' as a killer when shot, not the player
 		playerEarnedKill(killer);
 		
 		//Cancels the event so they player doesnt actually die

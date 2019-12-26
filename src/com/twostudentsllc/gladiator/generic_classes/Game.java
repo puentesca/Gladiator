@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 
 import com.twostudentsllc.gladiator.Main;
 import com.twostudentsllc.gladiator.managers.GameQueueManager;
@@ -16,8 +17,16 @@ public abstract class Game {
 
     protected String minigameName;
     protected String minigameDisplayName;
+    /**
+     * A HashMap of all of the GameMaps and their names
+     */
     protected HashMap<String, GameMap> maps;
+    /**
+     * Holds the manager for all of the queues for different maps
+     */
     protected GameQueueManager mapQueues;
+    
+    protected HashMap<String, Inventory> kits;
     
     //TODO: Add calls to removePlayerFromQueue and stuff to allow players to instantly /gladiator join to another queue
     
@@ -34,9 +43,12 @@ public abstract class Game {
         this.minigameDisplayName = displayName;
         maps = new HashMap<String, GameMap>();
         mapStartCountdowns = new HashMap<String, Countdown>();
+        kits = new HashMap<String, Inventory>();
         mapQueues = new GameQueueManager(plugin, this);
         registerGame(this);
         loadAllMaps();
+        //loadAllKits(); //TODO: Create serializable and deserialziable kits, as well as commands to save kits. Add commands and messages
+        //for people to select kits before a game starts and assign a default kit
     }
 
     public HashMap<String, GameMap> getMaps() {
@@ -83,6 +95,9 @@ public abstract class Game {
      */
     public void startMapCountdown(String mapName)
     {
+    	//If the match is already starting
+    	if(mapStartCountdowns.containsKey(mapName))
+    		return;
     	System.out.println("Starting map countdown for map: " + mapName);
     	//TODO: Add ability to remove player from queue and stop countdown if someone disconnets and not enough players are left
     	Runnable r = new GameMapStartCountdown(plugin, this, mapName);
@@ -141,7 +156,10 @@ public abstract class Game {
      */
     public boolean addPlayerToQueue(String mapName, Player toAdd) {
         if(!maps.containsKey(mapName))
+        {
+        	System.out.println("Game does not have map: " + mapName);
             return false;
+        }
         maps.get(mapName).sendPlayerToLobby(toAdd);
         return mapQueues.addPlayerToQueue(mapName, toAdd);
     }
@@ -153,8 +171,10 @@ public abstract class Game {
      * @return true/false whether it was successful
      */
     public boolean addGroupToQueue(String mapName, ArrayList<Player> group) {
-        if(!maps.containsKey(mapName))
+        if(!maps.containsKey(mapName)) {
+        	System.out.println("Game does not have map: " + mapName);
             return false;
+        }
         for(Player p : group)
         {
         	maps.get(mapName).sendPlayerToLobby(p);
@@ -221,14 +241,16 @@ public abstract class Game {
 
         GameMap targetMap = maps.get(mapName);
 
-        if(!mapQueues.canMakeGame(mapName))
-            return false;
+//        if(!mapQueues.canMakeGame(mapName))
+//            return false;
 
-        if(!targetMap.canStartMatch())
-            return false;
+//        if(!targetMap.canStartMatch())
+//            return false;
 
         //MapQueues getTeam method pulls players from queue (irreversible, can't pull the players out of queue until sure that a game can be started)
-        targetMap.startMatch(mapQueues.getTeams(mapName));
+        ArrayList<Team> teams = mapQueues.getTeams(mapName);
+        System.out.println("Game team size: " + teams.size());
+        targetMap.startMatch(teams);
         return true;
     }
 

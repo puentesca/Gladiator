@@ -54,6 +54,11 @@ public class GameQueueManager {
 			groupLeader = (int)Math.floor((Math.random() * groupMembers.size())) - 1;
 		}
 
+		public ArrayList<Player> getMembers()
+		{
+			return groupMembers;
+		}
+		
 		/**
 		 * Removes all disconnected players from a playerGroup
 		 * Assigns a new groupLeader
@@ -116,6 +121,8 @@ public class GameQueueManager {
 			if(contains(toAdd))
 				return false;
 			playerList.add(new PlayerGroup(toAdd));
+			System.out.println("PlayerQueue added player '" + toAdd.getName() + "' to queue");
+			System.out.println("Total groups: " + playerList.size());
 			return true;
 		}
 
@@ -183,8 +190,10 @@ public class GameQueueManager {
 		 * @return true/false depending on whether there is a group combination
 		 */
 		public boolean canMakeGame() {
-
-			System.out.println("Checking if can make game for map: " + map.getMapName());
+			
+			if(!map.canStartMatch())
+				return false;
+			
 			//O(n^2) method to find group combos TODO: Improve somehow? 
 			for(PlayerGroup group: playerList) {
 				int sum = group.groupMembers.size();
@@ -216,44 +225,66 @@ public class GameQueueManager {
 		 * @return an arraylist of players
 		 */
 		public ArrayList<Player> getPlayers() {
-
-			ArrayList<PlayerGroup> groupList = null;
-
-			for(PlayerGroup group: playerList) {
-
-				int sum = group.groupMembers.size();
-				groupList = new ArrayList<PlayerGroup>();
-
-				//If one group is already enough players for the required game size
-				if(sum >= teamMinimum * teamSize && sum <= teamMaximum * teamSize && sum % teamSize == 0) {
-					playerList.remove(group);
-					return group.groupMembers;
-				}
-
-				for(PlayerGroup group2: playerList) {
-					if(!group2.equals(group)) {
-
-						sum += group2.groupMembers.size();
-						groupList.add(group2);
-
-						//If the combined groupList has enough players for the game
-						if(sum >= teamMinimum * teamSize && sum <= teamMaximum * teamSize && sum % teamSize == 0) {
-
-							//Combine all the groups into a single list of players
-							ArrayList<Player> players = new ArrayList<Player>();
-
-							for(PlayerGroup g: groupList) {
-								players.addAll(g.groupMembers);
-								playerList.remove(g);
-							}
-
-							return players;
-						}
-					}
+			
+			int totalPlayers = 0;
+			int maxPlayers =  teamMaximum * teamSize;
+			int minPlayer = teamMinimum * teamSize;
+			ArrayList<Player> players = new ArrayList<Player>();
+			//Runs while the amount of players being grabbed is less than the max and while there are players to be grabbed
+			while(totalPlayers <= maxPlayers && !playerList.isEmpty())
+			{
+				//Gets and removes the next group in the queue
+				PlayerGroup group = playerList.element();
+				playerList.remove();
+				
+				//TODO: Add a check to see if the group that is about to be added will be too large for the game. 
+				//and if so, dont remove them but skip them somehow
+				
+				ArrayList<Player> groupMembers = group.getMembers();
+				for(Player p : groupMembers)
+				{
+					players.add(p);
 				}
 			}
-
-			return null;
+			return players;
+			
+//			ArrayList<PlayerGroup> groupList = null;
+//
+//			for(PlayerGroup group: playerList) {
+//
+//				int sum = group.groupMembers.size();
+//				groupList = new ArrayList<PlayerGroup>();
+//
+//				//If one group is already enough players for the required game size
+//				if(sum >= teamMinimum * teamSize && sum <= teamMaximum * teamSize && sum % teamSize == 0) {
+//					playerList.remove(group);
+//					return group.groupMembers;
+//				}
+//
+//				for(PlayerGroup group2: playerList) {
+//					if(!group2.equals(group)) {
+//
+//						sum += group2.groupMembers.size();
+//						groupList.add(group2);
+//
+//						//If the combined groupList has enough players for the game
+//						if(sum >= teamMinimum * teamSize && sum <= teamMaximum * teamSize && sum % teamSize == 0) {
+//
+//							//Combine all the groups into a single list of players
+//							ArrayList<Player> players = new ArrayList<Player>();
+//
+//							for(PlayerGroup g: groupList) {
+//								players.addAll(g.groupMembers);
+//								playerList.remove(g);
+//							}
+//
+//							return players;
+//						}
+//					}
+//				}
+//			}
+//
+//			return null;
 		}
 
 	}
@@ -446,6 +477,7 @@ public class GameQueueManager {
 
 	       	PlayerQueue targetGame = queueList.get(key);
 	       	ArrayList<Player> players = targetGame.getPlayers();
+	       	System.out.println("Grabbed " + players.size() + " players from the queue");
 
 	       	//Split players into teams
 			//TODO: This version splits people into teams randomly
@@ -468,7 +500,8 @@ public class GameQueueManager {
 
 				q++;
 			}
-
+			System.out.println("Generated " + (q + 1) + " teams");
+			System.out.println("Size of teams arraylist: " + teamList.size());
 			return teamList;
 
        	}
