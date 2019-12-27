@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import com.twostudentsllc.gladiator.managers.InventoryManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -25,8 +26,11 @@ public abstract class Game {
      * Holds the manager for all of the queues for different maps
      */
     protected GameQueueManager mapQueues;
-    
-    protected HashMap<String, Inventory> kits;
+
+    /**
+     * Manages the various kits for the game
+     */
+    protected InventoryManager kits;
     
     //TODO: Add calls to removePlayerFromQueue and stuff to allow players to instantly /gladiator join to another queue
     
@@ -38,15 +42,20 @@ public abstract class Game {
     protected Main plugin;
     
     public Game(Main plugin, String game, String displayName) {
+
         this.plugin = plugin;
     	minigameName = game;
         this.minigameDisplayName = displayName;
+
         maps = new HashMap<String, GameMap>();
         mapStartCountdowns = new HashMap<String, Countdown>();
-        kits = new HashMap<String, Inventory>();
+
+        kits = new InventoryManager(plugin, game);
         mapQueues = new GameQueueManager(plugin, this);
+
         registerGame(this);
         loadAllMaps();
+        //TODO: loadAllKits not necessary, automatically loads external file data in Inventory Manager
         //loadAllKits(); //TODO: Create serializable and deserialziable kits, as well as commands to save kits. Add commands and messages
         //for people to select kits before a game starts and assign a default kit
     }
@@ -298,7 +307,6 @@ public abstract class Game {
 
     /**
     * Conditional check if there are any open maps
-    * INFO: Overkill implementation for performance sake (method will probably be called a lot)
     * @return boolean if there are any open maps
      */
     public boolean hasOpenMaps() {

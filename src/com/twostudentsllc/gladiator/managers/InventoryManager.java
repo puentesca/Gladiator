@@ -1,6 +1,7 @@
 package com.twostudentsllc.gladiator.managers;
 
 import java.util.HashMap;
+import java.util.Set;
 import java.util.UUID;
 
 import com.twostudentsllc.gladiator.global.DatabaseManager;
@@ -17,6 +18,8 @@ public class InventoryManager {
 	private String minigameName;
 	
 	private Main plugin;
+
+	//Minigame name necessary as its used for file saving
 	public InventoryManager(Main plugin, String minigameName)
 	{
 		HashMap<String, PlayerInventory> externalFile = DatabaseManager.loadInventories(minigameName);
@@ -42,6 +45,13 @@ public class InventoryManager {
 	}
 
 	/**
+	 * Helper method to force the database manager to save to a file
+	 */
+	public void forceSaveToFile() {
+		DatabaseManager.saveInventories(savedInventories, minigameName);
+	}
+
+	/**
 	 * Gets a player's inventory
 	 * @param nameToSave Name to retrieve the player's inventory under
 	 * @param forgetInventory whether to forget the inventory once it is pulled
@@ -59,6 +69,14 @@ public class InventoryManager {
 		//inventoriesSaved.get(players UUID);
 		//Remove this line and replace it so that it returns the
 					 //players saved inventory from the inventoriesSaved
+	}
+
+	/**
+	 * Returns a list of the possible inventories
+	 * @return Set<String>
+	 */
+	public Set<String> listInventories() {
+		return savedInventories.keySet();
 	}
 
 	/**
