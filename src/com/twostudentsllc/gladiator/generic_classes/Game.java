@@ -67,6 +67,11 @@ public abstract class Game {
     public Set<String> getMapNames() {
         return maps.keySet();
     }
+    
+    public InventoryManager getInventoryManager()
+    {
+    	return kits;
+    }
 
     /**
     * Adds a given GameMap to the map list under its map name
@@ -263,10 +268,10 @@ public abstract class Game {
         return true;
     }
 
-    /**
-     * Saves all map data
-     * @return True if all data was saved successfully
-     */
+	/**
+	 * Attempts to save all data relating to this game.
+	 * @return True if all data was saved successfully
+	 */
     public abstract boolean saveAllData();
 
     /**

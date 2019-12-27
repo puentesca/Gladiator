@@ -37,10 +37,6 @@ public class Gladiator extends Game{
 	}
 	
 	@Override
-	/**
-	 * Attempts to save all data relating to this game.
-	 * @return True if all data was saved successfully
-	 */
 	public boolean saveAllData()
 	{
 		HashMap<String, String> serializedMaps = new HashMap<String, String>();
@@ -53,6 +49,7 @@ public class Gladiator extends Game{
 		}
 		
 		DatabaseManager.saveMaps(serializedMaps, minigameName, "maps");
+		kits.forceSaveToFile();
 		return true;
 	}
 	

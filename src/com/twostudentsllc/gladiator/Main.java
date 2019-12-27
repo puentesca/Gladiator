@@ -72,6 +72,8 @@ public class Main extends JavaPlugin{
 		new DeleteWorldCommand(this);
 		new ListCommand(this);
 		new CreateWorldCommand(this);
+		new SetKitCommand(this);
+		new GetKitCommand(this);
 	}
 	
 	private void initializeGames()
