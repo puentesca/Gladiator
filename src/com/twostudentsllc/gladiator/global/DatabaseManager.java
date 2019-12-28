@@ -1,21 +1,26 @@
 package com.twostudentsllc.gladiator.global;
 
 //import com.sun.org.apache.xpath.internal.res.XPATHErrorResources_zh_TW;
+import org.bukkit.Bukkit;
+import org.bukkit.craftbukkit.libs.it.unimi.dsi.fastutil.Hash;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.util.io.BukkitObjectInputStream;
+import org.bukkit.util.io.BukkitObjectOutputStream;
+import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
 import java.io.*;
+import java.lang.reflect.Array;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-/**
- * A global class that can save and load strings from locations
- * Copyright 2019 Casey Puentes. All rights reserved.
- * @author Casey Puentes
- *
- */
+
 public class DatabaseManager {
 
 	/**
@@ -101,6 +106,68 @@ public class DatabaseManager {
 
 		return readObject;
 	}
+
+	/**
+	 * Save custom inventories for a minigame
+	 * @param inventoryList HashMap of custom inventories
+	 * @param minigameName Name of the minigame
+	 */
+	public static void saveInventories(HashMap<String, Inventory> inventoryList, String minigameName) {
+
+		String fileDir = getDatabaseDirectoryString(minigameName);
+		String fileName = getDataFileNameString("inventories");
+
+		HashMap<String, String> serializedMap = new HashMap<>();
+
+		//Convert all inventories to base64 String
+		for(Map.Entry<String, Inventory> inventory: inventoryList.entrySet()) {
+			serializedMap.put(inventory.getKey(), Serializer.inventoryToBase64(inventory.getValue()));
+		}
+
+		System.out.println("Saving inventory data for minigame '" + minigameName  + "' at file: '" + fileDir + fileName + "'!");
+
+		String filePath = fileDir + fileName;
+
+		saveSerializableObject(serializedMap, filePath);
+	}
+
+	/**
+	 * Loads custom inventories for a minigame
+	 * @param minigameName Name of the minigame
+	 * @return HashMap of inventories mapped by custom names to the inventories
+	 */
+	public static HashMap<String, Inventory> loadInventories(String minigameName) {
+		String fileDir = getDatabaseDirectoryString(minigameName);
+		String fileName = getDataFileNameString("inventories");
+
+		System.out.println("Loading inventory data for minigame '" + minigameName  + "' at file: '" + fileDir + fileName + "'!");
+
+		String filePath = fileDir + fileName;
+
+		//Loads base64 serialized versions of inventory from file
+		Object data = loadObjectFromFile(filePath);
+
+		if(data == null)
+			return null;
+
+		HashMap<String, String> serializedInventories = (HashMap<String, String>)data;
+
+		try {
+
+			//Converts from base64 to standard Inventory type
+			HashMap<String, Inventory> deserializedInventories = new HashMap<>();
+			for (Map.Entry<String, String> base64Inventory : serializedInventories.entrySet()) {
+				deserializedInventories.put(base64Inventory.getKey(), Serializer.inventoryFromBase64(base64Inventory.getValue()));
+			}
+
+			return deserializedInventories;
+
+		} catch(IOException e) {
+			System.out.println("Could not load file data!");
+			return null;
+		}
+	}
+
 	
 	public static void saveLocations(HashMap<String, String> locations, String minigameName, String mapName)
 	{
@@ -118,12 +185,12 @@ public class DatabaseManager {
 //		{
 //			dir.mkdirs();
 //		}
-		
-		
+
+
 		File file = new File(fileDir + fileName);
-		
+
 		System.out.println("Actual file path: '" + file.getPath() + "'");
-		
+
 		//If the file doesnt exist
 		if(!file.exists()) {
 			try {
@@ -133,18 +200,18 @@ public class DatabaseManager {
 			    e.printStackTrace();
 			}
 		}
-		
+
 		ObjectOutputStream output = null;
 		try {
 			output = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream(file)));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		//If it was unable to load the file
 		if(output == null)
 			return;
-		
+
 		try {
 			output.writeObject(locations);
 			output.flush();
@@ -154,7 +221,7 @@ public class DatabaseManager {
 		{
 			e.printStackTrace();
 		}*/
-		
+
 	}
 	
 	public static void saveMaps(HashMap<String, String> serializedMaps, String minigameName, String fileN)
@@ -250,39 +317,6 @@ public class DatabaseManager {
 
 		return (HashMap<String, String>) loadObjectFromFile(filePath);
 		
-	}
-
-	/**
-	 * Save custom inventories for a minigame
-	 * @param inventoryList HashMap of custom inventories
-	 * @param minigameName Name of the minigame
-	 */
-	public static void saveInventories(HashMap<String, PlayerInventory> inventoryList, String minigameName) {
-
-		String fileDir = getDatabaseDirectoryString(minigameName);
-		String fileName = getDataFileNameString("inventories");
-
-		System.out.println("Saving inventory data for minigame '" + minigameName  + "' at file: '" + fileDir + fileName + "'!");
-
-		String filePath = fileDir + fileName;
-
-		saveSerializableObject(inventoryList, filePath);
-	}
-
-	/**
-	 * Loads custom inventories for a minigame
-	 * @param minigameName Name of the minigame
-	 * @return HashMap of inventories mapped by custom names to the player inventories
-	 */
-	public static HashMap<String, PlayerInventory> loadInventories(String minigameName) {
-		String fileDir = getDatabaseDirectoryString(minigameName);
-		String fileName = getDataFileNameString("inventories");
-
-		System.out.println("Loading inventory data for minigame '" + minigameName  + "' at file: '" + fileDir + fileName + "'!");
-
-		String filePath = fileDir + fileName;
-
-		return (HashMap<String, PlayerInventory>)loadObjectFromFile(filePath);
 	}
 	
 	

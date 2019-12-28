@@ -5,16 +5,18 @@ import java.util.Set;
 import java.util.UUID;
 
 import com.twostudentsllc.gladiator.global.DatabaseManager;
+import com.twostudentsllc.gladiator.global.Serializer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
 import com.twostudentsllc.gladiator.Main;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.jetbrains.annotations.NotNull;
 
 public class InventoryManager {
 	
-	private HashMap<String, PlayerInventory> savedInventories;
+	private HashMap<String, Inventory> savedInventories;
 	private String minigameName;
 	
 	private Main plugin;
@@ -22,14 +24,34 @@ public class InventoryManager {
 	//Minigame name necessary as its used for file saving
 	public InventoryManager(Main plugin, String minigameName)
 	{
-		HashMap<String, PlayerInventory> externalFile = DatabaseManager.loadInventories(minigameName);
+		HashMap<String, Inventory> externalFile = DatabaseManager.loadInventories(minigameName);
 
-		if(externalFile!=null)
+		if(externalFile==null) {
+			savedInventories = new HashMap<String, Inventory>();
+		} else {
 			savedInventories = externalFile;
+			System.out.println("Loaded "+savedInventories.keySet()+" kits for " + minigameName);
+		}
 
 		this.plugin = plugin;
-		savedInventories = new HashMap<String, PlayerInventory>();
 		this.minigameName = minigameName;
+	}
+
+	/**
+	 * Creates a deepcopy of an inventory
+	 * @param other A inventory object that should be copied
+	 * @return Deep copy of inventory
+	 */
+	private Inventory copyInventory(@NotNull Inventory other) {
+
+		int validSize = other.getStorageContents().length;
+		Inventory newInventory = plugin.getServer().createInventory(null, validSize);
+
+		//Copy each item stack
+		for(int i = 0; i < validSize; i++)
+			newInventory.setItem(i, other.getItem(i));
+
+		return newInventory;
 	}
 
 	/**
@@ -40,7 +62,8 @@ public class InventoryManager {
 	public void saveInventory(@NotNull Player p, @NotNull String nameToSave)
 	{
 		PlayerInventory inventory = p.getInventory();
-		savedInventories.put(nameToSave, inventory);
+		//Adds deep copy of savedInventory to hashmap
+		savedInventories.put(nameToSave, copyInventory(inventory));
 		DatabaseManager.saveInventories(savedInventories, minigameName);
 	}
 
@@ -55,9 +78,9 @@ public class InventoryManager {
 	 * Gets a player's inventory
 	 * @param nameToSave Name to retrieve the player's inventory under
 	 * @param forgetInventory whether to forget the inventory once it is pulled
-	 * @return PlayerInventory object
+	 * @return Inventory object
 	 */
-	public PlayerInventory getInventory(@NotNull String nameToSave, boolean forgetInventory)
+	public Inventory getInventory(@NotNull String nameToSave, boolean forgetInventory)
 	{
 		//Forget the inventory option
 		if(forgetInventory)
@@ -84,16 +107,16 @@ public class InventoryManager {
 	 * @param toSet Player object whose inventory should be set
 	 * @param targetInventoryName Name of the inventory the player should be set to
 	 */
-	public void setPlayerInventory(Player toSet, String targetInventoryName) {
+	public boolean setPlayerInventory(Player toSet, String targetInventoryName) {
 
 		PlayerInventory playerInv = toSet.getInventory();
-		PlayerInventory targetInv = savedInventories.get(targetInventoryName);
+		Inventory targetInv = savedInventories.get(targetInventoryName);
 
 		if(targetInv==null)
-			return;
+			return false;
 
-		playerInv.setContents(targetInv.getContents());
+		toSet.getInventory().setContents(targetInv.getContents());
+		toSet.updateInventory();
+		return true;
 	}
-	
-	
 }
