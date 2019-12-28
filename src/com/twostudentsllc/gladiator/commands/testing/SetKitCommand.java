@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.twostudentsllc.gladiator.generic_classes.Game;
+import com.twostudentsllc.gladiator.global.AutoSuggest;
 import com.twostudentsllc.gladiator.managers.GameManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -63,29 +64,11 @@ public class SetKitCommand extends CustomCommand {
 
 	public List<String> tabComplete(CommandSender commandSender, Command command, String s, String[] args) {
 
-		if(args.length == 1) {
+		return new AutoSuggest(plugin)
+					.suggestGame()
+					.suggestKit()
+					.run(commandSender, command, s, args);
 
-			ArrayList<String> list = new ArrayList<>();
-			list.addAll(plugin.getGameManager().getGames().keySet());
-			return list;
-
-		} else if (args.length == 2) {
-
-			//Suggest the games if they are looking for maps or locations
-			GameManager manager = plugin.getGameManager();
-			Game targetGame = manager.getGame(args[0]);
-
-			if(targetGame==null)
-				return null;
-
-			ArrayList<String> list = new ArrayList<>();
-			list.addAll(targetGame.getInventoryManager().listInventories());
-
-			return list;
-
-		}
-
-		return null;
 	}
 	
 

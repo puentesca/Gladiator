@@ -1,5 +1,6 @@
 package com.twostudentsllc.gladiator.commands.location;
 
+import com.twostudentsllc.gladiator.global.AutoSuggest;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -7,6 +8,9 @@ import org.bukkit.entity.Player;
 import com.twostudentsllc.gladiator.Main;
 import com.twostudentsllc.gladiator.generic_classes.CustomCommand;
 import com.twostudentsllc.gladiator.global.Utils;
+
+import java.util.List;
+
 /**
  * Command that allows admins to set the location of spawnpoints
  * Copyright 2019 Casey Puentes. All rights reserved.
@@ -49,6 +53,15 @@ public class SetLocationCommand extends CustomCommand{
 		Player p = (Player)sender;
 		//Execute command logic
 		plugin.getLocationManager().setLocation(p, args, p.getLocation());
+	}
+
+	public List<String> tabComplete(CommandSender commandSender, Command command, String s, String[] args) {
+
+		return new AutoSuggest(plugin)
+				.suggestGame()
+				.suggestMap()
+				.suggestLocation()
+				.run(commandSender, command, s, args);
 	}
 	
 

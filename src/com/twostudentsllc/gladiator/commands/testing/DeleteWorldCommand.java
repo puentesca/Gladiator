@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.twostudentsllc.gladiator.global.AutoSuggest;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.Command;
@@ -70,19 +71,11 @@ public class DeleteWorldCommand extends CustomCommand {
 
 	@Override
 	public List<String> tabComplete(CommandSender commandSender, Command command, String s, String[] args) {
-		if(args.length == 0 || args.length == 1) {
 
-			//Return a list of world names
-			List<World> worlds = plugin.getServer().getWorlds();
-			ArrayList<String> worldNames = new ArrayList<>();
-			for(World world : worlds)
-				worldNames.add(world.getName());
+		return new AutoSuggest(plugin)
+				.suggestWorld()
+				.run(commandSender, command, s, args);
 
-			return worldNames;
-
-		}
-
-		return null;
 	}
 
 

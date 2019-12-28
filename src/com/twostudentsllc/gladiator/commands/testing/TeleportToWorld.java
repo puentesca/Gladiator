@@ -1,5 +1,6 @@
 package com.twostudentsllc.gladiator.commands.testing;
 
+import com.twostudentsllc.gladiator.global.AutoSuggest;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -9,6 +10,8 @@ import org.bukkit.entity.Player;
 import com.twostudentsllc.gladiator.Main;
 import com.twostudentsllc.gladiator.generic_classes.CustomCommand;
 import com.twostudentsllc.gladiator.global.Utils;
+
+import java.util.List;
 
 /**
  * A command
@@ -60,6 +63,13 @@ public class TeleportToWorld extends CustomCommand {
 		Location l = new Location(Bukkit.getWorld(worldName),x,y,z);
 		p.teleport(l);
 	}
-	
+
+	public List<String> tabComplete(CommandSender commandSender, Command command, String s, String[] args) {
+
+		return new AutoSuggest(plugin)
+				.suggestWorld()
+				.run(commandSender, command, s, args);
+
+	}
 
 }

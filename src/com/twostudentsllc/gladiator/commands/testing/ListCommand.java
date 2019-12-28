@@ -4,6 +4,7 @@ import java.util.*;
 
 import com.twostudentsllc.gladiator.generic_classes.Game;
 import com.twostudentsllc.gladiator.generic_classes.GameMap;
+import com.twostudentsllc.gladiator.global.AutoSuggest;
 import com.twostudentsllc.gladiator.managers.GameManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -109,6 +110,13 @@ public class ListCommand extends CustomCommand {
 
     public List<String> tabComplete(CommandSender commandSender, Command command, String s, String[] args) {
 
+        return new AutoSuggest(plugin)
+                .suggestCustom(new String[] {"games", "maps", "locations", "kits"})
+                .suggestGame()
+                .suggestMap()
+                .run(commandSender, command, s, args);
+
+        /*
         if(args.length == 1) {
 
             return Arrays.asList("games","maps","locations", "kits");
@@ -143,6 +151,6 @@ public class ListCommand extends CustomCommand {
                 return list;
             }
         }
-        return new ArrayList<>();
+        return new ArrayList<>();*/
     }
 }

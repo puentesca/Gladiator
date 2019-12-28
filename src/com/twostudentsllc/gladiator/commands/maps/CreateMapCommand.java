@@ -1,5 +1,6 @@
 package com.twostudentsllc.gladiator.commands.maps;
 
+import com.twostudentsllc.gladiator.global.AutoSuggest;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
@@ -7,6 +8,8 @@ import com.twostudentsllc.gladiator.Main;
 import com.twostudentsllc.gladiator.generic_classes.CustomCommand;
 import com.twostudentsllc.gladiator.generic_classes.Game;
 import com.twostudentsllc.gladiator.global.Utils;
+
+import java.util.List;
 
 /**
  * A command
@@ -54,6 +57,13 @@ public class CreateMapCommand extends CustomCommand {
 		Game game = plugin.getGameManager().getGame(minigameName);
 		game.createGameMap(args);
 	}
-	
+
+	public List<String> tabComplete(CommandSender commandSender, Command command, String s, String[] args) {
+
+		return new AutoSuggest(plugin)
+				.suggestGame()
+				.run(commandSender, command, s, args);
+	}
+
 
 }

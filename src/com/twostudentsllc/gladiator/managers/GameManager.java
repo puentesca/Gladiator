@@ -30,8 +30,10 @@ public class GameManager {
 
     public Game getGame(String gameName)
     {
-    	if(!hasGame(gameName))
-    		throw new IllegalArgumentException("Game '" + gameName + "' does not exist!");
+        if(!hasGame(gameName))
+            return null;
+    	/*if(!hasGame(gameName))
+    		throw new IllegalArgumentException("Game '" + gameName + "' does not exist!");*/
     	return games.get(gameName);
     }
     

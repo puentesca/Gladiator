@@ -1,7 +1,9 @@
 package com.twostudentsllc.gladiator.commands.testing;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import com.twostudentsllc.gladiator.global.AutoSuggest;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -56,6 +58,14 @@ public class JoinCommand extends CustomCommand {
 		String minigameName = args[1];
 		String mapName = args[2];
 		plugin.getGameManager().getGame(minigameName).addPlayerToQueue(mapName, (Player)sender);
+	}
+
+	public List<String> tabComplete(CommandSender commandSender, Command command, String s, String[] args) {
+
+		return new AutoSuggest(plugin)
+				.suggestGame()
+				.suggestMap()
+				.run(commandSender, command, s, args);
 	}
 	
 
