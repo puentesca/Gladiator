@@ -140,11 +140,15 @@ public class AutoSuggest {
      * @return
      */
     public AutoSuggest suggestCustom(String[] suggestions) {
-        activeHandlers.add(new SuggestionHandler() {
-            @Override
-            public ArrayList<String> handleSuggestion(Main plugin, CommandSender commandSender, Command command, String s, String[] args) {
-                return new ArrayList<String>(Arrays.asList(suggestions));
-            }
+        activeHandlers.add((Main plugin, CommandSender commandSender, Command command, String s, String[] args) -> {
+            return new ArrayList<String>(Arrays.asList(suggestions));
+        });
+        return this;
+    }
+
+    public AutoSuggest suggestCustom(Collection<String> suggestions) {
+        activeHandlers.add((Main plugin, CommandSender commandSender, Command command, String s, String[] args)->{
+            return new ArrayList<String>(suggestions);
         });
         return this;
     }

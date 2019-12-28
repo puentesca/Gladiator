@@ -2,8 +2,8 @@ package com.twostudentsllc.gladiator;
 
 import java.io.IOException;
 
+import com.twostudentsllc.gladiator.commands.misc.BossBarCommand;
 import com.twostudentsllc.gladiator.commands.testing.*;
-import org.bukkit.WorldCreator;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.twostudentsllc.gladiator.commands.location.SetLocationCommand;
@@ -36,7 +36,7 @@ public class Main extends JavaPlugin{
 	public void onEnable()
 	{
 		initializeManagers();
-		initialzeCommands();
+		initializeCommands();
 		initializeGames();
 		registerListeners();
 		System.out.println("[GLADIATOR]: Successfully loaded!");
@@ -59,7 +59,7 @@ public class Main extends JavaPlugin{
 		cmdMan = new CommandManager(this);
 		gameMan = new GameManager(this);
 	}
-	private void initialzeCommands()
+	private void initializeCommands()
 	{
 		new SetLocationCommand(this);
 		new TeleportToLocationCommand(this);
@@ -74,6 +74,7 @@ public class Main extends JavaPlugin{
 		new CreateWorldCommand(this);
 		new SetKitCommand(this);
 		new GetKitCommand(this);
+		new BossBarCommand(this);
 	}
 	
 	private void initializeGames()
