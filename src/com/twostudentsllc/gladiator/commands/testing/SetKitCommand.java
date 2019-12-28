@@ -1,7 +1,10 @@
 package com.twostudentsllc.gladiator.commands.testing;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import com.twostudentsllc.gladiator.generic_classes.Game;
+import com.twostudentsllc.gladiator.managers.GameManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -56,6 +59,33 @@ public class SetKitCommand extends CustomCommand {
 		String minigameName = args[1];
 		String kitName = args[2];
 		plugin.getGameManager().getGame(minigameName).getInventoryManager().saveInventory((Player)sender, kitName);
+	}
+
+	public List<String> tabComplete(CommandSender commandSender, Command command, String s, String[] args) {
+
+		if(args.length == 1) {
+
+			ArrayList<String> list = new ArrayList<>();
+			list.addAll(plugin.getGameManager().getGames().keySet());
+			return list;
+
+		} else if (args.length == 2) {
+
+			//Suggest the games if they are looking for maps or locations
+			GameManager manager = plugin.getGameManager();
+			Game targetGame = manager.getGame(args[0]);
+
+			if(targetGame==null)
+				return null;
+
+			ArrayList<String> list = new ArrayList<>();
+			list.addAll(targetGame.getInventoryManager().listInventories());
+
+			return list;
+
+		}
+
+		return null;
 	}
 	
 

@@ -91,6 +91,18 @@ public class ListCommand extends CustomCommand {
                 sender.sendMessage(Utils.chatMessage(targetMap.getLocations().keySet().toString(), false));
                 break;
             }
+
+            case "kits": {
+                String gameName = args[2];
+
+                GameManager manager = plugin.getGameManager();
+                HashMap<String, Game> games = manager.getGames();
+
+                Game targetGame = games.get(gameName);
+
+                sender.sendMessage(Utils.chatMessage(targetGame.getInventoryManager().listInventories().toString(), false));
+                break;
+            }
         }
 
     }
@@ -99,11 +111,11 @@ public class ListCommand extends CustomCommand {
 
         if(args.length == 1) {
 
-            return Arrays.asList("games","maps","locations");
+            return Arrays.asList("games","maps","locations", "kits");
 
         } else if (args.length == 2) {
 
-            if(args[0].equals("maps") || args[0].equals("locations")) {
+            if(args[0].equals("maps") || args[0].equals("locations") || args[0].equals("kits")) {
 
                 //Suggest the games if they are looking for maps or locations
                 GameManager manager = plugin.getGameManager();
