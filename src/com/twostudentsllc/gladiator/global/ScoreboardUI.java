@@ -169,6 +169,7 @@ public class ScoreboardUI {
 
     }*/
 
+    //FIXME: Crashes client for some reason (seems like null pointer exception in constructor)
     public boolean createRow(Player toAdd) {
 
         Objective obj = board.registerNewObjective("ServerName", "dummy", "");
