@@ -1,6 +1,7 @@
 package com.twostudentsllc.gladiator.commands.misc;
 
 import com.twostudentsllc.gladiator.global.AutoSuggest;
+import com.twostudentsllc.gladiator.global.ScoreboardUI;
 import com.twostudentsllc.gladiator.global.UI;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarFlag;
@@ -16,19 +17,20 @@ import com.twostudentsllc.gladiator.global.Utils;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BossBarCommand extends CustomCommand{
+
+public class ScoreboardCommand extends CustomCommand{
 
     private Main plugin;
 
-    public BossBarCommand(Main plugin)
+    public ScoreboardCommand(Main plugin)
     {
-        super.setName("bossbar")
-                .setDescription("Sets the boss bar")
-                .setUsage("/gladiator bossbar <action> <text> <color>")
-                .setPermissions(new String[] {"gladiator.bossbar"})
+        super.setName("scc")
+                .setDescription("Sets scoreboard")
+                .setUsage("/gladiator scoreboard <action> <text> <color>")
+                .setPermissions(new String[] {"gladiator.score"})
                 .setMinArgs(2)
                 .setMaxArgs(4)
-                .setPlayerOnly(true);
+                .setPlayerOnly(false);
 
         this.plugin = plugin;
         plugin.getCommandManager().registerCommand(getName(), this);
@@ -49,22 +51,15 @@ public class BossBarCommand extends CustomCommand{
      */
     private void commandCalled(CommandSender sender, Command cmd, String label, String[] args)
     {
-        Player p = (Player)sender;
-        ArrayList<Player> list = new ArrayList<Player>();
-        list.add(p);
-
-        //Execute command logic
-        if(args[1].equals("create"))
-            UI.createBossBar(plugin, args[2], args[3], BarColor.BLUE, BarStyle.SEGMENTED_6, list, BarFlag.CREATE_FOG);
-        else if (args[1].equals("remove"))
-            UI.removeBossBar(args[2]);
+        ScoreboardUI b = new ScoreboardUI(plugin);
+        b.createRow((Player) sender);
     }
 
-    public List<String> tabComplete(CommandSender commandSender, Command command, String s, String[] args) {
+/*    public List<String> tabComplete(CommandSender commandSender, Command command, String s, String[] args) {
 
         return new AutoSuggest(plugin)
                 .suggestCustom(new String[]{"create", "remove"})
                 .suggestCustom(UI.getActiveBarNames())
                 .run(commandSender, command, s, args);
-    }
+    }*/
 }

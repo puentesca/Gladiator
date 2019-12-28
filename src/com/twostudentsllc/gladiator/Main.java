@@ -3,6 +3,7 @@ package com.twostudentsllc.gladiator;
 import java.io.IOException;
 
 import com.twostudentsllc.gladiator.commands.misc.BossBarCommand;
+import com.twostudentsllc.gladiator.commands.misc.ScoreboardCommand;
 import com.twostudentsllc.gladiator.commands.testing.*;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -75,6 +76,7 @@ public class Main extends JavaPlugin{
 		new SetKitCommand(this);
 		new GetKitCommand(this);
 		new BossBarCommand(this);
+		new ScoreboardCommand(this);
 	}
 	
 	private void initializeGames()

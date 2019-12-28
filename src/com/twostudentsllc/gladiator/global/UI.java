@@ -7,6 +7,7 @@ import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Boss;
 import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,9 +33,9 @@ public class UI {
         bar.removeAll();
         bar.setVisible(false);
 
-        for(Player player: visibleForPlayers) {
+        //Adds all the players that should see the boss bar
+        for(Player player: visibleForPlayers)
             bar.addPlayer(player);
-        }
         bar.setVisible(true);
         activeBars.put(name, bar);
     }
@@ -58,7 +59,4 @@ public class UI {
     public static Set<String> getActiveBarNames() {
         return activeBars.keySet();
     }
-
-
-
 }
