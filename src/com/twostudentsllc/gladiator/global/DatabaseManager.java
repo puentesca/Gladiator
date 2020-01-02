@@ -121,7 +121,7 @@ public class DatabaseManager {
 
 		//Convert all inventories to base64 String
 		for(Map.Entry<String, Inventory> inventory: inventoryList.entrySet()) {
-			serializedMap.put(inventory.getKey(), Serializer.inventoryToBase64(inventory.getValue()));
+			serializedMap.put(inventory.getKey(), Serializer.playerInventoryToBase64(inventory.getValue()));
 		}
 
 		System.out.println("Saving inventory data for minigame '" + minigameName  + "' at file: '" + fileDir + fileName + "'!");
@@ -147,6 +147,7 @@ public class DatabaseManager {
 		//Loads base64 serialized versions of inventory from file
 		Object data = loadObjectFromFile(filePath);
 
+		//If object does not exist
 		if(data == null)
 			return null;
 
@@ -154,16 +155,15 @@ public class DatabaseManager {
 
 		try {
 
-			//Converts from base64 to standard Inventory type
+			//Converts inventories from base64 to Inventory object
 			HashMap<String, Inventory> deserializedInventories = new HashMap<>();
-			for (Map.Entry<String, String> base64Inventory : serializedInventories.entrySet()) {
-				deserializedInventories.put(base64Inventory.getKey(), Serializer.inventoryFromBase64(base64Inventory.getValue()));
-			}
+			for (Map.Entry<String, String> base64Inventory : serializedInventories.entrySet())
+				deserializedInventories.put(base64Inventory.getKey(), Serializer.playerInventoryFromBase64(base64Inventory.getValue()));
 
 			return deserializedInventories;
 
-		} catch(IOException e) {
-			System.out.println("Could not load file data!");
+		} catch(IllegalStateException e) {
+			System.out.println("Could not load inventories!");
 			return null;
 		}
 	}

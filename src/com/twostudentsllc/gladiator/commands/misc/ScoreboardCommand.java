@@ -51,8 +51,8 @@ public class ScoreboardCommand extends CustomCommand{
      */
     private void commandCalled(CommandSender sender, Command cmd, String label, String[] args)
     {
-        ScoreboardUI b = new ScoreboardUI(plugin);
-        b.createRow((Player) sender);
+        //ScoreboardUI b = new ScoreboardUI(plugin);
+        //b.createRow((Player) sender);
     }
 
 /*    public List<String> tabComplete(CommandSender commandSender, Command command, String s, String[] args) {

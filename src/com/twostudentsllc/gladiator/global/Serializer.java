@@ -2,6 +2,7 @@ package com.twostudentsllc.gladiator.global;
 
 import com.google.common.io.BaseEncoding;
 import org.bukkit.Bukkit;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -26,6 +27,26 @@ public class Serializer {
      */
     public static int getClosestMultipleInventory(int size) {
         return Math.min((int)(Math.ceil((double)size/9)) * 9, 54);
+    }
+
+    public static String playerInventoryToBase64(Inventory inventory) throws IllegalStateException {
+        try {
+            return itemStackArrayToBase64(inventory.getContents());
+        } catch (Exception e) {
+            throw new IllegalStateException("Unable to save item stacks.", e);
+        }
+    }
+
+    public static Inventory playerInventoryFromBase64(String serialized) throws IllegalStateException {
+        try {
+
+            Inventory playerInv = Bukkit.getServer().createInventory(null, InventoryType.PLAYER);
+            playerInv.setContents(itemStackArrayFromBase64(serialized));
+
+            return playerInv;
+        } catch (Exception e) {
+            throw new IllegalStateException("Unable to load item stacks.", e);
+        }
     }
 
     /**
@@ -57,84 +78,6 @@ public class Serializer {
             return Base64Coder.encodeLines(outputStream.toByteArray());
         } catch (Exception e) {
             throw new IllegalStateException("Unable to save item stacks.", e);
-        }
-    }
-
-    /**
-     * A method to serialize an inventory to Base64 string.
-     *
-     * <p />
-     *
-     * Special thanks to Comphenix in the Bukkit forums or also known
-     * as aadnk on GitHub.
-     *
-     * <a href="https://gist.github.com/aadnk/8138186">Original Source</a>
-     *
-     * @param inventory to serialize
-     * @return Base64 string of the provided inventory
-     * @throws IllegalStateException
-     */
-    public static String inventoryToBase64(Inventory inventory) throws IllegalStateException {
-        try {
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            BukkitObjectOutputStream dataOutput = new BukkitObjectOutputStream(outputStream);
-
-            int validSize = inventory.getStorageContents().length;
-            // Write the size of the inventory
-            dataOutput.writeInt(validSize);
-
-            // Save every element in the list
-            for (int i = 0; i < inventory.getSize(); i++) {
-                dataOutput.writeObject(inventory.getItem(i));
-            }
-
-            // Serialize that array
-            dataOutput.close();
-            return Base64Coder.encodeLines(outputStream.toByteArray());
-        } catch (Exception e) {
-            throw new IllegalStateException("Unable to save item stacks.", e);
-        }
-    }
-
-    /**
-     *
-     * A method to get an {@link Inventory} from an encoded, Base64, string.
-     *
-     * <p />
-     *
-     * Special thanks to Comphenix in the Bukkit forums or also known
-     * as aadnk on GitHub.
-     *
-     * <a href="https://gist.github.com/aadnk/8138186">Original Source</a>
-     *
-     * @param data Base64 string of data containing an inventory.
-     * @return Inventory created from the Base64 string.
-     * @throws IOException
-     */
-    public static Inventory inventoryFromBase64(String data) throws IOException {
-        try {
-            ByteArrayInputStream inputStream = new ByteArrayInputStream(Base64Coder.decodeLines(data));
-            BukkitObjectInputStream dataInput = new BukkitObjectInputStream(inputStream);
-            int realSize = dataInput.readInt();
-            Inventory inventory = Bukkit.getServer().createInventory(null, getClosestMultipleInventory(realSize));
-
-            // Read the serialized inventory
-            for (int i = 0; i < realSize; i++) {
-                Object itemData = dataInput.readObject();
-                if(itemData == null){
-                    inventory.setItem(i, null);
-                } else if(itemData instanceof ItemStack) {
-                    inventory.setItem(i, (ItemStack)itemData);
-                } else {
-                    inventory.setItem(i, ItemStack.deserialize((HashMap<String, Object>)itemData));
-                }
-
-            }
-
-            dataInput.close();
-            return inventory;
-        } catch (ClassNotFoundException e) {
-            throw new IOException("Unable to decode class type.", e);
         }
     }
 

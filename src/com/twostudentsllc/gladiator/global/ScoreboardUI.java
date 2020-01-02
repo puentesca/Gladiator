@@ -172,7 +172,7 @@ public class ScoreboardUI {
     //FIXME: Crashes client for some reason (seems like null pointer exception in constructor)
     public boolean createRow(Player toAdd) {
 
-        Objective obj = board.registerNewObjective("ServerName", "dummy", "");
+       /* Objective obj = board.registerNewObjective("ServerName", "dummy", "");
         obj.setDisplaySlot(DisplaySlot.SIDEBAR);
 
         Score onlineName = obj.getScore(ChatColor.GRAY + "» Online");
@@ -181,7 +181,7 @@ public class ScoreboardUI {
         Team onlineCounter = board.registerNewTeam("onlineCounter");
 
         // Note: The ' + "" + ' is there to convert the colors into strings without manually calling ChatColor#toString
-        onlineCounter.addEntry("w");
+        onlineCounter.addEntry("w");*/
 
 /*        if (plugin.getServer().getOnlinePlayers().size() == 0) {
             onlineCounter.setPrefix(ChatColor.DARK_RED + "0" + ChatColor.RED + "/" + ChatColor.DARK_RED + plugin.getServer().getMaxPlayers());

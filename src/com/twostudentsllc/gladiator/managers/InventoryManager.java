@@ -6,7 +6,9 @@ import java.util.UUID;
 
 import com.twostudentsllc.gladiator.global.DatabaseManager;
 import com.twostudentsllc.gladiator.global.Serializer;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 
 import com.twostudentsllc.gladiator.Main;
@@ -14,6 +16,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Manages kits an inventories for a minigame
+ */
 public class InventoryManager {
 	
 	private HashMap<String, Inventory> savedInventories;
@@ -38,18 +43,25 @@ public class InventoryManager {
 	}
 
 	/**
-	 * Creates a deepcopy of an inventory
+	 * Converts a player inventory into super type Inventory, necessary since playerInventory does not contain armor
 	 * @param other A inventory object that should be copied
 	 * @return Deep copy of inventory
 	 */
-	private Inventory copyInventory(@NotNull Inventory other) {
+	private Inventory convertInventory(@NotNull PlayerInventory other) {
 
 		int validSize = other.getStorageContents().length;
-		Inventory newInventory = plugin.getServer().createInventory(null, validSize);
+		int armorSize = other.getArmorContents().length;
+
+		Inventory newInventory = plugin.getServer().createInventory(null, InventoryType.PLAYER);
 
 		//Copy each item stack
 		for(int i = 0; i < validSize; i++)
 			newInventory.setItem(i, other.getItem(i));
+
+		//Set armor contents while copying
+		for(int i = 0; i < armorSize; i++) {
+			newInventory.setItem(i+validSize, other.getArmorContents()[i]);
+		}
 
 		return newInventory;
 	}
@@ -63,7 +75,7 @@ public class InventoryManager {
 	{
 		PlayerInventory inventory = p.getInventory();
 		//Adds deep copy of savedInventory to hashmap
-		savedInventories.put(nameToSave, copyInventory(inventory));
+		savedInventories.put(nameToSave, convertInventory(inventory));
 		DatabaseManager.saveInventories(savedInventories, minigameName);
 	}
 
