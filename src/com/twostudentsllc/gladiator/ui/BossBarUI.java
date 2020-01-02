@@ -1,4 +1,4 @@
-package com.twostudentsllc.gladiator.global;
+package com.twostudentsllc.gladiator.ui;
 
 import com.twostudentsllc.gladiator.Main;
 import org.bukkit.boss.BarColor;
@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class UI {
+public class BossBarUI {
 
     private static Map<String, BossBar> activeBars = new HashMap<String, BossBar>();
 

@@ -1,4 +1,4 @@
-package com.twostudentsllc.gladiator.global;
+package com.twostudentsllc.gladiator.ui;
 
 import com.twostudentsllc.gladiator.Main;
 import org.bukkit.ChatColor;
@@ -40,10 +40,8 @@ public class ScoreboardUI {
 
     public ScoreboardUI(Main plugin) {
         this.plugin = plugin;
+
         ScoreboardManager b = plugin.getServer().getScoreboardManager();
-
-        System.out.println("=================================================\n\n\n" + b);
-
 
         board = plugin.getServer().getScoreboardManager().getMainScoreboard();
 

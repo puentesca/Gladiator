@@ -1,7 +1,7 @@
 package com.twostudentsllc.gladiator.commands.misc;
 
 import com.twostudentsllc.gladiator.global.AutoSuggest;
-import com.twostudentsllc.gladiator.global.UI;
+import com.twostudentsllc.gladiator.ui.BossBarUI;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarFlag;
 import org.bukkit.boss.BarStyle;
@@ -55,16 +55,16 @@ public class BossBarCommand extends CustomCommand{
 
         //Execute command logic
         if(args[1].equals("create"))
-            UI.createBossBar(plugin, args[2], args[3], BarColor.BLUE, BarStyle.SEGMENTED_6, list, BarFlag.CREATE_FOG);
+            BossBarUI.createBossBar(plugin, args[2], args[3], BarColor.BLUE, BarStyle.SEGMENTED_6, list, BarFlag.CREATE_FOG);
         else if (args[1].equals("remove"))
-            UI.removeBossBar(args[2]);
+            BossBarUI.removeBossBar(args[2]);
     }
 
     public List<String> tabComplete(CommandSender commandSender, Command command, String s, String[] args) {
 
         return new AutoSuggest(plugin)
                 .suggestCustom(new String[]{"create", "remove"})
-                .suggestCustom(UI.getActiveBarNames())
+                .suggestCustom(BossBarUI.getActiveBarNames())
                 .run(commandSender, command, s, args);
     }
 }

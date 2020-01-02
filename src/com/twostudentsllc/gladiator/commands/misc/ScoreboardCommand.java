@@ -1,21 +1,11 @@
 package com.twostudentsllc.gladiator.commands.misc;
 
-import com.twostudentsllc.gladiator.global.AutoSuggest;
-import com.twostudentsllc.gladiator.global.ScoreboardUI;
-import com.twostudentsllc.gladiator.global.UI;
-import org.bukkit.boss.BarColor;
-import org.bukkit.boss.BarFlag;
-import org.bukkit.boss.BarStyle;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 import com.twostudentsllc.gladiator.Main;
 import com.twostudentsllc.gladiator.generic_classes.CustomCommand;
 import com.twostudentsllc.gladiator.global.Utils;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class ScoreboardCommand extends CustomCommand{
