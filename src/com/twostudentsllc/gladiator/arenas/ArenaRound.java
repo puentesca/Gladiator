@@ -48,6 +48,16 @@ public class ArenaRound extends MatchRound{
 	}
 	
 	@Override
+	public void savePlayerStats()
+	{
+		for(Team t : teams)
+		{
+			//TODO: Add method on team to save all players kill, deaths, etc to the mysql database (Or do it here if its not possible with inheritance issues)
+			//t.saveAllPlayerStats();
+		}
+	}
+	
+	@Override
 	public void registerRoundListeners() {
 		registeredListeners.add(new DeathListener(plugin,this));
 		

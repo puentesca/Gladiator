@@ -18,6 +18,11 @@ public class MysqlCommunicator {
 		this.plugin = plugin;
 	}
 	
+	/**
+	 * Checks the database to see if a player exists 
+	 * @param uuid The UUID of the player
+	 * @return True if the player exists
+	 */
 	public boolean playerExists(UUID uuid)
 	{
 		String stringStatement = "SELECT * FROM " + plugin.getMysqlManager().table +" WHERE UUID=?";
@@ -39,6 +44,11 @@ public class MysqlCommunicator {
 		return false;
 	}
 	
+	/**
+	 * Checks to see if a player exists in the database. If not, it creates the player.
+	 * @param uuid The UUID of the player
+	 * @param player The player object
+	 */
 	public void createPlayer(final UUID uuid, Player player)
 	{
 		String stringStatement = "SELECT * FROM " + plugin.getMysqlManager().table +" WHERE UUID=?";
@@ -67,6 +77,85 @@ public class MysqlCommunicator {
 			e.printStackTrace();
 		}
 	}
-	//FIXME: Create methods to check if a playerstats exists for a minigame and a method to check and create a entry for them
-	//FIXME: Add the methods into the minigames whenever a player joins a lobby for a map
+	
+	/**
+	 * Checks if the player has minigame stats in the database
+	 * @param uuid The UUID of the player
+	 * @param minigameName the name of the minigame (Not display name)
+	 * @return True if the player has stats for gladiator
+	 */
+	public boolean minigameStatsExists(UUID uuid, String minigameName)
+	{
+		String stringStatement = "SELECT * FROM " + plugin.getMysqlManager().getMinigameStatsTableName(minigameName) + " WHERE UUID=?";
+		try {
+			PreparedStatement statement = plugin.getMysqlManager().getConnection().prepareStatement(stringStatement);
+			statement.setString(1, uuid.toString());
+			
+			ResultSet results = statement.executeQuery();
+			if(results.next())
+			{
+				System.out.println("The player has minigame stats.");
+				return true;
+			}
+			System.out.println("The player who joined the minigame does not have stats!");
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	/**
+	 * Creates a new minigame stats entry for a player if one does not exist
+	 * @param uuid The UUID of the player
+	 * @param minigameName the name of the minigame (Not display name)
+	 */
+	public void createMinigameStats(UUID uuid, String minigameName)
+	{
+		if(!minigameStatsExists(uuid, minigameName))
+		{
+			String stringStatement = "INSERT INTO " + plugin.getMysqlManager().getMinigameStatsTableName(minigameName) + " (UUID) VALUE (?)";
+			try {
+				PreparedStatement insert = plugin.getMysqlManager().getConnection().prepareStatement(stringStatement);
+				insert.setString(1, uuid.toString());
+				insert.executeUpdate();
+				System.out.println("Minigame stats created!");
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void updateMinigameStat(UUID uuid, String minigameName, String statName, int toAdd)
+	{
+		//If there is nothing to add, save memory and do not execute the update
+		if(toAdd == 0)
+			return;
+		
+		int currentVal = 0;
+		String table = plugin.getMysqlManager().getMinigameStatsTableName(minigameName);
+		String stringStatement = "SELECT " + statName + " FROM " + table +" WHERE UUID=?";
+		try
+		{
+			PreparedStatement statement = plugin.getMysqlManager().getConnection().prepareStatement(stringStatement);
+			statement.setString(1, uuid.toString());
+			ResultSet results = statement.executeQuery();
+			results.next();
+			currentVal = results.getInt(statName);
+			
+			currentVal += toAdd;
+			
+			String stringStatement2 = "UPDATE " + table + " SET " + statName + "=? WHERE UUID=?";
+			PreparedStatement insert = plugin.getMysqlManager().getConnection().prepareStatement(stringStatement2);
+			insert.setInt(1, currentVal);
+			insert.setString(2, uuid.toString());
+			insert.executeUpdate();
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+	}
 }

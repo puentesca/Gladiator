@@ -79,7 +79,7 @@ public abstract class MatchRound {
 	}
 	
 	/**
-	 * Ends the round.  Responsible for calling unregisterListeners() and stopping all respawn countdowns
+	 * Ends the round.  Responsible for calling unregisterListeners() and stopping all respawn countdowns as well as updating mysql stats for players
 	 */
 	public abstract void endRound();
 	

@@ -35,5 +35,6 @@ public class PlayerJoinListener implements Listener{
 	{
 		Player player = ((PlayerJoinEvent)e).getPlayer();
 		plugin.getMysqlManager().getCommunicator().createPlayer(player.getUniqueId(), player);
+		plugin.getMysqlManager().getCommunicator().updateMinigameStat(player.getUniqueId(), "gladiator", "Kills", 10);
 	}
 }

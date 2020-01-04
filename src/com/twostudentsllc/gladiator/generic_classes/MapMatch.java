@@ -118,7 +118,7 @@ public abstract class MapMatch {
 	public abstract void startMatch();
 
 	/**
-	 * Ends a match
+	 * Ends a match. Must save winners and losers stats to MySQL.
 	 */
 	public abstract void endMatch();
 
@@ -137,7 +137,7 @@ public abstract class MapMatch {
 	public abstract boolean hasWinner();
 
 	/**
-	 * Gets the winner of the round
+	 * Gets the winner of the round. 
 	 * 
 	 * @return
 	 */
