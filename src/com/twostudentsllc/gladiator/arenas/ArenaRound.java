@@ -43,6 +43,7 @@ public class ArenaRound extends MatchRound{
 		{
 			respawnCountdowns.get(p).stopCountdown();
 		}
+		savePlayerStats();
 		roundCountdown.stopCountdown();
 		unregisterRoundListeners();
 		match.endRound();
@@ -61,7 +62,6 @@ public class ArenaRound extends MatchRound{
 				MysqlCommunicator comm = plugin.getMysqlManager().getCommunicator();
 				comm.updateMinigameStat(p.getUniqueId(), match.getMap().getGame().getGameName(), "kills", kills);
 				comm.updateMinigameStat(p.getUniqueId(), match.getMap().getGame().getGameName(), "deaths", deaths);
-				//TODO: Rename database columns to start with lowercase
 			}
 		}
 	}
