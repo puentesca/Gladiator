@@ -89,6 +89,11 @@ public abstract class MatchRound {
 	public abstract void startRound();
 	
 	/**
+	 * Saves all of the players stats to the MySQL database
+	 */
+	public abstract void savePlayerStats();
+	
+	/**
 	 * Receieves the round's time limits time (in seconds) every second and handles a reaction
 	 * @param time The amount of time left in the round
 	 */
