@@ -24,7 +24,7 @@ public class MysqlManager {
 		mysqlSetup();
 		communicator = new MysqlCommunicator(plugin);
 	}
-	
+	 
 	public void mysqlSetup()
 	{
 		host = plugin.getConfig().getString("host");
