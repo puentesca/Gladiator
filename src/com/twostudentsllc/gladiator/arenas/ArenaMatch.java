@@ -66,7 +66,6 @@ public class ArenaMatch extends MapMatch {
 	public boolean startRound()
 	{
 		
-		//TODO: Unfreeze all players
 		if(getStatus() != STATUS.WARMUP)
 		{
 			System.out.println("Round not started as round did not have the status of: WARMUP. Status is instead: '" + getStatus() +"'");
@@ -74,8 +73,6 @@ public class ArenaMatch extends MapMatch {
 		}
 		
 		resetPlayerLives();
-		
-		//Add logic to unfreeze players
 		currentRoundCount++;
 		//TODO: Make timeLimit and lives be changeable dynamically
 		currentRound = new ArenaRound(plugin, this, teams, timeLimit, playerLives);

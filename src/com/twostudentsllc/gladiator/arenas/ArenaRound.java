@@ -16,6 +16,7 @@ import com.twostudentsllc.gladiator.generic_classes.MatchRound;
 import com.twostudentsllc.gladiator.generic_classes.PlayerStats;
 import com.twostudentsllc.gladiator.generic_classes.Team;
 import com.twostudentsllc.gladiator.listeners.gladiator.DeathListener;
+import com.twostudentsllc.gladiator.managers.MysqlCommunicator;
 import com.twostudentsllc.gladiator.runnables.RoundRespawnTimer;
 
 public class ArenaRound extends MatchRound{
@@ -52,8 +53,16 @@ public class ArenaRound extends MatchRound{
 	{
 		for(Team t : teams)
 		{
-			//TODO: Add method on team to save all players kill, deaths, etc to the mysql database (Or do it here if its not possible with inheritance issues)
-			//t.saveAllPlayerStats();
+			for(Player p : t.getPlayers())
+			{
+				PlayerStats stats = t.getPlayerStats(p);
+				int kills = stats.getKills();
+				int deaths = stats.getDeaths();
+				MysqlCommunicator comm = plugin.getMysqlManager().getCommunicator();
+				comm.updateMinigameStat(p.getUniqueId(), match.getMap().getGame().getGameName(), "kills", kills);
+				comm.updateMinigameStat(p.getUniqueId(), match.getMap().getGame().getGameName(), "deaths", deaths);
+				//TODO: Rename database columns to start with lowercase
+			}
 		}
 	}
 	
