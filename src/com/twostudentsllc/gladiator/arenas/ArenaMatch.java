@@ -36,15 +36,6 @@ public class ArenaMatch extends MapMatch {
 		assignPlayerSpawnpoints();
 		giveAllPlayersKits();
 		doWarmup();
-		//Creates gladiator stats for every player (If it does not exist)
-		for(Team t : teams)
-		{
-			for(Player p : t.getPlayers())
-			{
-				plugin.getMysqlManager().getCommunicator().createMinigameStats(p.getUniqueId(), map.getGame().getGameName());
-			}
-		}
-		
 	}
 	
 	@Override

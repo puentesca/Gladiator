@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import com.twostudentsllc.gladiator.Main;
 import com.twostudentsllc.gladiator.global.DatabaseManager;
 import com.twostudentsllc.gladiator.global.Utils;
+import com.twostudentsllc.gladiator.managers.ClickableBlockManager;
 import com.twostudentsllc.gladiator.managers.WorldManager;
 
 /**
@@ -21,9 +22,6 @@ import com.twostudentsllc.gladiator.managers.WorldManager;
  *
  */
 public abstract class GameMap {
-	
-	//TODO: Load maps from the Game's subclasses. Have abstract methods to load in the Game super class.
-	//TODO: Make game track the world the map is in
 	
 	/**
 	 * The main plugin
@@ -177,7 +175,7 @@ public abstract class GameMap {
 		}
 		
 		DatabaseManager.saveLocations(serializedLocations, minigameName, mapName);
-		System.out.println("Successfully saved map " + mapName + " locations for Minigame: " + minigameName + "");
+		System.out.println("Successfully saved map " + mapName + " locations and clickables for Minigame: " + minigameName + "");
 	}
 	
 	/**
@@ -326,7 +324,7 @@ public abstract class GameMap {
 		
 		return totalRounds;
 	}
-
+	
 	/**
 	 * @return The locations associated with this map
 	 */

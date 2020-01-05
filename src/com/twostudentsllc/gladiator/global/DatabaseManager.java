@@ -319,7 +319,28 @@ public class DatabaseManager {
 		
 	}
 	
+	public static HashMap<String, String> loadClickables()
+	{
+		String fileDir = getDatabaseDirectoryString("clickables");
+		String fileName = "clickables.dat";
+		
+		System.out.println("Loading clickables at file: '" + fileDir + fileName + "'!");
+
+		String filePath = fileDir + fileName;
+
+		//INFO: I don't think we should catch classcastexceptions since they are our fault
+		return (HashMap<String, String>) loadObjectFromFile(filePath);
+	}
 	
+	public static void saveClickables(HashMap<String, String> clickables)
+	{
+		String fileDir = getDatabaseDirectoryString("clickables");
+		String fileName = "clickables.dat";
+		
+		System.out.println("Saving clickables at file: '" + fileDir + fileName + "'!");
+		String filePath = fileDir + fileName;
+		saveSerializableObject(clickables, filePath);
+	}
 	/**
 	 * Creates a string representing the directory name of the database of a minigame
 	 * @param minigameName The name of the directory the databases are linked to
@@ -338,7 +359,8 @@ public class DatabaseManager {
 	 */
 	public static String getLocationFileNameString(String mapName)
 	{
-		String file = mapName + "_locations.dat";
+		String file = "";
+		file = mapName + "_locations.dat";
 		return file;
 	}
 	

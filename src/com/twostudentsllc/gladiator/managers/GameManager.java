@@ -8,16 +8,17 @@ import com.twostudentsllc.gladiator.generic_classes.GameMap;
 import com.twostudentsllc.gladiator.generic_classes.Team;
 
 public class GameManager {
-
-	//TODO: Verify on shutdown that all appropriate saving methods are called
 	
     private HashMap<String, Game> games;
 
     private Main plugin;
+    
+    private ClickableBlockManager clickableBlocks;
 
     public GameManager(Main plugin) {
     	this.plugin = plugin;
         games = new HashMap<>();
+        clickableBlocks = new ClickableBlockManager(plugin);
     }
     
     public boolean registerGame(String gameName, Game game) {
@@ -93,5 +94,10 @@ public class GameManager {
      */
     public HashMap<String, Game> getGames() {
         return games;
+    }
+    
+    public ClickableBlockManager getClickableBlockManager()
+    {
+    	return clickableBlocks;
     }
 }

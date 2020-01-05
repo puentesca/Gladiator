@@ -1,18 +1,20 @@
 package com.twostudentsllc.gladiator.global;
 
+import java.util.ArrayList;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.util.BlockIterator;
 
 import com.twostudentsllc.gladiator.Main;
-import com.twostudentsllc.gladiator.arenas.Arena;
 import com.twostudentsllc.gladiator.generic_classes.Team;
 
 import net.md_5.bungee.api.ChatColor;
-
-import java.util.ArrayList;
 
 /**
  * A common utility class
@@ -85,6 +87,20 @@ public class Utils {
 			throw new NullPointerException("The location you want to serialize is null!");
 		
 		String string = l.getWorld().getName() + ":" + l.getX() + ":" + l.getY() + ":" + l.getZ() + ":" + l.getYaw() + ":" + l.getPitch();
+		return string;
+	}
+	
+	/**
+	 * Creates a serialized version of a location of a block that can be easily saved and read.(Omits yaw, pitch as well as gets block locations)
+	 * @param The location to serialize
+	 * @return String of serialized location
+	 */
+	public static String serializeBlockLocation(Location l)
+	{
+		if(l == null)
+			throw new NullPointerException("The location you want to serialize is null!");
+		
+		String string = l.getWorld().getName() + ":" + l.getBlockX() + ":" + l.getBlockY() + ":" + l.getBlockZ();
 		return string;
 	}
 	
@@ -228,5 +244,24 @@ public class Utils {
 		msg = "spawn" + teamNum + "_" + playerNum;
 		return msg;
 	}
+	
+	/**
+	 * Returns the block a player is looking at
+	 * @param player The player who is looking
+	 * @param range The range for the search
+	 * @return The block the player is looking at
+	 */
+	public static Block getTargetBlock(Player player, int range) {
+        BlockIterator iter = new BlockIterator(player, range);
+        Block lastBlock = iter.next();
+        while (iter.hasNext()) {
+            lastBlock = iter.next();
+            if (lastBlock.getType() == Material.AIR) {
+                continue;
+            }
+            break;
+        }
+        return lastBlock;
+    }
 	
 }

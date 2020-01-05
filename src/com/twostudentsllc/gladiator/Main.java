@@ -15,9 +15,12 @@ import com.twostudentsllc.gladiator.commands.testing.DeleteWorldCommand;
 import com.twostudentsllc.gladiator.commands.testing.GetKitCommand;
 import com.twostudentsllc.gladiator.commands.testing.JoinCommand;
 import com.twostudentsllc.gladiator.commands.testing.ListCommand;
+import com.twostudentsllc.gladiator.commands.testing.RemoveClickableCommand;
+import com.twostudentsllc.gladiator.commands.testing.SetClickableCommand;
 import com.twostudentsllc.gladiator.commands.testing.SetKitCommand;
 import com.twostudentsllc.gladiator.commands.testing.TeleportToWorld;
 import com.twostudentsllc.gladiator.games.Gladiator;
+import com.twostudentsllc.gladiator.listeners.BlockClickedListener;
 import com.twostudentsllc.gladiator.listeners.PlayerJoinListener;
 import com.twostudentsllc.gladiator.managers.CommandManager;
 import com.twostudentsllc.gladiator.managers.GameManager;
@@ -77,6 +80,8 @@ public class Main extends JavaPlugin{
 		new TeleportToLocationCommand(this);
 		new HelpCommand(this);
 		new CreateMapCommand(this);
+		new SetClickableCommand(this);
+		new RemoveClickableCommand(this);
 		
 		//TEST COMMANDS
 		new JoinCommand(this);
@@ -98,6 +103,7 @@ public class Main extends JavaPlugin{
 	private void registerListeners()
 	{
 		new PlayerJoinListener(this);
+		new BlockClickedListener(this);
 	}
 	
 	private void loadConfig(boolean save)

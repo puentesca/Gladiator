@@ -154,7 +154,7 @@ public abstract class Game {
     }
 
     /**
-     * Deletes a queue for a specific map
+     * Deletes a queue for a specific map 
      * @param mapName name of the map
      * @return true/false whether the deletion of queue was successful
      */
@@ -163,7 +163,7 @@ public abstract class Game {
     }
 
     /**
-     * Adds a player to a queue
+     * Adds a player to a queue and inserts their data into the minigame stats table in the MySQL Database
      * @param mapName name of the map to add the player to
      * @param toAdd Player object to add
      * @return true/false whether it was successful
@@ -174,12 +174,13 @@ public abstract class Game {
         	System.out.println("Game does not have map: " + mapName);
             return false;
         }
+        plugin.getMysqlManager().getCommunicator().createMinigameStats(toAdd.getUniqueId(), minigameName);
         maps.get(mapName).sendPlayerToLobby(toAdd);
         return mapQueues.addPlayerToQueue(mapName, toAdd);
     }
 
     /**
-     * Adds a group of players to a queue
+     * Adds a group of players to a queue and inserts their data into the minigame stats table in the MySQL Database
      * @param mapName name of the map to add the group to
      * @param group ArrayList of Player objects
      * @return true/false whether it was successful
@@ -191,6 +192,7 @@ public abstract class Game {
         }
         for(Player p : group)
         {
+        	plugin.getMysqlManager().getCommunicator().createMinigameStats(p.getUniqueId(), minigameName);
         	maps.get(mapName).sendPlayerToLobby(p);
         } 
         return mapQueues.addGroupToQueue(mapName, group);
