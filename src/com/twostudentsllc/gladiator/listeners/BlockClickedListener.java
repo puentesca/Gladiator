@@ -12,6 +12,12 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import com.twostudentsllc.gladiator.Main;
 import com.twostudentsllc.gladiator.managers.ClickableBlockManager;
 
+/**
+ * A listener
+ * Copyright 2019 Casey Puentes. All rights reserved.
+ * @author Casey Puentes
+ *
+ */
 public class BlockClickedListener implements Listener{
 	private Main plugin;
 	public BlockClickedListener(Main plugin)
