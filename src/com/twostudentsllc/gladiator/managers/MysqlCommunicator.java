@@ -3,8 +3,7 @@ package com.twostudentsllc.gladiator.managers;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.UUID;
 
 import org.bukkit.entity.Player;
@@ -128,6 +127,13 @@ public class MysqlCommunicator {
 		}
 	}
 	
+	/**
+	 * Updates an integer value in the MySQL database with addition
+	 * @param uuid The UUID of the player you wish to update
+	 * @param minigameName The name of the minigame that the stat needs to be updated on
+	 * @param statName The name of the stat that you wish to update
+	 * @param toAdd The amount to add to the stat
+	 */
 	public void updateMinigameStat(UUID uuid, String minigameName, String statName, int toAdd)
 	{
 		//If there is nothing to add, save memory and do not execute the update
@@ -157,5 +163,34 @@ public class MysqlCommunicator {
 		{
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * Gets the desired values represented in the mysql database
+	 * @param tableName The MySQL table you wish to query
+	 * @param dataName The name of the data/column you are looking for
+	 * @param dataIdentifierName The name of the column you are going to use to identify the columns to pull data from
+	 * @param dataIdentifierValue The value of the identifier
+	 * @return An arraylist of strings containing all of the results from the query
+	 */
+	public ArrayList<String> getSQLStrings(String tableName, String dataName, String dataIdentifierName, String dataIdentifierValue)
+	{
+		String stringStatement = "SELECT " + dataName + " FROM " + tableName + " WHERE " + dataIdentifierName + "=" + dataIdentifierValue; 
+		ArrayList<String> stringResults = null;
+		try {
+			PreparedStatement statement = plugin.getMysqlManager().getConnection().prepareStatement(stringStatement);
+			ResultSet results = statement.executeQuery();
+			stringResults = new ArrayList<String>();
+			while(results.next())
+			{
+				String item = results.getString(dataName);
+				stringResults.add(item);
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return stringResults;
 	}
 }

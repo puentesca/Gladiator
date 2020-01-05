@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -355,12 +356,14 @@ public abstract class GameMap {
 		p.teleport(getSpectatingLocation());
 	}
 	/**
-	 * Teleports a player to the lobby location
+	 * Teleports a player to the lobby location and sets their gamemode to adventure
 	 * @param p The player to teleport
 	 */
 	public void sendPlayerToLobby(Player p)
 	{
+		//TODO: Add the setting of a lobby kit or hub kit when the player is teleported back to the lobby.
 		p.teleport(getLobbyLocation());
+		p.setGameMode(GameMode.ADVENTURE);
 	}
 	
 	/**

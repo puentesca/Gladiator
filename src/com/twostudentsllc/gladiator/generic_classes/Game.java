@@ -16,8 +16,8 @@ import com.twostudentsllc.gladiator.runnables.GameMapStartCountdown;
 
 public abstract class Game {
 
-    protected String minigameName;
-    protected String minigameDisplayName;
+    protected static String minigameName;
+    protected static String minigameDisplayName;
     /**
      * A HashMap of all of the GameMaps and their names
      */
@@ -326,4 +326,9 @@ public abstract class Game {
         return false;
     }
 
+    public InventoryManager getKits()
+    {
+    	return kits;
+    }
+    
 }

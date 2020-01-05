@@ -69,7 +69,7 @@ public class MysqlManager {
 		return communicator;
 	}
 	
-	public String getMinigameStatsTableName(String minigameName)
+	public static String getMinigameStatsTableName(String minigameName)
 	{
 		return  minigameName + "_stats";
 	}

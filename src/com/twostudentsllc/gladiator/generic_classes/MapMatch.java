@@ -6,10 +6,11 @@ import java.util.HashMap;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 
 import com.twostudentsllc.gladiator.Main;
 import com.twostudentsllc.gladiator.global.Utils;
-import com.twostudentsllc.gladiator.runnables.RoundTimelimitUpdater;
+import com.twostudentsllc.gladiator.managers.MysqlManager;
 
 /**
  * An interface for each round in an arena. Copyright 2019 Casey Puentes. All
@@ -113,7 +114,7 @@ public abstract class MapMatch {
 	}
 
 	/**
-	 * Starts a match
+	 * Starts a match. Must call giveAllPlayersKits();
 	 */
 	public abstract void startMatch();
 
@@ -129,6 +130,27 @@ public abstract class MapMatch {
 		map.unloadChunks();
 	}
 
+	/**
+	 * Gives all players in the match their selected kits
+	 */
+	public void giveAllPlayersKits()
+	{
+		for(Team t : teams)
+		{
+			for(Player p : t.getPlayers())
+			{
+				//Get the equippedkit
+				String tableName = MysqlManager.getMinigameStatsTableName(map.getGame().getGameName());
+				String dataName = "equippedkit";
+				String dataIdentifierName = "UUID";
+				String dataIdentifierValue = "'" + p.getUniqueId().toString() + "'";
+				String equippedKit = plugin.getMysqlManager().getCommunicator().getSQLStrings(tableName, dataName, dataIdentifierName, dataIdentifierValue).get(0);
+				//Sets the kit
+				map.getGame().getInventoryManager().setPlayerInventory(p, equippedKit);
+			}
+		}
+	}
+	
 	/**
 	 * Gets if there is a winner
 	 * 

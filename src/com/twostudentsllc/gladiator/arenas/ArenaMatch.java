@@ -34,6 +34,7 @@ public class ArenaMatch extends MapMatch {
 	public void startMatch()
 	{
 		assignPlayerSpawnpoints();
+		giveAllPlayersKits();
 		doWarmup();
 		//Creates gladiator stats for every player (If it does not exist)
 		for(Team t : teams)

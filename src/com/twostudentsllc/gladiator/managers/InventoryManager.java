@@ -88,17 +88,17 @@ public class InventoryManager {
 
 	/**
 	 * Gets a player's inventory
-	 * @param nameToSave Name to retrieve the player's inventory under
+	 * @param nameOfInventory Name to retrieve the player's inventory under
 	 * @param forgetInventory whether to forget the inventory once it is pulled
 	 * @return Inventory object
 	 */
-	public Inventory getInventory(@NotNull String nameToSave, boolean forgetInventory)
+	public Inventory getInventory(@NotNull String nameOfInventory, boolean forgetInventory)
 	{
 		//Forget the inventory option
 		if(forgetInventory)
-			return savedInventories.remove(nameToSave);
+			return savedInventories.remove(nameOfInventory);
 
-		return savedInventories.get(nameToSave);
+		return savedInventories.get(nameOfInventory);
 
 		//if the inventory should be removed from the database (if (forgetInventory)), then remove and return it using UUID.
 		//inventoriesSaved.get(players UUID);

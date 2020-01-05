@@ -14,6 +14,8 @@ public abstract class MatchRound {
 	protected Main plugin;
 	
 	//TODO: Add listener that prevents teammates from damaging each other and stops people in the warmup from shooting arrows or throwing stuff(Do the second part in the maps classes)
+	//TODO: Add kits being given at the start of a round and the ability to choose what kit you want
+	//TODO: Prevent killing in warmup and cooldown time.
 	
 	/**
 	 * The teams playing in this round
