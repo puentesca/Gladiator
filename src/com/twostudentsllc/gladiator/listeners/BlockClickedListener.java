@@ -1,6 +1,7 @@
 package com.twostudentsllc.gladiator.listeners;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -45,6 +46,10 @@ public class BlockClickedListener implements Listener{
 		Player player = pEvent.getPlayer();
 		
 		Block b = pEvent.getClickedBlock();
+		
+		if(b.getType() == Material.AIR)
+			return;
+		
 		ClickableBlockManager clickable = plugin.getGameManager().getClickableBlockManager();
 		
 		
