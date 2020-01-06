@@ -1,11 +1,17 @@
 package com.twostudentsllc.gladiator.managers;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.bukkit.Material;
+import org.bukkit.inventory.Inventory;
+
 import com.twostudentsllc.gladiator.Main;
+import com.twostudentsllc.gladiator.generic_classes.GUIInventory;
 import com.twostudentsllc.gladiator.generic_classes.Game;
-import com.twostudentsllc.gladiator.generic_classes.GameMap;
-import com.twostudentsllc.gladiator.generic_classes.Team;
+import com.twostudentsllc.gladiator.generic_classes.InventoryItem;
+import com.twostudentsllc.gladiator.generic_classes.InventoryRunnable;
+import com.twostudentsllc.gladiator.runnables.inventory.GladiatorJoinInventoryRunnable;
 
 public class GameManager {
 	
@@ -15,10 +21,31 @@ public class GameManager {
     
     private ClickableBlockManager clickableBlocks;
 
+    private GUIInventory chooseGameUI;
+    
     public GameManager(Main plugin) {
     	this.plugin = plugin;
         games = new HashMap<>();
         clickableBlocks = new ClickableBlockManager(plugin);
+        createChooseGameUI();
+    }
+    
+    /**
+     * Creates the GUI for whenever players want to choose a minigame to join
+     */
+    public void createChooseGameUI()
+    {
+    	HashMap<InventoryRunnable, InventoryItem> inventoryStuff = new HashMap<InventoryRunnable, InventoryItem>();
+    	
+    	InventoryRunnable gladiatorJoinRunnable = new GladiatorJoinInventoryRunnable(plugin);
+    	
+    	ArrayList<String> gladiatorLore = new ArrayList<String>();
+    	gladiatorLore.add("FIGHT TO THE DEATH AND WIN YOUR FREEDOM");
+    	gladiatorLore.add("GOOD LUCK WARRIOR!");
+    	InventoryItem gladiatorItem = new InventoryItem(plugin, Material.SHIELD, "GLADIATOR", gladiatorLore, 1, true, 1);
+    	inventoryStuff.put(gladiatorJoinRunnable, gladiatorItem);
+    	
+    	chooseGameUI = new GUIInventory(plugin, "MINIGAMES", inventoryStuff, 3);
     }
     
     public boolean registerGame(String gameName, Game game) {
@@ -99,5 +126,10 @@ public class GameManager {
     public ClickableBlockManager getClickableBlockManager()
     {
     	return clickableBlocks;
+    }
+    
+    public Inventory getMinigameChoosingInventory()
+    {
+    	return chooseGameUI.getInventory();
     }
 }

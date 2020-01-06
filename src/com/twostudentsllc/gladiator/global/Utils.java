@@ -9,9 +9,12 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.BlockIterator;
 
 import com.twostudentsllc.gladiator.Main;
+import com.twostudentsllc.gladiator.generic_classes.GlowEnchant;
 import com.twostudentsllc.gladiator.generic_classes.Team;
 
 import net.md_5.bungee.api.ChatColor;
