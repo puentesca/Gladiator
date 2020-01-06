@@ -1,21 +1,15 @@
 package com.twostudentsllc.gladiator.commands.testing;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
-import com.twostudentsllc.gladiator.generic_classes.Game;
-import com.twostudentsllc.gladiator.generic_classes.GameMap;
-import com.twostudentsllc.gladiator.global.AutoSuggest;
-import com.twostudentsllc.gladiator.managers.GameManager;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.twostudentsllc.gladiator.Main;
 import com.twostudentsllc.gladiator.generic_classes.CustomCommand;
-import com.twostudentsllc.gladiator.generic_classes.Team;
+import com.twostudentsllc.gladiator.global.AutoSuggest;
 import com.twostudentsllc.gladiator.global.Utils;
 
 /**
@@ -63,6 +57,7 @@ public class GetKitCommand extends CustomCommand {
 		String minigameName = args[1];
 		String kitName = args[2];
 		plugin.getGameManager().getGame(minigameName).getInventoryManager().setPlayerInventory((Player)sender, kitName);
+		Bukkit.broadcastMessage("GetKit Called froms sender: " + sender.getName());
 	}
 
 	public List<String> tabComplete(CommandSender commandSender, Command command, String s, String[] args) {
