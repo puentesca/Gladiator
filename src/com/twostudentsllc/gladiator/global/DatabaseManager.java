@@ -44,6 +44,13 @@ public class DatabaseManager {
 			}
 		}
 
+		//Wipes the file content
+		try {
+			new FileWriter(file, false).close();
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+
 		ObjectOutputStream output = null;
 		try {
 			output = new ObjectOutputStream(new GZIPOutputStream(new FileOutputStream(file)));
