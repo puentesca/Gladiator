@@ -47,15 +47,15 @@ public class BlockClickedListener implements Listener{
 		Block b = pEvent.getClickedBlock();
 		ClickableBlockManager clickable = plugin.getGameManager().getClickableBlockManager();
 		
-		if(!clickable.clickedBlockExists(b.getLocation()))
+		
+		
+		if(b == null || !clickable.clickedBlockExists(b.getLocation()))
 		{
 			System.out.println("Clicked block does not exist!");
 			return;
 		}
-		String command = clickable.getClickedBlockCommand(b.getLocation());
-		//Executes the command and omits the slash as its automatically added.
-		player.performCommand(command.substring(1));
+		clickable.PlayerClickedBlock(player, b.getLocation());
 		
-		System.out.println("Player clicked block and command: '" + command + "' was executed.");
+		
 	}
 }

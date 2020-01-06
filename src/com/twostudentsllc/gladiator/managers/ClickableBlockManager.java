@@ -81,7 +81,10 @@ public class ClickableBlockManager {
 		String command = getClickedBlockCommand(l);
 		if (command == null)
 			return;
-		// TODO: Make player run command
+		Bukkit.dispatchCommand(p, command);
+		//Executes the command and omits the slash as its automatically added.
+		//p.performCommand(command.substring(1));
+		System.out.println("Player clicked block and command: '" + command + "' was executed.");
 	}
 
 	/**
