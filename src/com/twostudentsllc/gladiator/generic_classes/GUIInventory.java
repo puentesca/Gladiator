@@ -64,6 +64,9 @@ public class GUIInventory implements InventoryHolder, Listener {
 	public void invClicked(InventoryClickEvent e)
 	{
 		Inventory clickedInv = e.getClickedInventory();
+		//If the player clicked air instead of the inventory
+		if(clickedInv == null)
+			return;
 		Player clicker = (Player)e.getWhoClicked();
 		ItemStack clickedItem = e.getCurrentItem();
 		int location = e.getRawSlot();
