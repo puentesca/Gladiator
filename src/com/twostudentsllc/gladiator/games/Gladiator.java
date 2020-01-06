@@ -6,7 +6,7 @@ import com.twostudentsllc.gladiator.Main;
 import com.twostudentsllc.gladiator.arenas.Arena;
 import com.twostudentsllc.gladiator.generic_classes.Game;
 import com.twostudentsllc.gladiator.generic_classes.GameMap;
-import com.twostudentsllc.gladiator.global.DatabaseManager;
+import com.twostudentsllc.gladiator.global.DatabaseUtils;
 
 public class Gladiator extends Game{
 	
@@ -48,7 +48,7 @@ public class Gladiator extends Game{
 			serializedMaps.put(map.getMapName(), serializedMap);
 		}
 		
-		DatabaseManager.saveMaps(serializedMaps, minigameName, "maps");
+		DatabaseUtils.saveMaps(serializedMaps, minigameName, "maps");
 		kits.forceSaveToFile();
 		return true;
 	}
@@ -56,7 +56,7 @@ public class Gladiator extends Game{
 	@Override
 	public void loadAllMaps()
 	{
-		HashMap<String, String> serializedMaps = DatabaseManager.loadMap(minigameName, "maps");
+		HashMap<String, String> serializedMaps = DatabaseUtils.loadMap(minigameName, "maps");
 		for(String s : serializedMaps.keySet())
 		{
 			String mapName = s;

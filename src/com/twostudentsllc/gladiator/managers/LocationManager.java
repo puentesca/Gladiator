@@ -29,6 +29,8 @@ import com.twostudentsllc.gladiator.global.Utils;
  *
  */
 
+
+//TODO: MOVE THIS INTO SETLOCATION COMMAND AND ALSO
 public class LocationManager {
 	
 	//TODO: Add reset location(s)

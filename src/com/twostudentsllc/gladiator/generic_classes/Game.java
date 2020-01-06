@@ -8,10 +8,9 @@ import java.util.Set;
 import com.twostudentsllc.gladiator.managers.InventoryManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 
 import com.twostudentsllc.gladiator.Main;
-import com.twostudentsllc.gladiator.managers.GameQueueManager;
+import com.twostudentsllc.gladiator.managers.GameLobby;
 import com.twostudentsllc.gladiator.runnables.GameMapStartCountdown;
 
 public abstract class Game {
@@ -25,7 +24,7 @@ public abstract class Game {
     /**
      * Holds the manager for all of the queues for different maps
      */
-    protected GameQueueManager mapQueues;
+    protected GameLobby mapQueues;
 
     /**
      * Manages the various kits for the game
@@ -51,7 +50,7 @@ public abstract class Game {
         mapStartCountdowns = new HashMap<String, Countdown>();
 
         kits = new InventoryManager(plugin, game);
-        mapQueues = new GameQueueManager(plugin, this);
+        mapQueues = new GameLobby(plugin, this);
 
         registerGame(this);
         loadAllMaps();

@@ -10,10 +10,9 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import com.twostudentsllc.gladiator.Main;
-import com.twostudentsllc.gladiator.global.DatabaseManager;
+import com.twostudentsllc.gladiator.global.DatabaseUtils;
 import com.twostudentsllc.gladiator.global.Utils;
-import com.twostudentsllc.gladiator.managers.ClickableBlockManager;
-import com.twostudentsllc.gladiator.managers.WorldManager;
+import com.twostudentsllc.gladiator.global.WorldUtils;
 
 /**
  * Super class that stores all data relating to a maps special information
@@ -116,7 +115,7 @@ public abstract class GameMap {
 		this.warmupTimeLimit = warmupTime;
 		this.cooldownTimeLimit = cooldownTime;
 		this.totalRounds = totalRounds;
-		this.mapWorld = WorldManager.getWorld(plugin.getServer(), mapName);
+		this.mapWorld = WorldUtils.getWorld(plugin.getServer(), mapName);
 		hasRunningMatch = false;
 		plugin.getGameManager().getGame(minigameName).registerMap(this);
 		loadLocations();
@@ -135,7 +134,7 @@ public abstract class GameMap {
 	 */
 	public void loadLocations()
 	{
-		HashMap<String, String> serializedLocations = DatabaseManager.loadLocations(minigameName, mapName);
+		HashMap<String, String> serializedLocations = DatabaseUtils.loadLocations(minigameName, mapName);
 		
 		locations = new HashMap<String, Location>();
 		for(String s : serializedLocations.keySet())
@@ -174,7 +173,7 @@ public abstract class GameMap {
 			serializedLocations.put(s, Utils.serializeLocation(locations.get(s)));
 		}
 		
-		DatabaseManager.saveLocations(serializedLocations, minigameName, mapName);
+		DatabaseUtils.saveLocations(serializedLocations, minigameName, mapName);
 		System.out.println("Successfully saved map " + mapName + " locations and clickables for Minigame: " + minigameName + "");
 	}
 	
@@ -213,7 +212,7 @@ public abstract class GameMap {
 	* Unload loaded chunks on the map
 	 */
 	public void unloadChunks() {
-		WorldManager.unloadLoadedChunks(mapWorld);
+		WorldUtils.unloadLoadedChunks(mapWorld);
 	}
 	
 	/**

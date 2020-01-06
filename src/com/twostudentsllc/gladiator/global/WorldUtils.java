@@ -1,4 +1,4 @@
-package com.twostudentsllc.gladiator.managers;
+package com.twostudentsllc.gladiator.global;
 
 import java.util.List;
 import java.util.Random;
@@ -6,9 +6,7 @@ import java.util.Random;
 import org.bukkit.*;
 import org.bukkit.generator.ChunkGenerator;
 
-import com.twostudentsllc.gladiator.global.CustomChunkGenerator;
-
-public class WorldManager {
+public class WorldUtils {
 
 
     //Chunk generator for creating an empty world
@@ -45,7 +43,7 @@ public class WorldManager {
     public static World createVoidWorld(String worldName)
     {
         WorldCreator wc = new WorldCreator(worldName);
-        wc.generator(new WorldManager.EmptyChunkGenerator());
+        wc.generator(new WorldUtils.EmptyChunkGenerator());
         return wc.createWorld();
     }
 

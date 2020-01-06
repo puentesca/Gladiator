@@ -16,7 +16,7 @@ import com.twostudentsllc.gladiator.generic_classes.Team;
 /**
  * Manages a queue of players for a Game
  */
-public class GameQueueManager {
+public class GameLobby {
 	
 	private Main plugin;
 	//String key is the name of the map
@@ -289,7 +289,7 @@ public class GameQueueManager {
 
 	}
 	
-    public GameQueueManager(Main plugin, Game game) {
+    public GameLobby(Main plugin, Game game) {
     	this.plugin = plugin;
 		this.game = game;
 		queueList = new TreeMap<>();

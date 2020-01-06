@@ -2,17 +2,13 @@ package com.twostudentsllc.gladiator.managers;
 
 import java.util.HashMap;
 import java.util.Set;
-import java.util.UUID;
 
-import com.twostudentsllc.gladiator.global.DatabaseManager;
-import com.twostudentsllc.gladiator.global.Serializer;
-import org.bukkit.Bukkit;
+import com.twostudentsllc.gladiator.global.DatabaseUtils;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 
 import com.twostudentsllc.gladiator.Main;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.jetbrains.annotations.NotNull;
 
@@ -29,7 +25,7 @@ public class InventoryManager {
 	//Minigame name necessary as its used for file saving
 	public InventoryManager(Main plugin, String minigameName)
 	{
-		HashMap<String, Inventory> externalFile = DatabaseManager.loadInventories(minigameName);
+		HashMap<String, Inventory> externalFile = DatabaseUtils.loadInventories(minigameName);
 
 		if(externalFile==null) {
 			savedInventories = new HashMap<String, Inventory>();
@@ -76,14 +72,14 @@ public class InventoryManager {
 		PlayerInventory inventory = p.getInventory();
 		//Adds deep copy of savedInventory to hashmap
 		savedInventories.put(nameToSave, convertInventory(inventory));
-		DatabaseManager.saveInventories(savedInventories, minigameName);
+		DatabaseUtils.saveInventories(savedInventories, minigameName);
 	}
 
 	/**
 	 * Helper method to force the database manager to save to a file
 	 */
 	public void forceSaveToFile() {
-		DatabaseManager.saveInventories(savedInventories, minigameName);
+		DatabaseUtils.saveInventories(savedInventories, minigameName);
 	}
 
 	/**

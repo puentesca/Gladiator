@@ -21,7 +21,7 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 
-public class DatabaseManager {
+public class DatabaseUtils {
 
 	/**
 	 * Saves a serializable object to a filepath

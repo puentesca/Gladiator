@@ -1,17 +1,8 @@
 package com.twostudentsllc.gladiator.commands.testing;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import com.twostudentsllc.gladiator.managers.WorldManager;
-import org.bukkit.Bukkit;
-import org.bukkit.World;
+import com.twostudentsllc.gladiator.global.WorldUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.libs.org.apache.commons.io.FileUtils;
 
 import com.twostudentsllc.gladiator.Main;
 import com.twostudentsllc.gladiator.generic_classes.CustomCommand;
@@ -54,7 +45,7 @@ public class CreateWorldCommand extends CustomCommand {
     private void commandCalled(CommandSender sender, Command cmd, String label, String[] args)
     {
         String worldName = args[1];
-        WorldManager.createVoidWorld(worldName);
+        WorldUtils.createVoidWorld(worldName);
 
     }
 }

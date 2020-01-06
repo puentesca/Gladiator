@@ -7,8 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import com.twostudentsllc.gladiator.Main;
-import com.twostudentsllc.gladiator.generic_classes.GameMap;
-import com.twostudentsllc.gladiator.global.DatabaseManager;
+import com.twostudentsllc.gladiator.global.DatabaseUtils;
 import com.twostudentsllc.gladiator.global.Utils;
 
 public class ClickableBlockManager {
@@ -23,7 +22,7 @@ public class ClickableBlockManager {
 
 	public void loadClickableBlocks() {
 		blockLocationsAndCommands = new HashMap<Location, String>();
-		HashMap<String, String> serializedClickables = DatabaseManager.loadClickables();
+		HashMap<String, String> serializedClickables = DatabaseUtils.loadClickables();
 		for (String s : serializedClickables.keySet()) {
 			String serializedLocation = s;
 			String[] parts = serializedLocation.split(":");
@@ -43,7 +42,7 @@ public class ClickableBlockManager {
 		for (Location l : blockLocationsAndCommands.keySet()) {
 			serializedClickables.put(Utils.serializeBlockLocation(l), blockLocationsAndCommands.get(l));
 		}
-		DatabaseManager.saveClickables(serializedClickables);
+		DatabaseUtils.saveClickables(serializedClickables);
 		System.out.println("Successfully saved clickables.");
 	}
 
