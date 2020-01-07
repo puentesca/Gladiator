@@ -356,12 +356,13 @@ public abstract class GameMap {
 	 * Teleports a player to the lobby location and sets their gamemode to adventure
 	 * @param p The player to teleport
 	 */
-	public void sendPlayerToLobby(Player p)
+
+/*	public void sendPlayerToLobby(Player p)
 	{
 		//TODO: Add the setting of a lobby kit or hub kit when the player is teleported back to the lobby.
 		p.teleport(getLobbyLocation());
 		p.setGameMode(GameMode.ADVENTURE);
-	}
+	}*/
 	
 	/**
 	 * Gets whether or not this map currently has a running round

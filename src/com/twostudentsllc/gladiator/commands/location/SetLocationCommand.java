@@ -51,8 +51,20 @@ public class SetLocationCommand extends CustomCommand{
 	private void commandCalled(CommandSender sender, Command cmd, String label, String[] args)
 	{
 		Player p = (Player)sender;
-		//Execute command logic
-		plugin.getLocationManager().setLocation(p, args, p.getLocation());
+
+		String minigameName = args[1];
+		String mapName = args[2];
+		String key = args[3];
+		System.out.println("Setting location for '" + key + "' for map '" + mapName + "' and minigame '" + minigameName + "'.");
+
+		//Handle input argument validation
+		if(!LocationCommandHelper.validateArguments(plugin, p, args))
+			return;
+
+		//Gets the game from the game manager, then gets the GameMap from the game, and adds the location.
+		//Will throw IllegalArgumentException if any of them do not exist
+		plugin.getGameManager().getGame(minigameName).getGameMap(mapName).addLocation(key, p.getLocation());
+		System.out.println("Location '" + key + "' for map '" + mapName + "' and minigame '" + minigameName + "' successfully set.");
 	}
 
 	public List<String> tabComplete(CommandSender commandSender, Command command, String s, String[] args) {

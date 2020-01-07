@@ -1,9 +1,9 @@
 package com.twostudentsllc.gladiator;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -30,7 +30,6 @@ import com.twostudentsllc.gladiator.listeners.BlockClickedListener;
 import com.twostudentsllc.gladiator.listeners.PlayerJoinListener;
 import com.twostudentsllc.gladiator.managers.CommandManager;
 import com.twostudentsllc.gladiator.managers.GameManager;
-import com.twostudentsllc.gladiator.managers.LocationManager;
 import com.twostudentsllc.gladiator.managers.MysqlManager;
 
 /**
@@ -50,10 +49,11 @@ public class Main extends JavaPlugin implements VoteHost {
 	// Also must have loadMaps() or something related to that and loadInformation()
 
 	private MysqlManager sqlMan;
-	private LocationManager locMan;
 	private CommandManager cmdMan;
 	private GameManager gameMan;
 	private Vote curVote;
+
+	private World hubWorld;
 
 	@Override
 	public void onEnable() {
@@ -73,6 +73,12 @@ public class Main extends JavaPlugin implements VoteHost {
 		Vote vote = new Vote(this, this, "TEST VOTING", choices, Material.PAPER, 15);
 		curVote = vote;
 		System.out.println("[GLADIATOR]: Successfully loaded!");
+
+
+		//Insure that there is a main hub world that players will spawn in
+		hubWorld = getServer().getWorld("world");
+		if(hubWorld == null)
+			throw new Error("No hub world defined!");
 	}
 
 	//PART OF VOTING TESTING
@@ -96,11 +102,6 @@ public class Main extends JavaPlugin implements VoteHost {
 	}
 
 	private void initializeManagers() {
-		try {
-			locMan = new LocationManager(this);
-		} catch (ClassNotFoundException | IOException e) {
-			e.printStackTrace();
-		}
 		cmdMan = new CommandManager(this);
 		gameMan = new GameManager(this);
 		sqlMan = new MysqlManager(this);
@@ -142,10 +143,6 @@ public class Main extends JavaPlugin implements VoteHost {
 			saveConfig();
 	}
 
-	public LocationManager getLocationManager() {
-		return locMan;
-	}
-
 	public CommandManager getCommandManager() {
 		return cmdMan;
 	}
@@ -156,5 +153,9 @@ public class Main extends JavaPlugin implements VoteHost {
 
 	public MysqlManager getMysqlManager() {
 		return sqlMan;
+	}
+
+	public World getHubWorld() {
+		return hubWorld;
 	}
 }

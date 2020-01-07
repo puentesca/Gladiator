@@ -12,6 +12,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 import com.twostudentsllc.gladiator.Main;
 import com.twostudentsllc.gladiator.managers.ClickableBlockManager;
+import org.bukkit.inventory.EquipmentSlot;
 
 /**
  * A listener
@@ -44,9 +45,14 @@ public class BlockClickedListener implements Listener{
 	{
 		PlayerInteractEvent pEvent = (PlayerInteractEvent)e;
 		Player player = pEvent.getPlayer();
+
+		//Ignore double action event when right clicking
+		if(pEvent.getHand() != null && !pEvent.getHand().equals(EquipmentSlot.HAND))
+			return;
 		
 		Block b = pEvent.getClickedBlock();
-		
+
+		//Filter out air
 		if(b.getType() == Material.AIR)
 			return;
 		

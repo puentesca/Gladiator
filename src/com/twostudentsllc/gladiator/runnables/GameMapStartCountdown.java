@@ -3,17 +3,18 @@ package com.twostudentsllc.gladiator.runnables;
 import com.twostudentsllc.gladiator.Main;
 import com.twostudentsllc.gladiator.generic_classes.Game;
 import com.twostudentsllc.gladiator.generic_classes.MapMatch;
+import com.twostudentsllc.gladiator.managers.GameLobby.GameLobby;
 
 public class GameMapStartCountdown implements Runnable {
 
 	private Main plugin;
-	private Game game;
+	private GameLobby lobby;
 	private String mapName;
 	
-	public GameMapStartCountdown(Main plugin, Game game, String mapName)
+	public GameMapStartCountdown(Main plugin, GameLobby lobby, String mapName)
 	{
 		this.plugin = plugin;
-		this.game = game;
+		this.lobby = lobby;
 		this.mapName = mapName;
 	}
 	
@@ -25,6 +26,6 @@ public class GameMapStartCountdown implements Runnable {
 
 	public void sendTimeLeft()
 	{
-		game.handleMapStartCountdown(mapName, game.getMapStartCountdown(mapName).getSecondsLeft());
+		lobby.handleMapStartCountdown(mapName, lobby.getMapStartCountdown(mapName).getSecondsLeft());
 	}
 }

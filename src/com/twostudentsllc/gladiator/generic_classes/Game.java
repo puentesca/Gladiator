@@ -7,10 +7,12 @@ import java.util.Set;
 
 import com.twostudentsllc.gladiator.managers.InventoryManager;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import com.twostudentsllc.gladiator.Main;
-import com.twostudentsllc.gladiator.managers.GameLobby;
+import com.twostudentsllc.gladiator.managers.GameLobby.GameLobby;
 import com.twostudentsllc.gladiator.runnables.GameMapStartCountdown;
 
 public abstract class Game {
@@ -102,10 +104,10 @@ public abstract class Game {
     }
 
     
-    /**
+/*    *//**
      * Starts a countdown until the map match starts after enough players have joined
      * @param mapName The name of the map
-     */
+     *//*
     public void startMapCountdown(String mapName)
     {
     	//If the match is already starting
@@ -122,13 +124,13 @@ public abstract class Game {
     public Countdown getMapStartCountdown(String mapName)
     {
     	return mapStartCountdowns.get(mapName);
-    }
+    }*/
     
-    /**
+/*    *//**
      * Handles the time left in a map start countdown
      * @param mapName The name of the map that is starting soon
      * @param time The time left until starting
-     */
+     *//*
     public void handleMapStartCountdown(String mapName, int time)
     {
     	Bukkit.broadcastMessage(minigameDisplayName + " match on map " + mapName + " is starting is " + time);
@@ -137,7 +139,7 @@ public abstract class Game {
     		startGame(mapName);
     		mapStartCountdowns.remove(mapName);
     	}
-    }
+    }*/
 
     /**
      * Create a queue for a specific map
@@ -174,7 +176,7 @@ public abstract class Game {
             return false;
         }
         plugin.getMysqlManager().getCommunicator().createMinigameStats(toAdd.getUniqueId(), minigameName);
-        maps.get(mapName).sendPlayerToLobby(toAdd);
+        //maps.get(mapName).sendPlayerToLobby(toAdd);
         return mapQueues.addPlayerToQueue(mapName, toAdd);
     }
 
@@ -192,7 +194,7 @@ public abstract class Game {
         for(Player p : group)
         {
         	plugin.getMysqlManager().getCommunicator().createMinigameStats(p.getUniqueId(), minigameName);
-        	maps.get(mapName).sendPlayerToLobby(p);
+        	//maps.get(mapName).sendPlayerToLobby(p);
         } 
         return mapQueues.addGroupToQueue(mapName, group);
     }
@@ -330,6 +332,34 @@ public abstract class Game {
     public InventoryManager getKits()
     {
     	return kits;
+    }
+
+
+    /**
+     * Send a player to the main hub world
+     * @param player
+     */
+    public void sendPlayerToHubWorld(Player player) {
+        Location spawnPoint = plugin.getHubWorld().getSpawnLocation();
+
+        player.setGameMode(GameMode.ADVENTURE);
+        player.setInvulnerable(true);
+        player.teleport(spawnPoint);
+    }
+
+    /**
+     * Send a list of players to main hub world
+     * @param player
+     */
+    public void sendPlayersToHubWorld(ArrayList<Player> members) {
+        Location spawnPoint = plugin.getHubWorld().getSpawnLocation();
+
+        //Teleport all players to lobby
+        for(Player player: members) {
+            player.teleport(spawnPoint);
+            player.setGameMode(GameMode.ADVENTURE);
+            player.setInvulnerable(true);
+        }
     }
     
 }

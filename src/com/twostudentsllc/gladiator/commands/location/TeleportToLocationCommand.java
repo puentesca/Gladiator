@@ -1,6 +1,8 @@
 package com.twostudentsllc.gladiator.commands.location;
 
+import com.twostudentsllc.gladiator.generic_classes.GameMap;
 import com.twostudentsllc.gladiator.global.AutoSuggest;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -50,8 +52,27 @@ public class TeleportToLocationCommand extends CustomCommand{
 	 */
 	private void commandCalled(CommandSender sender, Command cmd, String label, String[] args)
 	{
-		//Execute command logic
-		plugin.getLocationManager().teleportToLocation((Player)sender, args);
+
+		Player p = (Player)sender;
+
+		String minigameName = args[1];
+		String mapName = args[2];
+		String key = args[3];
+
+		//Handle input argument validation
+		if(!LocationCommandHelper.validateArguments(plugin, p, args))
+			return;
+
+		GameMap targetMap = plugin.getGameManager().getGame(minigameName).getGameMap(mapName);
+
+		//Check if the location exists before trying to teleport the player
+		Location targetLoc = targetMap.getLocation(key);
+		if(targetLoc == null) {
+			Utils.Error(p, key + " does not exist as a stored location for " + targetMap.getMapDisplayName());
+			return;
+		}
+
+		p.teleport(plugin.getGameManager().getGame(minigameName).getGameMap(mapName).getLocation(key));
 	}
 
 	public List<String> tabComplete(CommandSender commandSender, Command command, String s, String[] args) {
