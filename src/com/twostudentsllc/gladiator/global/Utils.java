@@ -8,13 +8,11 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.BlockIterator;
 
 import com.twostudentsllc.gladiator.Main;
-import com.twostudentsllc.gladiator.generic_classes.GlowEnchant;
 import com.twostudentsllc.gladiator.generic_classes.Team;
 
 import net.md_5.bungee.api.ChatColor;
@@ -203,6 +201,17 @@ public class Utils {
 		String msg = "&aCommand '" + name + "' completed.";
 		p.sendMessage(chatMessage(msg, true));
 	}
+	
+	/**
+	 * Send a generic confirmation message to an entity
+	 * @param e The entity to send the message to
+	 * @param message The message to send
+	 */
+	public static void confirmationMessage(Entity e, String message)	
+	{
+		String msg = "&a" + message;
+		e.sendMessage(chatMessage(msg, true));
+	}
 
 
 	public static ArrayList<Team> assignTeams(int numberOfTeams, ArrayList<Player> playerList) {
@@ -235,6 +244,7 @@ public class Utils {
 		return teamList;
 	}
 	
+	
 	/**
 	 * Gets the string mapped to a players spawn
 	 * @param teamNum The number of the team
@@ -266,5 +276,16 @@ public class Utils {
         }
         return lastBlock;
     }
+	
+	/**
+	 * Chooses a random string from an arraylist
+	 * @param args The strings to choose from
+	 * @return A random string from an arraylist
+	 */
+	public static String chooseOneRandomly(ArrayList<String> args)
+	{
+		int idx = (int) (Math.random() * args.size());
+		return args.get(idx);
+	}
 	
 }

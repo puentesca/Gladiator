@@ -51,7 +51,9 @@ public class TestInventoryCommand extends CustomCommand {
 	 */
 	private void commandCalled(CommandSender sender, Command cmd, String label, String[] args)
 	{
-		((Player)sender).openInventory(plugin.getGameManager().getMinigameChoosingInventory());
+		((Player)sender).openInventory(plugin.getVoteInventory());
+
+		//((Player)sender).openInventory(plugin.getGameManager().getMinigameChoosingInventory());
 	}
 	
 

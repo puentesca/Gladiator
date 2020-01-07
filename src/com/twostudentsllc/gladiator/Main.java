@@ -1,6 +1,10 @@
 package com.twostudentsllc.gladiator;
 
 import java.io.IOException;
+import java.util.ArrayList;
+
+import org.bukkit.Material;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.twostudentsllc.gladiator.commands.location.SetLocationCommand;
@@ -20,6 +24,8 @@ import com.twostudentsllc.gladiator.commands.testing.SetKitCommand;
 import com.twostudentsllc.gladiator.commands.testing.TeleportToWorld;
 import com.twostudentsllc.gladiator.commands.testing.TestInventoryCommand;
 import com.twostudentsllc.gladiator.games.Gladiator;
+import com.twostudentsllc.gladiator.generic_classes.Vote;
+import com.twostudentsllc.gladiator.generic_classes.VoteHost;
 import com.twostudentsllc.gladiator.listeners.BlockClickedListener;
 import com.twostudentsllc.gladiator.listeners.PlayerJoinListener;
 import com.twostudentsllc.gladiator.managers.CommandManager;
@@ -34,7 +40,7 @@ import com.twostudentsllc.gladiator.managers.MysqlManager;
  * @author Casey Puentes
  *
  */
-public class Main extends JavaPlugin {
+public class Main extends JavaPlugin implements VoteHost {
 
 	// Notes:
 	// Game super class must have an unimplemented version of saveInformation() and
@@ -47,6 +53,7 @@ public class Main extends JavaPlugin {
 	private LocationManager locMan;
 	private CommandManager cmdMan;
 	private GameManager gameMan;
+	private Vote curVote;
 
 	@Override
 	public void onEnable() {
@@ -56,9 +63,31 @@ public class Main extends JavaPlugin {
 		initializeGames();
 		registerListeners();
 		
+		//Creating a test vote
+		ArrayList<String> choices = new ArrayList<String>();
+		
+		choices.add("Choice1");
+		choices.add("Choice2");
+		choices.add("Choice3");
+		
+		Vote vote = new Vote(this, this, "TEST VOTING", choices, Material.PAPER, 15);
+		curVote = vote;
 		System.out.println("[GLADIATOR]: Successfully loaded!");
 	}
 
+	//PART OF VOTING TESTING
+	public Inventory getVoteInventory()
+	{
+		return curVote.getVotingInventory();
+	}
+	//PART OF VOTING TESTING
+	//PART OF VOTING TESTING
+	public void votingFinished(String winner)
+	{
+		
+	}
+	//PART OF VOTING TESTING
+	
 	@Override
 	public void onDisable() {
 		gameMan.saveAllData();

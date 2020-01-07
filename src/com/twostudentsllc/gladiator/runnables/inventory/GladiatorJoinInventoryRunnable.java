@@ -1,7 +1,7 @@
 package com.twostudentsllc.gladiator.runnables.inventory;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 
 import com.twostudentsllc.gladiator.Main;
 import com.twostudentsllc.gladiator.generic_classes.InventoryRunnable;
@@ -18,7 +18,7 @@ public class GladiatorJoinInventoryRunnable extends InventoryRunnable{
 		super(plugin);
 	}
 	
-	public void runEvent(Player p)
+	public void runEvent(InventoryClickEvent e, Player p)
 	{
 		//FIXME: CHange to console and override permissions
 		p.performCommand("gladiator join gladiator testmap");

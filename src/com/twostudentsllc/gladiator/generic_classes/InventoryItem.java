@@ -12,7 +12,7 @@ public class InventoryItem {
 	
 	private Main plugin;
 	private ItemStack item;
-	private int location;
+	private Integer location;
 	/**
 	 * Creates an item that will be used for an inventory
 	 * @param itemType The material of the item to be created
@@ -22,7 +22,7 @@ public class InventoryItem {
 	 * @param glow Whether or not the item should glow with enchantment
 	 * @param location The index of the slot the item should be placed in 
 	 */
-	public InventoryItem(Main plugin, Material itemType, String displayName, ArrayList<String> lore, int amount, boolean glow, int location)
+	public InventoryItem(Main plugin, Material itemType, String displayName, ArrayList<String> lore, int amount, boolean glow, Integer location)
 	{
 		this.plugin = plugin;
 		createInventoryItem(itemType, displayName, lore, amount, glow);
@@ -66,7 +66,7 @@ public class InventoryItem {
 		return item;
 	}
 	
-	public int getLocation()
+	public Integer getLocation()
 	{
 		return location;
 	}

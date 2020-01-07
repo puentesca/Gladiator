@@ -25,24 +25,30 @@ public class GUIInventory implements InventoryHolder, Listener {
 	private Inventory guiInv;
 	private String name;
 	private HashMap<Integer, InventoryRunnable> invListenerMap;
+	/**
+	 * Creates a new GUIInventory with runnables mapped to items.
+	 * @param inventoryName The name of the inventory
+	 * @param items The items that should be in the inventory
+	 * @param rows The amount of rows the inventory should have
+	 */
 	public GUIInventory(Main plugin, String inventoryName, HashMap<InventoryRunnable, InventoryItem> items, int rows)
 	{
 		if(rows == 0)
 			throw new IllegalArgumentException("You cannot have 0 rows in an inventory!");
 		this.plugin = plugin;
 		name = inventoryName;
-		rows *= 9;
 		createGUIInventory(inventoryName, items, rows);
 		Bukkit.getPluginManager().registerEvents(this, plugin); //Registers the inventory listener
 	}
 	
 	/**
 	 * Creates an inventory with the specified items in the spots desired
-	 * @param items
-	 * @param rows
+	 * @param items The items to be added
+	 * @param rows The amount of rows the inventory should have
 	 */
 	private void createGUIInventory(String name, HashMap<InventoryRunnable, InventoryItem> items, int rows)
 	{
+		rows *= 9; //9 columns in a row
 		guiInv = Bukkit.createInventory(this, rows, name);
 		invListenerMap = new HashMap<Integer, InventoryRunnable>();
 		//Adds the items to the inventory
@@ -60,6 +66,10 @@ public class GUIInventory implements InventoryHolder, Listener {
 		
 	}
 	
+	/**
+	 * Checks if the clicked inventory and item have an InventoryRunnable in this class
+	 * @param e The event
+	 */
 	@EventHandler
 	public void invClicked(InventoryClickEvent e)
 	{
@@ -67,23 +77,32 @@ public class GUIInventory implements InventoryHolder, Listener {
 		//If the player clicked air instead of the inventory
 		if(clickedInv == null)
 			return;
+		
 		Player clicker = (Player)e.getWhoClicked();
 		ItemStack clickedItem = e.getCurrentItem();
 		int location = e.getRawSlot();
+		
 		e.setCancelled(true);
+		
 		if(clickedInv.equals(guiInv))
 		{
-			System.out.println("Size: " + invListenerMap.size());
+			System.out.println("Checking if slot " + location + " has a runnable.");
+			String keys = "";
+			for(Integer i : invListenerMap.keySet())
+			{
+				keys += ":" + i;
+			}
+			System.out.println("Keys: " + keys);
 			//If the slot clicked has a runnable associated with it, run the event
 			if(invListenerMap.containsKey(location))
 			{
-				invListenerMap.get(location).runEvent(clicker);
+				invListenerMap.get(location).runEvent(e, clicker);
 			}
-			System.out.println("Item clicked does not have an inventoryrunnable");
+			System.out.println("Item clicked does not have an inventoryrunnable in the inventory: " + name);
 		}
 		else
 		{
-			System.out.println("Clicked inv is not the same as the listeners.");
+			System.out.println("Clicked inv is not the same as the listeners for the inventory: " + name);
 		}
 	}
 	

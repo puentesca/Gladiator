@@ -1,11 +1,11 @@
 package com.twostudentsllc.gladiator.runnables.inventory;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
 import com.twostudentsllc.gladiator.Main;
 import com.twostudentsllc.gladiator.generic_classes.InventoryRunnable;
+import com.twostudentsllc.gladiator.generic_classes.Vote;
 
 /**
  * Test Inventory Runnable
@@ -13,14 +13,16 @@ import com.twostudentsllc.gladiator.generic_classes.InventoryRunnable;
  * @author Casey Puentes
  *
  */
-public class TestInventoryRunnable extends InventoryRunnable{
-	public TestInventoryRunnable(Main plugin)
+public class VoteCounterInventoryRunnable extends InventoryRunnable{
+	public VoteCounterInventoryRunnable(Main plugin, Vote vote)
 	{
-		super(plugin);
+		super(plugin, vote);
 	}
 	
-	public void runEvent(InventoryClickEvent e,Player p)
+	public void runEvent(InventoryClickEvent e, Player p)
 	{
-		Bukkit.broadcastMessage("Player clicked the inventory slot!");
+		//Counts the players vote
+		String vote = e.getCurrentItem().getItemMeta().getDisplayName();
+		curVote.vote(p, vote);
 	}
 }
