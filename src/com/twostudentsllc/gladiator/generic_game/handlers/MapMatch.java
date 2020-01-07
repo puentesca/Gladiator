@@ -154,18 +154,18 @@ public abstract class MapMatch {
 	}
 	
 	/**
-	 * Gets if there is a winner
+	 * Gets if there is a single winning team
 	 * 
-	 * @return True if the round has a winner
+	 * @return True if the round has a single winning team
 	 */
-	public abstract boolean hasWinner();
+	public abstract boolean hasSingleWinner();
 
 	/**
-	 * Gets the winner of the round. 
+	 * Gets the winning players of the match
 	 * 
 	 * @return
 	 */
-	public abstract Team getWinner();
+	public abstract ArrayList<Player> getWinningPlayers();
 
 	/**
 	 * Gets the current status of the round
@@ -205,7 +205,6 @@ public abstract class MapMatch {
 
 	/**
 	 * Ends a round. Responsible for starting cooldown.
-	 * 
 	 * @return True if the round was successfully ended
 	 */
 	public abstract boolean endRound();

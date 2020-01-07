@@ -163,5 +163,19 @@ public class ArenaRound extends MatchRound{
 		Team playerTeam = getTeam(p);
 		playerTeam.incrementPlayerKills(p);
 	}
+
+
+	@Override
+	public void setWinner() {
+		for(Team t : teams)
+		{
+			//If the team isnt eliminated, they get an extra point
+			if(!t.isEliminated())
+			{
+				t.incrementWins();
+			}
+		}
+		
+	}
 	
 }

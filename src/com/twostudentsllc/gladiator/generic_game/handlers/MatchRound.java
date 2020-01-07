@@ -94,6 +94,11 @@ public abstract class MatchRound {
 	public abstract void startRound();
 	
 	/**
+	 * Gives the winning team a win point
+	 */
+	public abstract void setWinner();
+	
+	/**
 	 * Saves all of the players stats to the MySQL database
 	 */
 	public abstract void savePlayerStats();

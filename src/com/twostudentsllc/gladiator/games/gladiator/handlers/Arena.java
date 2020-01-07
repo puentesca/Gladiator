@@ -2,9 +2,13 @@ package com.twostudentsllc.gladiator.games.gladiator.handlers;
 
 import java.util.ArrayList;
 
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+
 import com.twostudentsllc.gladiator.Main;
-import com.twostudentsllc.gladiator.generic_game.handlers.GameMap;
+import com.twostudentsllc.gladiator.datastorage.mysql.MysqlCommunicator;
 import com.twostudentsllc.gladiator.generic_game.Team;
+import com.twostudentsllc.gladiator.generic_game.handlers.GameMap;
 
 public class Arena extends GameMap{
 	
@@ -35,6 +39,20 @@ public class Arena extends GameMap{
 	@Override
 	public void endMatch()
 	{
+		ArrayList<Player> winners = currentMatch.getWinningPlayers();
+		
+		for(Player p : winners)
+		{
+			MysqlCommunicator sql = plugin.getMysqlManager().getCommunicator();
+			sql.updateMinigameStat(p.getUniqueId(), minigameName, "wins", 1);
+		}
+		
+		String winnersMessage = "The winners are: ";
+		for(Player p : winners)
+		{
+			winnersMessage += p.getDisplayName() + " ";
+		}
+		Bukkit.broadcastMessage(winnersMessage);
 		currentMatch = null;
 		hasRunningMatch = false;
 		unloadChunks();	//TODO: Verify this works. Might want to add a 5 second timer until this calls to verify everyone has been teleported out

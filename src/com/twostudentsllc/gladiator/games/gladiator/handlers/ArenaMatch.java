@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import com.twostudentsllc.gladiator.Main;
+import com.twostudentsllc.gladiator.datastorage.mysql.MysqlCommunicator;
 import com.twostudentsllc.gladiator.runnables.Countdown;
 import com.twostudentsllc.gladiator.generic_game.handlers.GameMap;
 import com.twostudentsllc.gladiator.generic_game.handlers.MapMatch;
@@ -32,6 +33,16 @@ public class ArenaMatch extends MapMatch {
 	@Override
 	public void startMatch()
 	{
+		//Updates the players matches played total
+		for(Team t : teams)
+		{
+			for(Player p: t.getPlayers())
+			{
+				MysqlCommunicator sql = plugin.getMysqlManager().getCommunicator();
+				sql.updateMinigameStat(p.getUniqueId(), map.getMinigameName(), "plays", 1);
+			}
+		}
+		
 		assignPlayerSpawnpoints();
 		giveAllPlayersKits();
 		doWarmup();
@@ -78,7 +89,7 @@ public class ArenaMatch extends MapMatch {
 			System.out.println("Round not started as round did not have the status of: IN_PROGRESS");
 			return false;
 		}
-		//Add logic to end round
+		
 		resetPlayerStats();
 		currentRound = null;
 		doCooldown();
@@ -86,7 +97,7 @@ public class ArenaMatch extends MapMatch {
 	}
 	
 	@Override
-	public boolean hasWinner()
+	public boolean hasSingleWinner()
 	{
 		int alive = 0;
 		for(Team t : teams)
@@ -98,9 +109,26 @@ public class ArenaMatch extends MapMatch {
 	}
 	
 	@Override
-	public Team getWinner() {
-		// TODO: Return winner
-		return null;
+	public ArrayList<Player> getWinningPlayers() {
+		ArrayList<Player> winners = new ArrayList<Player>();;
+		int maxWins = 0;
+		for(Team t : teams)
+		{
+			//If there is a new winner
+			if(t.getWins() > maxWins)
+			{
+				winners = (ArrayList<Player>)t.getPlayers().clone();
+			}
+			//If there is a tie, add the other team to the winners
+			else if(t.getWins() == maxWins)
+			{
+				for(Player p : t.getPlayers())
+				{
+					winners.add(p);
+				}
+			}
+		}
+		return winners;
 	}
 
 	@Override

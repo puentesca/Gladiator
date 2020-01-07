@@ -16,6 +16,8 @@ public class Team {
      * Holds the players spawns
      */
     private HashMap<Player, Location> playerSpawns;
+    
+    private int wins = 0;
 
 
     /**
@@ -40,6 +42,16 @@ public class Team {
         }
     }
 
+    public void incrementWins()
+    {
+    	wins++;
+    }
+    
+    public int getWins()
+    {
+    	return wins;
+    }
+    
     /**
      * Adds a player to the team
      * @param toAdd player to add
