@@ -80,13 +80,13 @@ public class GUIInventory implements InventoryHolder, Listener {
 		
 		Player clicker = (Player)e.getWhoClicked();
 		ItemStack clickedItem = e.getCurrentItem();
-		int location = e.getRawSlot();
+		Integer itemIndex = e.getRawSlot();
 		
 		e.setCancelled(true);
 		
 		if(clickedInv.equals(guiInv))
 		{
-			System.out.println("Checking if slot " + location + " has a runnable.");
+			System.out.println("Checking if slot " + itemIndex + " has a runnable.");
 			String keys = "";
 			for(Integer i : invListenerMap.keySet())
 			{
@@ -94,11 +94,12 @@ public class GUIInventory implements InventoryHolder, Listener {
 			}
 			System.out.println("Keys: " + keys);
 			//If the slot clicked has a runnable associated with it, run the event
-			if(invListenerMap.containsKey(location))
+			if(invListenerMap.containsKey(itemIndex))
 			{
-				invListenerMap.get(location).runEvent(e, clicker);
+				invListenerMap.get(itemIndex).runEvent(e, clicker);
 			}
-			System.out.println("Item clicked does not have an inventoryrunnable in the inventory: " + name);
+			else
+				System.out.println("Item clicked does not have an inventoryrunnable in the inventory: " + name);
 		}
 		else
 		{

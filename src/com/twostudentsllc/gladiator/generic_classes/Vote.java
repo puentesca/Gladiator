@@ -1,6 +1,7 @@
 package com.twostudentsllc.gladiator.generic_classes;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -88,7 +89,7 @@ public class Vote {
 		HashMap<InventoryRunnable, InventoryItem> items = new HashMap<InventoryRunnable, InventoryItem>();
 		
 		int rows = choices.size()/9 + 1;
-		voteOptions = choices;
+		voteOptions = (ArrayList<String>) choices.clone();
 		
 		int count = 0;
 		//Creates all of the item choices
@@ -125,6 +126,7 @@ public class Vote {
 		if(votes.size() == 0)
 			return Utils.chooseOneRandomly(voteOptions);
 		
+		System.out.println("Counting votes");
 		int[] voteCount = new int[voteOptions.size()];
 		//Counts the votes
 		for(UUID id : votes.keySet())
@@ -134,11 +136,12 @@ public class Vote {
 			for(int i = 0; i < voteOptions.size(); i++)
 			{
 				//If the person voted for the current index
-				if(voteOptions.get(i) == vote)
+				if(voteOptions.get(i).equals(vote))
 				{
 					voteCount[i]++;
+					System.out.println("Vote added for option: " + i);
+					break;
 				}
-				break;
 			}
 		}
 		
@@ -154,6 +157,7 @@ public class Vote {
 				winnerIdx = i;
 			}
 		}
+		Arrays.toString(voteCount);
 		
 		return voteOptions.get(winnerIdx);
 	}
