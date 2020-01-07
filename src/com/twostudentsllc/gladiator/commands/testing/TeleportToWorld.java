@@ -1,6 +1,6 @@
 package com.twostudentsllc.gladiator.commands.testing;
 
-import com.twostudentsllc.gladiator.global.AutoSuggest;
+import com.twostudentsllc.gladiator.commands.AutoSuggest;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -8,8 +8,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.twostudentsllc.gladiator.Main;
-import com.twostudentsllc.gladiator.generic_classes.CustomCommand;
-import com.twostudentsllc.gladiator.global.Utils;
+import com.twostudentsllc.gladiator.commands.CustomCommand;
+import com.twostudentsllc.gladiator.utils.Utils;
 
 import java.util.List;
 

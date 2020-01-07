@@ -1,6 +1,6 @@
 package com.twostudentsllc.gladiator.commands.misc;
 
-import com.twostudentsllc.gladiator.global.AutoSuggest;
+import com.twostudentsllc.gladiator.commands.AutoSuggest;
 import com.twostudentsllc.gladiator.ui.BossBarUI;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarFlag;
@@ -10,8 +10,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.twostudentsllc.gladiator.Main;
-import com.twostudentsllc.gladiator.generic_classes.CustomCommand;
-import com.twostudentsllc.gladiator.global.Utils;
+import com.twostudentsllc.gladiator.commands.CustomCommand;
+import com.twostudentsllc.gladiator.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;

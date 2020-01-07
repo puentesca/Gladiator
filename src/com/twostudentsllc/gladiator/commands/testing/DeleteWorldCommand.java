@@ -2,20 +2,17 @@ package com.twostudentsllc.gladiator.commands.testing;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import com.twostudentsllc.gladiator.global.AutoSuggest;
+import com.twostudentsllc.gladiator.commands.AutoSuggest;
 import org.bukkit.Bukkit;
-import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.craftbukkit.libs.org.apache.commons.io.FileUtils;
 
 import com.twostudentsllc.gladiator.Main;
-import com.twostudentsllc.gladiator.generic_classes.CustomCommand;
-import com.twostudentsllc.gladiator.global.Utils;
+import com.twostudentsllc.gladiator.commands.CustomCommand;
+import com.twostudentsllc.gladiator.utils.Utils;
 
 /**
  * A command

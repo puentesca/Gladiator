@@ -2,21 +2,16 @@ package com.twostudentsllc.gladiator.commands.testing;
 
 import java.util.*;
 
-import com.twostudentsllc.gladiator.generic_classes.Game;
-import com.twostudentsllc.gladiator.generic_classes.GameMap;
-import com.twostudentsllc.gladiator.global.AutoSuggest;
-import com.twostudentsllc.gladiator.managers.GameManager;
+import com.twostudentsllc.gladiator.generic_game.handlers.Game;
+import com.twostudentsllc.gladiator.generic_game.handlers.GameMap;
+import com.twostudentsllc.gladiator.commands.AutoSuggest;
+import com.twostudentsllc.gladiator.global_managers.GameManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
-import org.bukkit.entity.Player;
 
 import com.twostudentsllc.gladiator.Main;
-import com.twostudentsllc.gladiator.generic_classes.CustomCommand;
-import com.twostudentsllc.gladiator.generic_classes.Team;
-import com.twostudentsllc.gladiator.global.Utils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import com.twostudentsllc.gladiator.commands.CustomCommand;
+import com.twostudentsllc.gladiator.utils.Utils;
 
 
 public class ListCommand extends CustomCommand {

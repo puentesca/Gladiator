@@ -1,13 +1,13 @@
 package com.twostudentsllc.gladiator.commands.maps;
 
-import com.twostudentsllc.gladiator.global.AutoSuggest;
+import com.twostudentsllc.gladiator.commands.AutoSuggest;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 import com.twostudentsllc.gladiator.Main;
-import com.twostudentsllc.gladiator.generic_classes.CustomCommand;
-import com.twostudentsllc.gladiator.generic_classes.Game;
-import com.twostudentsllc.gladiator.global.Utils;
+import com.twostudentsllc.gladiator.commands.CustomCommand;
+import com.twostudentsllc.gladiator.generic_game.handlers.Game;
+import com.twostudentsllc.gladiator.utils.Utils;
 
 import java.util.List;
 

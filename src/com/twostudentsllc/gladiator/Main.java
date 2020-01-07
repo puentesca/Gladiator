@@ -23,14 +23,14 @@ import com.twostudentsllc.gladiator.commands.testing.SetClickableCommand;
 import com.twostudentsllc.gladiator.commands.testing.SetKitCommand;
 import com.twostudentsllc.gladiator.commands.testing.TeleportToWorld;
 import com.twostudentsllc.gladiator.commands.testing.TestInventoryCommand;
-import com.twostudentsllc.gladiator.games.Gladiator;
-import com.twostudentsllc.gladiator.generic_classes.Vote;
-import com.twostudentsllc.gladiator.generic_classes.VoteHost;
-import com.twostudentsllc.gladiator.listeners.BlockClickedListener;
-import com.twostudentsllc.gladiator.listeners.PlayerJoinListener;
-import com.twostudentsllc.gladiator.managers.CommandManager;
-import com.twostudentsllc.gladiator.managers.GameManager;
-import com.twostudentsllc.gladiator.managers.MysqlManager;
+import com.twostudentsllc.gladiator.games.gladiator.Gladiator;
+import com.twostudentsllc.gladiator.utils.vote.Vote;
+import com.twostudentsllc.gladiator.utils.vote.VoteHost;
+import com.twostudentsllc.gladiator.global_listeners.BlockClickedListener;
+import com.twostudentsllc.gladiator.global_listeners.PlayerJoinListener;
+import com.twostudentsllc.gladiator.global_managers.CommandManager;
+import com.twostudentsllc.gladiator.global_managers.GameManager;
+import com.twostudentsllc.gladiator.datastorage.mysql.MysqlManager;
 
 /**
  * Gladiator plugin main class. Initializes the plugin. Copyright 2019 Casey
