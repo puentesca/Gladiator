@@ -82,10 +82,9 @@ public class GUIInventory implements InventoryHolder, Listener {
 		ItemStack clickedItem = e.getCurrentItem();
 		Integer itemIndex = e.getRawSlot();
 		
-		e.setCancelled(true);
-		
 		if(clickedInv.equals(guiInv))
 		{
+			e.setCancelled(true);
 			System.out.println("Checking if slot " + itemIndex + " has a runnable.");
 			String keys = "";
 			for(Integer i : invListenerMap.keySet())
