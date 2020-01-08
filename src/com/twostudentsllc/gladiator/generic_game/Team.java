@@ -70,6 +70,7 @@ public class Team {
      */
     public boolean isEliminated()
     {
+    	clearInvalidPlayers();
     	for(Player p : teamMembers.keySet())
     	{
     		//If any player on the team is not eliminated, the team is still in game
@@ -77,6 +78,30 @@ public class Team {
     			return false;
     	}
     	return true;
+    }
+    
+    /**
+     * Removes all null and offline players from the team
+     */
+    public void clearInvalidPlayers()
+    {
+    	for(Player p : teamMembers.keySet())
+    	{
+    		//If the player doesnt exist or isnt online anymore
+    		if(p == null || !p.isOnline())
+    		{
+    			removePlayer(p);
+    		}
+    	}
+    }
+    
+    /**
+     * Removes a player
+     * @param p
+     */
+    public void removePlayer(Player p)
+    {
+    	teamMembers.remove(p);
     }
     
     /**
@@ -107,6 +132,7 @@ public class Team {
      */
     public void resetAllPlayerStats()
     {
+    	clearInvalidPlayers();
     	HashMap<Player, PlayerStats> resetMembersStats = new HashMap<Player, PlayerStats>();
     	for(Player p : teamMembers.keySet())
     	{
@@ -120,6 +146,7 @@ public class Team {
      */
     public void resetAllPlayerLives()
     {
+    	clearInvalidPlayers();
     	for(Player p : teamMembers.keySet())
     	{
     		PlayerStats stats = teamMembers.get(p);
@@ -150,6 +177,7 @@ public class Team {
     }
 
     public ArrayList<Player> getPlayers() {
+    	clearInvalidPlayers();
     	ArrayList<Player> players = new ArrayList<Player>();
     	for(Player p : teamMembers.keySet())
     	{

@@ -7,11 +7,12 @@ import org.bukkit.entity.Player;
 
 import com.twostudentsllc.gladiator.Main;
 import com.twostudentsllc.gladiator.datastorage.mysql.MysqlCommunicator;
-import com.twostudentsllc.gladiator.runnables.Countdown;
+import com.twostudentsllc.gladiator.games.gladiator.listeners.WarmupPlayerMoveListener;
+import com.twostudentsllc.gladiator.generic_game.Team;
 import com.twostudentsllc.gladiator.generic_game.handlers.GameMap;
 import com.twostudentsllc.gladiator.generic_game.handlers.MapMatch;
-import com.twostudentsllc.gladiator.generic_game.Team;
-import com.twostudentsllc.gladiator.games.gladiator.listeners.WarmupPlayerMoveListener;
+import com.twostudentsllc.gladiator.global_listeners.PlayerDisconnectListener;
+import com.twostudentsllc.gladiator.runnables.Countdown;
 import com.twostudentsllc.gladiator.runnables.game.match.MatchCooldown;
 import com.twostudentsllc.gladiator.runnables.game.match.MatchWarmup;
 /**
@@ -60,6 +61,7 @@ public class ArenaMatch extends MapMatch {
 				map.getGame().sendPlayerToHubWorld(p);
 			}
 		}
+		unregisterMatchListeners();
 		setStatus(STATUS.COMPLETED);
 	}
 	
@@ -96,17 +98,6 @@ public class ArenaMatch extends MapMatch {
 		return true;
 	}
 	
-	@Override
-	public boolean hasSingleWinner()
-	{
-		int alive = 0;
-		for(Team t : teams)
-		{
-			if(!t.isEliminated())
-				alive++;
-		}
-		return alive == 1;
-	}
 	
 	@Override
 	public ArrayList<Player> getWinningPlayers() {
@@ -178,10 +169,17 @@ public class ArenaMatch extends MapMatch {
 		//TODO: Add player freezing until the startRound() is called
 	}
 	
+	@Override
+	public void registerMatchListeners()
+	{
+		matchListeners.add(new PlayerDisconnectListener(plugin, this));
+	}
+	@Override
 	public void registerWarmupListeners()
 	{
 		warmupListeners.add(new WarmupPlayerMoveListener(plugin, this));
 	}
+
 
 	@Override
 	public void doCooldown() {

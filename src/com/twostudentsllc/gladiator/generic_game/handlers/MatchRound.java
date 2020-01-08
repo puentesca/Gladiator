@@ -79,8 +79,7 @@ public abstract class MatchRound {
 		for(MinigameListener ml : registeredListeners)
 		{
 			ml.unregisterEvent();
-		}
-		
+		}		
 	}
 	
 	/**
@@ -92,6 +91,18 @@ public abstract class MatchRound {
 	 * Starts the round. Responsible for calling registerListeners()
 	 */
 	public abstract void startRound();
+	
+	/**
+	 * Checks to see if a winner is present. If so, it ends the round.
+	 */
+	public abstract void checkForWinner();
+	
+	/**
+	 * Gets if there is a single winning team
+	 * 
+	 * @return True if the round has a single winning team
+	 */
+	public abstract boolean hasSingleWinner();
 	
 	/**
 	 * Gives the winning team a win point

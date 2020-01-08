@@ -44,6 +44,7 @@ public class ArenaRound extends MatchRound{
 			respawnCountdowns.get(p).stopCountdown();
 		}
 		savePlayerStats();
+		setWinner();
 		roundCountdown.stopCountdown();
 		unregisterRoundListeners();
 		match.endRound();
@@ -69,7 +70,6 @@ public class ArenaRound extends MatchRound{
 	@Override
 	public void registerRoundListeners() {
 		registeredListeners.add(new DeathListener(plugin,this));
-		
 	}
 	
 	@Override
@@ -154,6 +154,17 @@ public class ArenaRound extends MatchRound{
 		getTeam(p).getPlayerStats(p).eliminatedPlayer();
 		Bukkit.broadcastMessage("Player '" + p.getName() + "' eliminated!");
 		match.getMap().sendPlayerToSpectate(p);
+		checkForWinner();
+	}
+	
+	@Override
+	public void checkForWinner()
+	{
+		//If all the teams have been eliminated
+		if(hasSingleWinner())
+		{
+			endRound();
+		}	
 	}
 
 
@@ -175,7 +186,18 @@ public class ArenaRound extends MatchRound{
 				t.incrementWins();
 			}
 		}
-		
+	}
+	
+	@Override
+	public boolean hasSingleWinner()
+	{
+		int alive = 0;
+		for(Team t : teams)
+		{
+			if(!t.isEliminated())
+				alive++;
+		}
+		return alive <= 1;
 	}
 	
 }

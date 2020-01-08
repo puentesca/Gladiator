@@ -93,6 +93,11 @@ public abstract class MapMatch {
 	protected ArrayList<Team> teams;
 
 	/**
+	 * Holds the listeners that are present for the entire match
+	 */
+	protected ArrayList<MinigameListener> matchListeners;
+	
+	/**
 	 * Holds all of the listeners that are registered during warmup
 	 */
 	protected ArrayList<MinigameListener> warmupListeners;
@@ -111,6 +116,7 @@ public abstract class MapMatch {
 		this.totalRounds = totalRounds;
 		playerLives = 3; // TODO: Add ability to customize this
 		this.currentRoundCount = 0;
+		matchListeners = new ArrayList<MinigameListener>();
 		warmupListeners = new ArrayList<MinigameListener>();
 		startMatch();
 	}
@@ -152,13 +158,6 @@ public abstract class MapMatch {
 			}
 		}
 	}
-	
-	/**
-	 * Gets if there is a single winning team
-	 * 
-	 * @return True if the round has a single winning team
-	 */
-	public abstract boolean hasSingleWinner();
 
 	/**
 	 * Gets the winning players of the match
@@ -216,6 +215,23 @@ public abstract class MapMatch {
 	public abstract void doWarmup();
 	
 	/**
+	 * Registers all match listeners
+	 */
+	public abstract void registerMatchListeners();
+	
+	/**
+	 * Unregisters all match listeners
+	 */
+	public void unregisterMatchListeners()
+	{
+		for(MinigameListener ml : matchListeners)
+		{
+			ml.unregisterEvent();
+		}
+		matchListeners = new ArrayList<MinigameListener>();
+	}
+	
+	/**
 	 * Registers all warmup listeners
 	 */
 	public abstract void registerWarmupListeners();
@@ -232,6 +248,35 @@ public abstract class MapMatch {
 		warmupListeners = new ArrayList<MinigameListener>();
 	}
 
+	/**
+	 * Gets a players team if they are in this match. If they are not, it returns null.
+	 * @param p The player whose team you need to get
+	 * @return The team of the player
+	 */
+	public Team getPlayersTeam(Player p)
+	{
+		for(Team t : teams)
+		{
+			if(t.getPlayers().contains(p))
+				return t;
+		}
+		return null;
+	}
+	
+	/**
+	 * Removes a player from a team in game and checks to see if it makes a team win
+	 * @param p The player who disconnected
+	 */
+	public void playerDisconnected(Player p)
+	{
+		Team playersTeam = getPlayersTeam(p);
+		if(currentRound != null && playersTeam != null)
+		{
+			playersTeam.removePlayer(p);
+			currentRound.checkForWinner();
+		}
+	}
+	
 	/**
 	 * Handles the cooldown period, also in charge of setting state to COOLDOWN
 	 */
@@ -355,5 +400,10 @@ public abstract class MapMatch {
 
 	public GameMap getMap() {
 		return map;
+	}
+	
+	public MatchRound getCurrentRound()
+	{
+		return currentRound;
 	}
 }

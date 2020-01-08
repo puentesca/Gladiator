@@ -46,7 +46,7 @@ public class Arena extends GameMap{
 			MysqlCommunicator sql = plugin.getMysqlManager().getCommunicator();
 			sql.updateMinigameStat(p.getUniqueId(), minigameName, "wins", 1);
 		}
-		
+		//TODO: Send all players into another lobby
 		String winnersMessage = "The winners are: ";
 		for(Player p : winners)
 		{
